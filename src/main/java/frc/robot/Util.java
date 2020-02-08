@@ -1,8 +1,8 @@
 package frc.robot;
 
 public class Util {
-    public static final double kDefaultDeadband = .02;
-    
+    public static final double kDefaultDeadband = .08;
+
     public static double deadband(double value, double min) {
         if (Math.abs(value) > min) {
             if (value > 0.0) {

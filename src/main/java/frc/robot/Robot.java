@@ -28,6 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static final double kMaxJoySpeed = 3.0; //meters per sec
+  private static final double kMaxJoyTurn = 3.0; // radians per sec
+
   private final Drive m_robotDrive = new Drive();
 
   private final Spark m_loadMotor = new Spark(4);
@@ -134,8 +137,8 @@ public class Robot extends TimedRobot {
 
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
-      driveCommand = Util.deadband(m_stick.getY());
-      steerCommand = Util.deadband(m_stick.getX());
+      driveCommand = kMaxJoySpeed* Util.deadband(m_stick.getY());
+      steerCommand = kMaxJoyTurn* Util.deadband(m_stick.getX());
     }
     m_robotDrive.drive(driveCommand, steerCommand);
 
