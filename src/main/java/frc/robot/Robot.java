@@ -1,0 +1,186 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+package frc.robot;
+
+// This is the limelight
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
+public class Robot extends TimedRobot {
+  private final Drive m_robotDrive = new Drive();
+
+  private final Spark m_loadMotor = new Spark(4);
+  private final Spark m_shooter = new Spark(5);
+  private final Spark m_storageMotor = new Spark(6);
+  private final Spark m_intakeMotor = new Spark(7);
+  private final Spark m_shooterControl = new Spark(9);
+  private final Spark m_controlPannel = new Spark(8);
+
+  private final XboxController m_controller = new XboxController(1);
+  private final Joystick m_stick = new Joystick(0);
+  private final Timer m_timer = new Timer();
+
+  private final double m_KpAim = -0.0746;
+  private final double m_KpDistance = -0.1;
+  private final double m_max_aim_command = 0.584;
+
+  private boolean m_storageMovement = false;
+
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
+  @Override
+  public void robotInit() {
+  }
+
+  /**
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
+   *
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
+   */
+  @Override
+  public void robotPeriodic() {
+  }
+
+  /**
+   * This autonomous (along with the chooser code above) shows how to select
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString line to get the
+   * auto name from the text box below the Gyro
+   *
+   * <p>
+   * You can add additional auto modes by adding additional comparisons to the
+   * switch structure below with additional strings. If using the SendableChooser
+   * make sure to add them to the chooser code above as well.
+   */
+  @Override
+  public void autonomousInit() {
+    m_timer.reset();
+    m_timer.start();
+  }
+
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
+    // Drive for 2 seconds
+    if (m_timer.get() < 2.0) {
+      m_robotDrive.drive(-0.5, 0.0); // drive forwards half speed
+    } else {
+      m_robotDrive.drive(0,0); // stop robot
+    }
+  }
+
+  /**
+   * This function is called when entering operator control.
+   */
+  @Override
+  public void teleopInit() {
+    m_storageMovement = false;
+  }
+
+  /**
+   * This function is called periodically during operator control.
+   */
+  @Override
+  public void teleopPeriodic() {
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
+
+    double driveCommand = 0.0;
+    double steerCommand = 0.0;
+
+    if (m_stick.getRawButton(9)) {
+      double heading_error = -tx.getDouble(0.0);
+      double distance_error = -ty.getDouble(0.0);
+
+      steerCommand = m_KpAim * heading_error;
+      if (steerCommand > m_max_aim_command) {
+        steerCommand = m_max_aim_command;
+      } else if (steerCommand < -m_max_aim_command) {
+        steerCommand = -m_max_aim_command;
+      }
+
+      // double distance_adjust = m_KpDistance * distance_error;
+    } else {
+      driveCommand = Util.deadband(m_stick.getY());
+      steerCommand = Util.deadband(m_stick.getX());
+    }
+    m_robotDrive.drive(driveCommand, steerCommand);
+
+    m_storageMotor.set(m_controller.getTriggerAxis(Hand.kLeft));
+    if (m_controller.getTriggerAxis(Hand.kLeft) > .1) {
+      m_intakeMotor.set(-(m_controller.getTriggerAxis(Hand.kLeft)));
+      m_storageMotor.set(-.5);
+    } else {
+      m_intakeMotor.set(0);
+      m_storageMotor.set(m_controller.getTriggerAxis(Hand.kRight));
+    }
+
+    /*
+     * if (m_controller.getBumper(Hand.kLeft)) { m_storageMotor.set(-.5); } else {
+     * m_storageMotor.set(-m_controller.getTriggerAxis(Hand.kLeft)); } if
+     * (m_stick.getRawButton(10)) { m_storageMovement = false; } if
+     * (m_stick.getRawButton(11)) { m_storageMovement = true; } if
+     * (m_storageMovement) { if (m_controller.getBumper(Hand.kRight)) {
+     * m_storageMotor.set(1);
+     * 
+     * } else { m_storageMotor.set(0); //we need to add variable controll } } else {
+     * m_storageMotor.set(0); }
+     */
+
+    if (m_controller.getXButton()) {
+      m_controlPannel.set(1);
+    } else {
+      m_controlPannel.set(0);
+    }
+
+    m_shooterControl.set(m_controller.getX(Hand.kLeft));
+
+    if (m_controller.getBButton()) {
+      m_loadMotor.set(-1);
+    } else {
+      m_loadMotor.set((m_controller.getTriggerAxis(Hand.kLeft))/3);
+    }
+    if (m_controller.getBButton()) {
+      m_shooter.set(-1);
+    } else {
+      m_shooter.set(0);
+    }
+  }
+  @Override
+  public void testPeriodic(){
+
+  }
+}
