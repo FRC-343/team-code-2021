@@ -1,0 +1,10 @@
+intake = Left Trigger Full speed
+    hopper ccw
+    kicker slow cw
+    
+shooter = Left bumper
+
+Kicker = Right trigger (ccw);
+    hopper cw   
+    (vision adjust for aim and distane)
+

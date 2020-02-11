@@ -33,10 +33,10 @@ public class Robot extends TimedRobot {
 
   private final Drive m_robotDrive = new Drive();
 
-  private final Spark m_loadMotor = new Spark(4);
+  private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
-  private final Spark m_storageMotor = new Spark(6);
-  private final Spark m_intakeMotor = new Spark(7);
+  private final Spark m_hopper = new Spark(6);
+  private final Spark m_intake = new Spark(7);
   private final Spark m_shooterControl = new Spark(9);
   private final Spark m_controlPannel = new Spark(8);
 
@@ -142,46 +142,41 @@ public class Robot extends TimedRobot {
     }
     m_robotDrive.drive(driveCommand, steerCommand);
 
-    m_storageMotor.set(m_controller.getTriggerAxis(Hand.kLeft));
-    if (m_controller.getTriggerAxis(Hand.kLeft) > .1) {
-      m_intakeMotor.set(-(m_controller.getTriggerAxis(Hand.kLeft)));
-      m_storageMotor.set(-.5);
-    } else {
-      m_intakeMotor.set(0);
-      m_storageMotor.set(m_controller.getTriggerAxis(Hand.kRight));
+    double shooterCommand = 0;
+    double intakeCommand = 0;
+    double kickerCommand = 0;
+    double hopperCommand = 0;
+
+
+    if (m_controller.getBumper(Hand.kLeft)) {
+      shooterCommand = -1;
+      //TODO lower intake
+      if (m_controller.getTriggerAxis(Hand.kRight) > .2 ) {
+        kickerCommand = 1;
+        hopperCommand = 1;
+        // TODO: (ADD VISION TRACKER now)
+      }
+    } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
+      intakeCommand = -1;
+      kickerCommand = .2422;
+      hopperCommand = -1;
+    }  
+
+    if (m_controller.getYButton()) {
+      intakeCommand = .5;
     }
 
-    /*
-     * if (m_controller.getBumper(Hand.kLeft)) { m_storageMotor.set(-.5); } else {
-     * m_storageMotor.set(-m_controller.getTriggerAxis(Hand.kLeft)); } if
-     * (m_stick.getRawButton(10)) { m_storageMovement = false; } if
-     * (m_stick.getRawButton(11)) { m_storageMovement = true; } if
-     * (m_storageMovement) { if (m_controller.getBumper(Hand.kRight)) {
-     * m_storageMotor.set(1);
-     * 
-     * } else { m_storageMotor.set(0); //we need to add variable controll } } else {
-     * m_storageMotor.set(0); }
-     */
+    m_shooter.set(shooterCommand);
+    m_intake.set(intakeCommand);
+    m_kicker.set(kickerCommand);
+    m_hopper.set(hopperCommand);
 
     if (m_controller.getXButton()) {
       m_controlPannel.set(1);
     } else {
       m_controlPannel.set(0);
     }
-
-    m_shooterControl.set(m_controller.getX(Hand.kLeft));
-
-    if (m_controller.getBButton()) {
-      m_loadMotor.set(-1);
-    } else {
-      m_loadMotor.set((m_controller.getTriggerAxis(Hand.kLeft))/3);
-    }
-    if (m_controller.getBButton()) {
-      m_shooter.set(-1);
-    } else {
-      m_shooter.set(0);
-    }
-  }
+  } 
   @Override
   public void testPeriodic(){
 
