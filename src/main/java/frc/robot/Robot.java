@@ -152,18 +152,22 @@ public class Robot extends TimedRobot {
       shooterCommand = -1;
       //TODO lower intake
       if (m_controller.getTriggerAxis(Hand.kRight) > .2 ) {
-        kickerCommand = 1;
-        hopperCommand = 1;
+        kickerCommand = -1;
+        hopperCommand = .7;
         // TODO: (ADD VISION TRACKER now)
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
       intakeCommand = -1;
-      kickerCommand = .2422;
-      hopperCommand = -1;
+      kickerCommand = .23;
+      hopperCommand = -.45;
     }  
 
     if (m_controller.getYButton()) {
       intakeCommand = .5;
+    }
+
+    if (m_controller.getBButton()) {
+      hopperCommand = .5;
     }
 
     m_shooter.set(shooterCommand);
