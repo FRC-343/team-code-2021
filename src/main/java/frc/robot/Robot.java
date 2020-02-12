@@ -44,9 +44,9 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
   private final Timer m_timer = new Timer();
 
-  private final double m_KpAim = -0.0746;
+  private final double m_KpAim = -0.10;
   private final double m_KpDistance = -0.1;
-  private final double m_min_aim_command = 0.050;
+  private final double m_min_aim_command = -.5;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -125,11 +125,14 @@ public class Robot extends TimedRobot {
       double heading_error = -tx.getDouble(0.0);
       double distance_error = -ty.getDouble(0.0);
 
-      if (-heading_error > 1.0) {
-        steerCommand = m_KpAim * heading_error - m_min_aim_command;
-      } else if (-heading_error < 1.0) {
+      if (heading_error > 1.0) {
         steerCommand = m_KpAim * heading_error + m_min_aim_command;
+      } else if (heading_error < -1.0) {
+        steerCommand = m_KpAim * heading_error - m_min_aim_command;
       }
+
+      SmartDashboard.putNumber("steerCommand", steerCommand);
+
 
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
