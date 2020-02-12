@@ -8,3 +8,4 @@ Kicker = Right trigger (ccw);
     hopper cw   
     (vision adjust for aim and distane)
 
+100001 is better than 100101 but not by much

@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final double kMaxJoySpeed = 3.0; //meters per sec
+  private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
   private final Drive m_robotDrive = new Drive();
@@ -37,8 +37,8 @@ public class Robot extends TimedRobot {
   private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(6);
   private final Spark m_intake = new Spark(7);
-  private final Spark m_shooterControl = new Spark(9);
   private final Spark m_controlPannel = new Spark(8);
+  private final Spark m_aimer = new Spark(9);
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -46,9 +46,7 @@ public class Robot extends TimedRobot {
 
   private final double m_KpAim = -0.0746;
   private final double m_KpDistance = -0.1;
-  private final double m_max_aim_command = 0.584;
-
-  private boolean m_storageMovement = false;
+  private final double m_min_aim_command = 0.050;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -98,7 +96,7 @@ public class Robot extends TimedRobot {
     if (m_timer.get() < 2.0) {
       m_robotDrive.drive(-0.5, 0.0); // drive forwards half speed
     } else {
-      m_robotDrive.drive(0,0); // stop robot
+      m_robotDrive.drive(0, 0); // stop robot
     }
   }
 
@@ -107,7 +105,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    m_storageMovement = false;
   }
 
   /**
@@ -128,17 +125,16 @@ public class Robot extends TimedRobot {
       double heading_error = -tx.getDouble(0.0);
       double distance_error = -ty.getDouble(0.0);
 
-      steerCommand = m_KpAim * heading_error;
-      if (steerCommand > m_max_aim_command) {
-        steerCommand = m_max_aim_command;
-      } else if (steerCommand < -m_max_aim_command) {
-        steerCommand = -m_max_aim_command;
+      if (-heading_error > 1.0) {
+        steerCommand = m_KpAim * heading_error - m_min_aim_command;
+      } else if (-heading_error < 1.0) {
+        steerCommand = m_KpAim * heading_error + m_min_aim_command;
       }
 
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
-      driveCommand = kMaxJoySpeed* Util.deadband(m_stick.getY());
-      steerCommand = kMaxJoyTurn* Util.deadband(m_stick.getX());
+      driveCommand = kMaxJoySpeed * Util.deadband(m_stick.getY());
+      steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
     }
     m_robotDrive.drive(driveCommand, steerCommand);
 
@@ -147,24 +143,25 @@ public class Robot extends TimedRobot {
     double kickerCommand = 0;
     double hopperCommand = 0;
 
-
     if (m_controller.getBumper(Hand.kLeft)) {
       shooterCommand = -1;
-      //TODO lower intake
-      if (m_controller.getTriggerAxis(Hand.kRight) > .2 ) {
+      // TODO lower intake
+      if (m_controller.getTriggerAxis(Hand.kRight) > .2) {
         kickerCommand = -1;
         hopperCommand = .7;
         // TODO: (ADD VISION TRACKER now)
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
       intakeCommand = -1;
-      kickerCommand = .23;
+      kickerCommand = .2422;
       hopperCommand = -.45;
-    }  
+    }
 
     if (m_controller.getYButton()) {
       intakeCommand = .5;
     }
+
+    m_aimer.set(m_controller.getY(Hand.kLeft));
 
     if (m_controller.getBButton()) {
       hopperCommand = .5;
@@ -180,9 +177,10 @@ public class Robot extends TimedRobot {
     } else {
       m_controlPannel.set(0);
     }
-  } 
+  }
+
   @Override
-  public void testPeriodic(){
+  public void testPeriodic() {
 
   }
 }
