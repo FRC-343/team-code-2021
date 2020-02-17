@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
   private final Timer m_timer = new Timer();
 
-  private final double m_KpAim = -0.10;
+  private final double m_KpAim = -0.085;
   private final double m_KpDistance = -0.1;
   private final double m_min_aim_command = -.5;
 
@@ -156,8 +156,13 @@ public class Robot extends TimedRobot {
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
       intakeCommand = -1;
-      kickerCommand = .2422;
+      kickerCommand = .2343;
       hopperCommand = -.45;
+    }
+
+    if (m_controller.getBButton()) {
+      hopperCommand = .5;
+      kickerCommand = -.2343;
     }
 
     if (m_controller.getYButton()) {
@@ -165,10 +170,6 @@ public class Robot extends TimedRobot {
     }
 
     m_aimer.set(m_controller.getY(Hand.kLeft));
-
-    if (m_controller.getBButton()) {
-      hopperCommand = .5;
-    }
 
     m_shooter.set(shooterCommand);
     m_intake.set(intakeCommand);
