@@ -18,10 +18,10 @@ public class Drive {
     private static final double kWheelRadius = 0.076; // meters
     private static final int kEncoderResolution = 1024;
 
-    private final SpeedController m_leftMaster = new Spark(0);
-    private final SpeedController m_leftFollower = new Spark(1);
-    private final SpeedController m_rightMaster = new Spark(2);
-    private final SpeedController m_rightFollower = new Spark(3);
+    private final SpeedController m_leftMaster = new Spark(2);
+    private final SpeedController m_leftFollower = new Spark(3);
+    private final SpeedController m_rightMaster = new Spark(0);
+    private final SpeedController m_rightFollower = new Spark(1);
 
     private final Encoder m_leftEncoder = new Encoder(4, 5);
     private final Encoder m_rightEncoder = new Encoder(6, 7);
