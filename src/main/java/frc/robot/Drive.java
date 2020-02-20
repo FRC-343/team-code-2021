@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drive {
@@ -42,8 +44,11 @@ public class Drive {
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(2.24, 2.28, 0.506);
+  
+    private DifferentialDriveOdometry m_odometry;
 
     private double m_maxOutput = 10.0;
+ 
 
     public Drive() {
         // Set the distance per pulse for the drive encoders. We can simply use the
@@ -169,7 +174,7 @@ public class Drive {
      * @param rot    Angular velocity in rad/s.
      */
     public void drive(double xSpeed, double rot) {
-        double wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -rot));
+        DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -rot));
         setSpeeds(wheelSpeeds);
     }
 }
