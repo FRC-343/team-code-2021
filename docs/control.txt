@@ -3,9 +3,14 @@ intake = Left Trigger Full speed
     kicker slow cw
     
 shooter = Left bumper
-
++
 Kicker = Right trigger (ccw);
     hopper cw   
     (vision adjust for aim and distane)
+
+intake backwards = Y
+hopper backwards = B 
+hood angle = right thumbstick
+controll panell = X
 
 100001 is better than 100101 but not by much

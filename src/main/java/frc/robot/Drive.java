@@ -46,7 +46,8 @@ public class Drive {
         m_leftEncoder.reset();
         m_rightEncoder.reset();
 
-        m_rightGroup.setInverted(true);
+        m_rightGroup.setInverted(false);
+        m_leftGroup.setInverted(true);
     }
 
     /**
