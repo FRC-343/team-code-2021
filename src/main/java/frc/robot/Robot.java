@@ -36,8 +36,8 @@ public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
-  private final DoubleSolenoid m_climberLift = new DoubleSolenoid(2, 3);
-  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(0, 1);
+  private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
+  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
 
   private final Drive m_robotDrive = new Drive();
 
@@ -163,7 +163,7 @@ public class Robot extends TimedRobot {
         // TODO: (ADD VISION TRACKER now)
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
-      intakeCommand = -.6;
+      intakeCommand = -.5;
       kickerCommand = .24;
       hopperCommand = -.45;
     }
