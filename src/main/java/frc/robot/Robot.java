@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
 
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
-      driveCommand = kMaxJoySpeed * Util.deadband(m_stick.getY());
+      driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
       steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
     }
     m_robotDrive.drive(driveCommand, steerCommand);
