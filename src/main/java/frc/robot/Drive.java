@@ -12,9 +12,8 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drive extends SubsystemBase {
+public class Drive {
     public static final double kMaxSpeed = 3.0; // meters per second
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
@@ -59,13 +58,6 @@ public class Drive extends SubsystemBase {
 
         m_leftGroup.setInverted(true);
         m_rightGroup.setInverted(true);
-    }
-
-    @Override
-    public void periodic() {
-        // Update the odometry in the periodic block
-        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
-                m_rightEncoder.getDistance());
     }
 
     /**
@@ -160,6 +152,10 @@ public class Drive extends SubsystemBase {
         double rightVoltage = rightFeedforward;
         m_leftGroup.setVoltage(leftVoltage);
         m_rightGroup.setVoltage(rightVoltage);
+
+        // Update the odometry in the periodic block
+        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
+                m_rightEncoder.getDistance());
     }
 
     public void setSpeeds(double left , double right) {
