@@ -61,7 +61,7 @@ public class Drive {
 
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
-        m_leftGroup.setInverted(true);
+        m_leftGroup.setInverted(false);
         m_rightGroup.setInverted(true);
     }
 

@@ -11,6 +11,6 @@ Kicker = Right trigger (ccw);
 intake backwards = Y
 hopper backwards = B 
 hood angle = right thumbstick
-controll panell = X
+controll panel = X
 
 100001 is better than 100101 but not by much
