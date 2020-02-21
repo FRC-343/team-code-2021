@@ -1,13 +1,18 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drive {
@@ -18,6 +23,8 @@ public class Drive {
     private static final double kWheelRadius = 0.076; // meters
     private static final int kEncoderResolution = 1024;
 
+    private static final boolean kGyroReversed = false;
+
     private final SpeedController m_leftMaster = new Spark(2);
     private final SpeedController m_leftFollower = new Spark(3);
     private final SpeedController m_rightMaster = new Spark(0);
@@ -25,6 +32,8 @@ public class Drive {
 
     private final Encoder m_leftEncoder = new Encoder(0, 1);
     private final Encoder m_rightEncoder = new Encoder(2, 3);
+
+    private final Gyro m_gyro = new ADXRS450_Gyro();
 
     private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
     private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
@@ -35,6 +44,11 @@ public class Drive {
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(2.24, 2.28, 0.506);
+  
+    private DifferentialDriveOdometry m_odometry;
+
+    private double m_maxOutput = 10.0;
+ 
 
     public Drive() {
         // Set the distance per pulse for the drive encoders. We can simply use the
@@ -43,10 +57,82 @@ public class Drive {
         m_leftEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
         m_rightEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
 
+        resetEncoders();
+
+        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
+        m_leftGroup.setInverted(false);
+        m_rightGroup.setInverted(true);
+    }
+
+    /**
+     * Returns the currently-estimated pose of the robot.
+     *
+     * @return The pose.
+     */
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    /**
+     * Returns the current wheel speeds of the robot.
+     *
+     * @return The current wheel speeds.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+    }
+
+    /**
+     * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
+     *
+     * @param maxOutput the maximum output to which the drive will be constrained
+     */
+    public void setMaxOutput(double maxOutput) {
+        m_maxOutput = maxOutput;
+    }
+
+    /**
+     * Resets the drive encoders to currently read a position of 0.
+     */
+    public void resetEncoders() {
         m_leftEncoder.reset();
         m_rightEncoder.reset();
+    }
 
-        m_rightGroup.setInverted(true);
+    /**
+     * Resets the odometry to the specified pose.
+     *
+     * @param pose The pose to which to set the odometry.
+     */
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+    }
+
+    /**
+     * Zeroes the heading of the robot.
+     */
+    public void zeroHeading() {
+        m_gyro.reset();
+    }
+
+    /**
+     * Returns the heading of the robot.
+     *
+     * @return the robot's heading in degrees, from -180 to 180
+     */
+    public double getHeading() {
+        return Math.IEEEremainder(m_gyro.getAngle(), 360) * (kGyroReversed ? -1.0 : 1.0);
+    }
+
+    /**
+     * Returns the turn rate of the robot.
+     *
+     * @return The turn rate of the robot, in degrees per second
+     */
+    public double getTurnRate() {
+        return m_gyro.getRate() * (kGyroReversed ? -1.0 : 1.0);
     }
 
     /**
@@ -55,22 +141,32 @@ public class Drive {
      * @param speeds The desired wheel speeds.
      */
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
-        final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+        speeds.leftMetersPerSecond = Util.clamp(speeds.leftMetersPerSecond, -m_maxOutput, m_maxOutput);
+        speeds.rightMetersPerSecond = Util.clamp(speeds.rightMetersPerSecond, -m_maxOutput, m_maxOutput);
 
-        final double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
-        final double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
+        double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
+        double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+
+        double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
+        double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
                 speeds.rightMetersPerSecond);
-        //m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-        //m_rightGroup.setVoltage(rightOutput + rightFeedforward);
-        m_leftGroup.setVoltage(leftFeedforward);
-        m_rightGroup.setVoltage(rightFeedforward);
+
+        //double leftVoltage = leftOutput + leftFeedforward;
+        //double rightVoltage = rightOutput + rightFeedforward;
+        double leftVoltage = leftFeedforward;
+        double rightVoltage = rightFeedforward;
+        m_leftGroup.setVoltage(leftVoltage);
+        m_rightGroup.setVoltage(rightVoltage);
+
+        // Update the odometry in the periodic block
+        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
+                m_rightEncoder.getDistance());
     }
 
     public void setSpeeds(double left , double right) {
         setSpeeds(new DifferentialDriveWheelSpeeds(left,right));
     }
-    
+
     /**
      * Drives the robot with the given linear velocity and angular velocity.
      *
@@ -78,7 +174,7 @@ public class Drive {
      * @param rot    Angular velocity in rad/s.
      */
     public void drive(double xSpeed, double rot) {
-        var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -rot));
+        DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -rot));
         setSpeeds(wheelSpeeds);
     }
 }

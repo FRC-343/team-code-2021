@@ -11,14 +11,19 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,12 +36,15 @@ public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
+  private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
+  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
+
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
-  private final Spark m_hopper = new Spark(6);
+  private final Spark m_hopper = new Spark(9);
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPannel = new Spark(8);
   private final Spark m_winch = new Spark(10);
@@ -137,7 +145,7 @@ public class Robot extends TimedRobot {
 
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
-      driveCommand = kMaxJoySpeed * Util.deadband(m_stick.getY());
+      driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
       steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
     }
     m_robotDrive.drive(driveCommand, steerCommand);
@@ -156,8 +164,8 @@ public class Robot extends TimedRobot {
         // TODO: (ADD VISION TRACKER now)
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
-      intakeCommand = -1;
-      kickerCommand = .2343;
+      intakeCommand = -.55;
+      kickerCommand = .24;
       hopperCommand = -.45;
     }
 
@@ -184,6 +192,25 @@ public class Robot extends TimedRobot {
     } else {
       m_controlPannel.set(0);
     }
+  
+    if (m_stick.getRawButton(11)) {
+      m_intakeLift.set(Value.kForward);
+    } else if (m_stick.getRawButton(10))  {
+      m_intakeLift.set(Value.kReverse);
+    } else {
+      m_intakeLift.set(Value.kOff);
+    }
+    
+    if (m_stick.getRawButton(6)) {
+      m_climberLift.set(Value.kForward);
+    } else if (m_stick.getRawButton(7)) {
+      m_climberLift.set(Value.kReverse);
+    } else {
+      m_climberLift.set(Value.kOff);
+    }
+
+  
+  
   }
 
   @Override
