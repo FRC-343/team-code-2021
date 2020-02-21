@@ -23,8 +23,8 @@ public class Drive {
     private final SpeedController m_rightMaster = new Spark(0);
     private final SpeedController m_rightFollower = new Spark(1);
 
-    private final Encoder m_leftEncoder = new Encoder(4, 5);
-    private final Encoder m_rightEncoder = new Encoder(6, 7);
+    private final Encoder m_leftEncoder = new Encoder(0, 1);
+    private final Encoder m_rightEncoder = new Encoder(2, 3);
 
     private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
     private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
