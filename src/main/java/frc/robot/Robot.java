@@ -12,7 +12,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-//import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,10 +20,10 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,9 +36,9 @@ public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
- /* private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
+  private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
-  private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);*/
+  private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
 
   private final Drive m_robotDrive = new Drive();
 
@@ -56,6 +56,12 @@ public class Robot extends TimedRobot {
   private final double m_KpAim = -0.085;
   private final double m_KpDistance = -0.1;
   private final double m_min_aim_command = -.5;
+
+  public Robot() {
+    if (!RobotConstants.kPractice) {
+      m_climberLift = new DoubleSolenoid(1, 2, 3);
+    }
+  }
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -142,7 +148,6 @@ public class Robot extends TimedRobot {
 
       SmartDashboard.putNumber("steerCommand", steerCommand);
 
-
       // double distance_adjust = m_KpDistance * distance_error;
     } else {
       driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
@@ -190,26 +195,23 @@ public class Robot extends TimedRobot {
     } else {
       m_controlPannel.set(0);
     }
-<<<<<<< HEAD
-  
-   /* if (m_stick.getRawButton(11)) {
-=======
 
     if (m_stick.getRawButton(11)) {
->>>>>>> bb43f6d6499e0188be7bce592637ba2762065aca
       m_intakeLift.set(Value.kForward);
-    } else if (m_stick.getRawButton(10))  {
+    } else if (m_stick.getRawButton(10)) {
       m_intakeLift.set(Value.kReverse);
     } else {
       m_intakeLift.set(Value.kOff);
     }
 
-    if (m_stick.getRawButton(6)) {
-      m_climberLift.set(Value.kForward);
-    } else if (m_stick.getRawButton(7)) {
-      m_climberLift.set(Value.kReverse);
-    } else {
-      m_climberLift.set(Value.kOff);
+    if (m_climberLift != null) {
+      if (m_stick.getRawButton(6)) {
+        m_climberLift.set(Value.kForward);
+      } else if (m_stick.getRawButton(7)) {
+        m_climberLift.set(Value.kReverse);
+      } else {
+        m_climberLift.set(Value.kOff);
+      }
     }
 
     if (m_stick.getRawButton(4)) {
@@ -218,15 +220,8 @@ public class Robot extends TimedRobot {
       m_controlPannelLift.set(Value.kReverse);
     } else {
       m_controlPannelLift.set(Value.kOff);
-<<<<<<< HEAD
-    }*/
-  
-  
-=======
     }
 
-
->>>>>>> bb43f6d6499e0188be7bce592637ba2762065aca
   }
 
   @Override

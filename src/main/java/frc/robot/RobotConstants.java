@@ -10,10 +10,12 @@ public class RobotConstants {
 
     public static RobotConstants getInstance() {
         if (m_instance == null) {
-            if (kPractice)
+            if (kPractice) {
                 m_instance = new PracticeRobotConstants();
-            else
+            }
+            else {
                 m_instance = new CompRobotConstants();
+            }
         }
 
         return m_instance;
