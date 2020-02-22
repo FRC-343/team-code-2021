@@ -44,11 +44,11 @@ public class Drive {
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(2.24, 2.28, 0.506);
-  
+
     private DifferentialDriveOdometry m_odometry;
 
     private double m_maxOutput = 10.0;
- 
+
 
     public Drive() {
         // Set the distance per pulse for the drive encoders. We can simply use the
