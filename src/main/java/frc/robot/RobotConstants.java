@@ -3,8 +3,9 @@ package frc.robot;
 public class RobotConstants {
     public static final boolean kPractice = false;
 
-    // PUT CONSTANTS HERE WITH A DEFAULT VALUE AND THEN PUT IN ROBOT-SPECIFIC FILES
-    public final int kHoodMotor = -1;
+    // PUT CONSTANTS HERE WITH A BOGUS DEFAULT VALUE AND THEN PUT IN ROBOT-SPECIFIC FILES
+    public int kHoodMotor = -1;
+    public int kHopper = -1;
 
     private static RobotConstants m_instance;
 

@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
-  private final Spark m_hopper = new Spark(6);
+  private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;

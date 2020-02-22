@@ -1,5 +1,8 @@
 package frc.robot;
 
 public class PracticeRobotConstants extends RobotConstants {
-    public final int kHoodMotor = 9;
+    public PracticeRobotConstants() {
+        kHoodMotor = 9;
+        kHopper = 6;
+    }
 }
