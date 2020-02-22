@@ -41,13 +41,14 @@ public class Robot extends TimedRobot {
   private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
 
   private final Drive m_robotDrive = new Drive();
+  private final Hood m_aimer = new Hood();
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(6);
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPannel = new Spark(8);
-  private final Spark m_aimer = new Spark(9);
+  private final Spark m_winch = new Spark(10);
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -183,7 +184,9 @@ public class Robot extends TimedRobot {
       intakeCommand = .5;
     }
 
-    m_aimer.set(m_controller.getY(Hand.kLeft));
+    m_aimer.move(m_controller.getY(Hand.kLeft));
+
+    m_winch.set(m_controller.getY(Hand.kRight));
 
     m_shooter.set(shooterCommand);
     m_intake.set(intakeCommand);
