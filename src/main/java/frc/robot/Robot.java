@@ -34,6 +34,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 5.0; // radians per sec
+  private static final double kMaxHoodSpeed = 0.5; // ratio
+  private static final double kMaxWinchSpeed = 1.0; // ratio
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
@@ -187,10 +189,10 @@ public class Robot extends TimedRobot {
       intakeCommand = .5;
     }
 
-    m_aimer.move(m_controller.getY(Hand.kLeft));
+    m_aimer.move(kMaxHoodSpeed*m_controller.getY(Hand.kLeft));
 
     if (m_winch != null) {
-      m_winch.set(m_controller.getY(Hand.kRight));
+      m_winch.set(kMaxWinchSpeed*m_controller.getY(Hand.kRight));
     }
 
     m_shooter.set(shooterCommand);
