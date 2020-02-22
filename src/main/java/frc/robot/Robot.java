@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
 
   private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
   private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
+  private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
@@ -46,7 +47,7 @@ public class Robot extends TimedRobot {
   private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(9);
   private final Spark m_intake = new Spark(7);
-  private final Spark m_controlPannel = new Spark(8);
+  private final Spark m_controlPannel = new Spark(11);
   private final Spark m_winch = new Spark(10);
 
   private final XboxController m_controller = new XboxController(1);
@@ -209,8 +210,13 @@ public class Robot extends TimedRobot {
       m_climberLift.set(Value.kOff);
     }
 
-  
-  
+    if (m_stick.getRawButton(4)) {
+      m_controlPannelLift.set(Value.kForward);
+    } else if (m_stick.getRawButton(5)) {
+      m_controlPannelLift.set(Value.kReverse);
+    } else {
+      m_controlPannelLift.set(Value.kOff);
+    }
   }
 
   @Override
