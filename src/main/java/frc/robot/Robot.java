@@ -36,37 +36,18 @@ public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
-<<<<<<< HEAD
-  //private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
-  //private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
-=======
   private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
   private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
   private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
-<<<<<<< HEAD
->>>>>>> b06194ec168b9453792eb65ea4e29b0de2ae18e4
-=======
->>>>>>> 3b71662c268cc2e6fbcc5546956b01d0f3a8237f
 
   private final Drive m_robotDrive = new Drive();
-  private final Hood m_aimer = new Hood();
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(6);
   private final Spark m_intake = new Spark(7);
-<<<<<<< HEAD
-<<<<<<< HEAD
-  private final Spark m_controlPannel = new Spark(8);
-  private final Spark m_aimer = new Spark(9);
-=======
   private final Spark m_controlPannel = new Spark(11);
-  private final Spark m_winch = new Spark(10);
->>>>>>> b06194ec168b9453792eb65ea4e29b0de2ae18e4
-=======
-  private final Spark m_controlPannel = new Spark(11);
-  private final Spark m_winch = new Spark(10);
->>>>>>> 3b71662c268cc2e6fbcc5546956b01d0f3a8237f
+  private final Spark m_aimer = new Spark(10);
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -197,9 +178,7 @@ public class Robot extends TimedRobot {
       intakeCommand = .5;
     }
 
-    m_aimer.move(m_controller.getY(Hand.kLeft));
-
-    m_winch.set(m_controller.getY(Hand.kRight)); 
+    m_aimer.set(m_controller.getY(Hand.kLeft));
 
     m_shooter.set(shooterCommand);
     m_intake.set(intakeCommand);
@@ -207,12 +186,12 @@ public class Robot extends TimedRobot {
     m_hopper.set(hopperCommand);
 
     if (m_controller.getXButton()) {
-      m_controlPannel.set(-1);
+      m_controlPannel.set(1);
     } else {
       m_controlPannel.set(0);
     }
   
-    /*if (m_stick.getRawButton(11)) {
+    if (m_stick.getRawButton(11)) {
       m_intakeLift.set(Value.kForward);
     } else if (m_stick.getRawButton(10))  {
       m_intakeLift.set(Value.kReverse);
@@ -226,7 +205,7 @@ public class Robot extends TimedRobot {
       m_climberLift.set(Value.kReverse);
     } else {
       m_climberLift.set(Value.kOff);
-    } */
+    } 
 
     if (m_stick.getRawButton(4)) {
       m_controlPannelLift.set(Value.kForward);
@@ -235,6 +214,8 @@ public class Robot extends TimedRobot {
     } else {
       m_controlPannelLift.set(Value.kOff);
     }
+  
+  
   }
 
   @Override
