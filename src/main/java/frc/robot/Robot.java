@@ -37,8 +37,8 @@ public class Robot extends TimedRobot {
   private static final double kMaxJoyTurn = 3.0; // radians per sec
 
   private final DoubleSolenoid m_climberLift;
-  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
-  private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
+  private final DoubleSolenoid m_intakeLift;
+  private final DoubleSolenoid m_controlPanelLift;
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
@@ -47,8 +47,8 @@ public class Robot extends TimedRobot {
   private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(6);
   private final Spark m_intake = new Spark(7);
-  private final Spark m_controlPannel = new Spark(8);
-  private final Spark m_winch = new Spark(10);
+  private final Spark m_controlPanel;
+  private final Spark m_winch;
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -61,6 +61,10 @@ public class Robot extends TimedRobot {
   public Robot() {
     if (!RobotConstants.kPractice) {
       m_climberLift = new DoubleSolenoid(1, 2, 3);
+      m_intakeLift = new DoubleSolenoid(1, 0, 1);
+      m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
+      m_controlPanel = new Spark(11);
+      m_winch = new Spark(10);
     }
   }
 
@@ -186,25 +190,31 @@ public class Robot extends TimedRobot {
 
     m_aimer.move(m_controller.getY(Hand.kLeft));
 
-    m_winch.set(m_controller.getY(Hand.kRight));
+    if (m_winch != null) {
+      m_winch.set(m_controller.getY(Hand.kRight));
+    }
 
     m_shooter.set(shooterCommand);
     m_intake.set(intakeCommand);
     m_kicker.set(kickerCommand);
     m_hopper.set(hopperCommand);
 
-    if (m_controller.getXButton()) {
-      m_controlPannel.set(1);
-    } else {
-      m_controlPannel.set(0);
+    if (m_controlPanel != null) {
+      if (m_controller.getXButton()) {
+        m_controlPanel.set(1);
+      } else {
+        m_controlPanel.set(0);
+      }
     }
 
-    if (m_stick.getRawButton(11)) {
-      m_intakeLift.set(Value.kForward);
-    } else if (m_stick.getRawButton(10)) {
-      m_intakeLift.set(Value.kReverse);
-    } else {
-      m_intakeLift.set(Value.kOff);
+    if (m_intakeLift != null) {
+      if (m_stick.getRawButton(11)) {
+        m_intakeLift.set(Value.kForward);
+      } else if (m_stick.getRawButton(10)) {
+        m_intakeLift.set(Value.kReverse);
+      } else {
+        m_intakeLift.set(Value.kOff);
+      }
     }
 
     if (m_climberLift != null) {
@@ -217,14 +227,15 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (m_stick.getRawButton(4)) {
-      m_controlPannelLift.set(Value.kForward);
-    } else if (m_stick.getRawButton(5)) {
-      m_controlPannelLift.set(Value.kReverse);
-    } else {
-      m_controlPannelLift.set(Value.kOff);
+    if (m_controlPanelLift != null) {
+      if (m_stick.getRawButton(4)) {
+        m_controlPanelLift.set(Value.kForward);
+      } else if (m_stick.getRawButton(5)) {
+        m_controlPanelLift.set(Value.kReverse);
+      } else {
+        m_controlPanelLift.set(Value.kOff);
+      }
     }
-
   }
 
   @Override
