@@ -175,7 +175,7 @@ public class Robot extends TimedRobot {
         // TODO: (ADD VISION TRACKER now)
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
-      intakeCommand = -.8;
+      intakeCommand = -.65;
       kickerCommand = .24;
       hopperCommand = -.45;
     }
