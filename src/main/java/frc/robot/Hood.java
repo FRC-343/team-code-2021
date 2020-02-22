@@ -14,7 +14,6 @@ public class Hood {
         if (!RobotConstants.kPractice) {
             m_hoodEncoder = new Encoder(4, 5);
             m_hoodZero = new DigitalInput(9);
-            m_hoodMotor.setInverted(true);
         }
     }
 
@@ -26,6 +25,7 @@ public class Hood {
     public void move(double speed) {
         if (m_hoodZero != null && m_hoodZero.get() && speed < 0) {
             m_hoodEncoder.reset();
+            m_hoodMotor.set(0.0);
         } else {
             m_hoodMotor.set(speed);
         }

@@ -19,8 +19,8 @@ public class Drive {
     public static final double kMaxSpeed = 3.0; // meters per second
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-    private static final double kTrackWidth = 0.619; // meters
-    private static final double kWheelRadius = 0.076; // meters
+    private static final double kTrackWidth = 0.597; // meters
+    private static final double kWheelRadius = 0.0762; // meters
     private static final int kEncoderResolution = 1024;
 
     private static final boolean kGyroReversed = false;
