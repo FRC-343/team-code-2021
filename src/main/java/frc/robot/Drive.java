@@ -38,12 +38,12 @@ public class Drive {
     private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
     private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-    private final PIDController m_leftPIDController = new PIDController(16.6, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(16.6, 0, 0);
+    private final PIDController m_leftPIDController = new PIDController(13.9, 0, 0);
+    private final PIDController m_rightPIDController = new PIDController(13.9, 0, 0);
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(2.24, 2.28, 0.506);
+    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveS, RobotConstants.getInstance().kDriveV, RobotConstants.getInstance().kDriveA);
 
     private DifferentialDriveOdometry m_odometry;
 

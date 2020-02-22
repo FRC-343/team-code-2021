@@ -24,7 +24,11 @@ public class Hood {
 
     public void move(double speed) {
         if (m_hoodZero != null && m_hoodZero.get() && speed < 0) {
-            m_hoodEncoder.reset();
+            if (m_hoodEncoder != null) {
+                m_hoodEncoder.reset();
+            }
+            m_hoodMotor.set(0.0);
+        } else if (m_hoodEncoder != null && m_hoodEncoder.getDistance() > 65.0 && speed > 0) {
             m_hoodMotor.set(0.0);
         } else {
             m_hoodMotor.set(speed);

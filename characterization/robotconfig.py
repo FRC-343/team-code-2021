@@ -11,13 +11,13 @@
     "rightControllerTypes": ["Spark", "Spark"],
     "leftControllerTypes": ["Spark", "Spark"],
     # Ports for the left-side motors
-    "leftMotorPorts": [0, 1],
+    "leftMotorPorts": [2, 3],
     # Ports for the right-side motors
-    "rightMotorPorts": [2, 3],
+    "rightMotorPorts": [0, 1],
     # Inversions for the left-side motors
-    "leftMotorsInverted": [True, True],
+    "leftMotorsInverted": [False, False],
     # Inversions for the right side motors
-    "rightMotorsInverted": [True, True],
+    "rightMotorsInverted": [False, False],
     # Wheel diameter (in units of your choice - will dictate units of analysis)
     "wheelDiameter": 0.152,
     # If your robot has only one encoder, set all right encoder fields to `None`
@@ -26,15 +26,15 @@
     # should take into account gearing between the encoder and the wheels
     "encoderEPR": 1024,
     # Ports for the left-side encoder
-    "leftEncoderPorts": [4, 5],
+    "leftEncoderPorts": [2, 3],
     # Ports for the right-side encoder
-    "rightEncoderPorts": [6, 7],
+    "rightEncoderPorts": [0, 1],
     # Whether the left encoder is inverted
-    "leftEncoderInverted": True,
+    "leftEncoderInverted": False,
     # Whether the right encoder is inverted:
     "rightEncoderInverted": True,
     # Your gyro type (one of "NavX", "Pigeon", "ADXRS450", "AnalogGyro", or "None")
-    "gyroType": "None",
+    "gyroType": "ADXRS450",
     # Whatever you put into the constructor of your gyro
     # Could be:
     # "SPI.Port.kMXP" (MXP SPI port for NavX or ADXRS450),
