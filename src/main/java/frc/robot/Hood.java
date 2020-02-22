@@ -11,6 +11,7 @@ public class Hood {
     public Hood() {
         if (!RobotConstants.kPractice) {
             m_hoodEncoder = new Encoder(4, 5);
+            m_hoodMotor.setInverted(true);
         }
     }
 
