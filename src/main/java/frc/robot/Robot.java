@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
     }
 
     if (m_controller.getBButton()) {
-      hopperCommand = .5;
+      hopperCommand = .6;
       kickerCommand = -.2343;
     }
 
@@ -189,7 +189,7 @@ public class Robot extends TimedRobot {
     m_hopper.set(hopperCommand);
 
     if (m_controller.getXButton()) {
-      m_controlPannel.set(1);
+      m_controlPannel.set(-1);
     } else {
       m_controlPannel.set(0);
     }
