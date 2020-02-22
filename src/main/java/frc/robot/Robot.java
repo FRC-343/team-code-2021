@@ -190,22 +190,27 @@ public class Robot extends TimedRobot {
     } else {
       m_controlPannel.set(0);
     }
+<<<<<<< HEAD
   
    /* if (m_stick.getRawButton(11)) {
+=======
+
+    if (m_stick.getRawButton(11)) {
+>>>>>>> bb43f6d6499e0188be7bce592637ba2762065aca
       m_intakeLift.set(Value.kForward);
     } else if (m_stick.getRawButton(10))  {
       m_intakeLift.set(Value.kReverse);
     } else {
       m_intakeLift.set(Value.kOff);
     }
-    
+
     if (m_stick.getRawButton(6)) {
       m_climberLift.set(Value.kForward);
     } else if (m_stick.getRawButton(7)) {
       m_climberLift.set(Value.kReverse);
     } else {
       m_climberLift.set(Value.kOff);
-    } 
+    }
 
     if (m_stick.getRawButton(4)) {
       m_controlPannelLift.set(Value.kForward);
@@ -213,9 +218,15 @@ public class Robot extends TimedRobot {
       m_controlPannelLift.set(Value.kReverse);
     } else {
       m_controlPannelLift.set(Value.kOff);
+<<<<<<< HEAD
     }*/
   
   
+=======
+    }
+
+
+>>>>>>> bb43f6d6499e0188be7bce592637ba2762065aca
   }
 
   @Override
