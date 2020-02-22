@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,7 +33,7 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
  */
 public class Robot extends TimedRobot {
   private static final double kMaxJoySpeed = 3.0; // meters per sec
-  private static final double kMaxJoyTurn = 3.0; // radians per sec
+  private static final double kMaxJoyTurn = 5.0; // radians per sec
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
