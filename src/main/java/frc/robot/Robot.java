@@ -43,7 +43,10 @@ public class Robot extends TimedRobot {
   private final DoubleSolenoid m_climberLift = new DoubleSolenoid(1, 2, 3);
   private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
   private final DoubleSolenoid m_controlPannelLift = new DoubleSolenoid(1, 6, 7);
+<<<<<<< HEAD
 >>>>>>> b06194ec168b9453792eb65ea4e29b0de2ae18e4
+=======
+>>>>>>> 3b71662c268cc2e6fbcc5546956b01d0f3a8237f
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
@@ -53,12 +56,17 @@ public class Robot extends TimedRobot {
   private final Spark m_hopper = new Spark(6);
   private final Spark m_intake = new Spark(7);
 <<<<<<< HEAD
+<<<<<<< HEAD
   private final Spark m_controlPannel = new Spark(8);
   private final Spark m_aimer = new Spark(9);
 =======
   private final Spark m_controlPannel = new Spark(11);
   private final Spark m_winch = new Spark(10);
 >>>>>>> b06194ec168b9453792eb65ea4e29b0de2ae18e4
+=======
+  private final Spark m_controlPannel = new Spark(11);
+  private final Spark m_winch = new Spark(10);
+>>>>>>> 3b71662c268cc2e6fbcc5546956b01d0f3a8237f
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -181,7 +189,7 @@ public class Robot extends TimedRobot {
     }
 
     if (m_controller.getBButton()) {
-      hopperCommand = .5;
+      hopperCommand = .6;
       kickerCommand = -.2343;
     }
 
