@@ -176,16 +176,16 @@ public class Drive {
         double leftFeedforward = m_leftFeedforward.calculate(speeds.leftMetersPerSecond);
         double rightFeedforward = m_rightFeedforward.calculate(speeds.rightMetersPerSecond);
 
-        double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
-        double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
+        double leftPIDOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
+        double rightPIDOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
                 speeds.rightMetersPerSecond);
 
-        double leftVoltage = leftOutput + leftFeedforward;
-        double rightVoltage = rightOutput + rightFeedforward;
-        //double leftVoltage = leftFeedforward;
-        //double rightVoltage = rightFeedforward;
-        m_leftGroup.setVoltage(leftVoltage);
-        m_rightGroup.setVoltage(rightVoltage);
+        double leftOutput = leftPIDOutput + leftFeedforward;
+        double rightOutput = rightPIDOutput + rightFeedforward;
+        //double leftOutput = leftFeedforward;
+        //double rightOutput = rightFeedforward;
+        m_leftGroup.setVoltage(leftOutput);
+        m_rightGroup.setVoltage(rightOutput);
 
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),

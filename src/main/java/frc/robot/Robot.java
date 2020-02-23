@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -31,10 +30,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final double kMaxJoySpeed = 3.0; // meters per sec
-  private static final double kMaxJoyTurn = 5.0; // radians per sec
-  private static final double kMaxHoodSpeed = 0.5; // ratio
-  private static final double kMaxWinchSpeed = 1.0; // ratio
+  public static final double kMaxJoySpeed = 3.0; // meters per sec
+  public static final double kMaxJoyTurn = 5.0; // radians per sec
+  public static final double kMaxHoodSpeed = 0.5; // ratio
+  public static final double kMaxWinchSpeed = 1.0; // ratio
+
+  public static final double kTargetP = -0.085;
+  public static final double kMinTargetCommand = -0.5;
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
@@ -42,23 +44,17 @@ public class Robot extends TimedRobot {
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
+  private final Shooter m_shooter = new Shooter();
   private final Autonomous m_auto = new Autonomous(m_robotDrive);
 
   private final Spark m_kicker = new Spark(4);
-  private final Spark m_shooter = new Spark(5);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
-  
-  private final Encoder m_shootEncoder;
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
-
-  private final double m_KpAim = -0.085;
-  private final double m_KpDistance = -0.1;
-  private final double m_min_aim_command = -.5;
 
   public Robot() {
     if (!RobotConstants.kPractice) {
@@ -67,7 +63,6 @@ public class Robot extends TimedRobot {
       m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
       m_winch = new Spark(10);
-      m_shootEncoder = new Encoder(6, 7);
     }
   }
 
@@ -133,28 +128,24 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
 
     double driveCommand = 0.0;
     double steerCommand = 0.0;
 
     if (m_stick.getRawButton(9)) {
       double heading_error = -tx.getDouble(0.0);
-      double distance_error = -ty.getDouble(0.0);
+      double angle_error = ty.getDouble(0.0);
 
       if (heading_error > 1.0) {
-        steerCommand = m_KpAim * heading_error + m_min_aim_command;
+        steerCommand = kTargetP * heading_error + kMinTargetCommand;
       } else if (heading_error < -1.0) {
-        steerCommand = m_KpAim * heading_error - m_min_aim_command;
+        steerCommand = kTargetP * heading_error - kMinTargetCommand;
       }
 
-      SmartDashboard.putNumber("steerCommand", steerCommand);
-
-      // double distance_adjust = m_KpDistance * distance_error;
+      m_aimer.aim(angle_error);
     } else {
       driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
       steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
@@ -167,12 +158,13 @@ public class Robot extends TimedRobot {
     double hopperCommand = 0;
 
     if (m_controller.getBumper(Hand.kLeft)) {
-      shooterCommand = -1;
+      shooterCommand = Shooter.kShootSpeed;
       // TODO lower intake
       if (m_controller.getTriggerAxis(Hand.kRight) > .2) {
         kickerCommand = -1;
-        hopperCommand = .65;
-        // TODO: (ADD VISION TRACKER now)
+        if (m_shooter.getRate() > Shooter.kShootReadySpeed) {
+          hopperCommand = .65;
+        }
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
       intakeCommand = -.65;
@@ -189,13 +181,13 @@ public class Robot extends TimedRobot {
       intakeCommand = .5;
     }
 
-    m_aimer.move(kMaxHoodSpeed*m_controller.getY(Hand.kLeft));
+    m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
 
     if (m_winch != null) {
-      m_winch.set(kMaxWinchSpeed*m_controller.getY(Hand.kRight));
+      m_winch.set(kMaxWinchSpeed * m_controller.getY(Hand.kRight));
     }
 
-    m_shooter.set(shooterCommand);
+    m_shooter.shoot(shooterCommand);
     m_intake.set(intakeCommand);
     m_kicker.set(kickerCommand);
     m_hopper.set(hopperCommand);

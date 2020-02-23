@@ -17,9 +17,8 @@ public class Hood {
         }
     }
 
-    public void aim(double height) {
-        // m_hoodEncoder.get( /*aiming code*/ );
-
+    public void aim(double angle) {
+        // TODO: add hood aim equation
     }
 
     public void move(double speed) {
