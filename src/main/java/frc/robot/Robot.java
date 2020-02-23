@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
+  private final Autonomous m_auto = new Autonomous(m_robotDrive);
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_shooter = new Spark(5);
@@ -52,7 +53,6 @@ public class Robot extends TimedRobot {
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
-  private final Timer m_timer = new Timer();
 
   private final double m_KpAim = -0.085;
   private final double m_KpDistance = -0.1;
@@ -103,8 +103,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_timer.reset();
-    m_timer.start();
+    m_auto.autonomousInit();
   }
 
   /**
@@ -112,12 +111,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // Drive for 2 seconds
-    if (m_timer.get() < 2.0) {
-      m_robotDrive.drive(0.5, 0.0); // drive forwards half speed
-    } else {
-      m_robotDrive.drive(0, 0); // stop robot
-    }
+    m_auto.autonomousPeriodic();
   }
 
   /**
@@ -125,6 +119,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    m_auto.autonomousEnd();
   }
 
   /**
@@ -236,6 +231,11 @@ public class Robot extends TimedRobot {
         m_controlPanelLift.set(Value.kOff);
       }
     }
+  }
+
+  @Override
+  public void testInit() {
+    m_auto.autonomousEnd();
   }
 
   @Override

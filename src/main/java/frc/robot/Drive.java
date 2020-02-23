@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drive {
     public static final double kMaxSpeed = 3.0; // meters per second
+    public static final double kMaxAcceleration = 1.0; // meters per second squared
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
     private static final double kTrackWidth = 0.597; // meters
@@ -43,7 +44,8 @@ public class Drive {
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveS, RobotConstants.getInstance().kDriveV, RobotConstants.getInstance().kDriveA);
+    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveLeftS, RobotConstants.getInstance().kDriveLeftV, RobotConstants.getInstance().kDriveLeftA);
+    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveRightS, RobotConstants.getInstance().kDriveRightV, RobotConstants.getInstance().kDriveRightA);
 
     private DifferentialDriveOdometry m_odometry;
 
@@ -63,6 +65,26 @@ public class Drive {
 
         m_leftGroup.setInverted(false);
         m_rightGroup.setInverted(true);
+    }
+
+    public PIDController getLeftPIDController() {
+        return m_leftPIDController;
+    }
+
+    public PIDController getRightPIDController() {
+        return m_rightPIDController;
+    }
+
+    public SimpleMotorFeedforward getLeftFeedforward() {
+        return m_leftFeedforward;
+    }
+
+    public SimpleMotorFeedforward getRightFeedforward() {
+        return m_rightFeedforward;
+    }
+
+    public DifferentialDriveKinematics getKinematics() {
+        return m_kinematics;
     }
 
     /**
@@ -98,6 +120,11 @@ public class Drive {
     public void resetEncoders() {
         m_leftEncoder.reset();
         m_rightEncoder.reset();
+    }
+
+    public void resetPID() {
+        m_leftPIDController.reset();
+        m_rightPIDController.reset();
     }
 
     /**
@@ -144,8 +171,8 @@ public class Drive {
         speeds.leftMetersPerSecond = Util.clamp(speeds.leftMetersPerSecond, -m_maxOutput, m_maxOutput);
         speeds.rightMetersPerSecond = Util.clamp(speeds.rightMetersPerSecond, -m_maxOutput, m_maxOutput);
 
-        double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
-        double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+        double leftFeedforward = m_leftFeedforward.calculate(speeds.leftMetersPerSecond);
+        double rightFeedforward = m_rightFeedforward.calculate(speeds.rightMetersPerSecond);
 
         double leftOutput = m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
         double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
@@ -165,6 +192,11 @@ public class Drive {
 
     public void setSpeeds(double left , double right) {
         setSpeeds(new DifferentialDriveWheelSpeeds(left,right));
+    }
+
+    public void setVoltages(double left, double right) {
+        m_leftGroup.setVoltage(left);
+        m_rightGroup.setVoltage(right);
     }
 
     /**
