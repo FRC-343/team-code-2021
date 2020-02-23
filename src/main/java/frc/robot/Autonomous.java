@@ -32,16 +32,16 @@ public class Autonomous {
     public Autonomous(Drive robotDrive) {
         m_robotDrive = robotDrive;
 
-        TrajectoryConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(),
-                m_robotDrive.getKinematics(), 10);
+                m_robotDrive.getKinematics(), 5);
 
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_robotDrive.getKinematics())
                 // Apply the voltage constraint
-                .addConstraint(autoVoltageConstraint);
+                .addConstraint(voltageConstraint);
 
         // An example trajectory to follow. All units in meters.
         m_trajectory = TrajectoryGenerator.generateTrajectory(
@@ -59,7 +59,7 @@ public class Autonomous {
 
     public void autonomousInit() {
         m_prevTime = 0;
-        var initialState = m_trajectory.sample(0);
+        Trajectory.State initialState = m_trajectory.sample(0);
         m_prevSpeeds = m_robotDrive.getKinematics().toWheelSpeeds(new ChassisSpeeds(initialState.velocityMetersPerSecond, 0,
                 initialState.curvatureRadPerMeter * initialState.velocityMetersPerSecond));
 
@@ -67,17 +67,18 @@ public class Autonomous {
         m_timer.start();
 
         m_robotDrive.resetPID();
+        m_robotDrive.resetOdometry(new Pose2d());
     }
 
     public void autonomousPeriodic() {
         double curTime = m_timer.get();
         double dt = curTime - m_prevTime;
 
-        var targetWheelSpeeds = m_robotDrive.getKinematics()
+        DifferentialDriveWheelSpeeds targetWheelSpeeds = m_robotDrive.getKinematics()
                 .toWheelSpeeds(m_follower.calculate(m_robotDrive.getPose(), m_trajectory.sample(curTime)));
 
-        var leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond;
-        var rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond;
+        double leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond;
+        double rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond;
 
         double leftOutput;
         double rightOutput;
@@ -102,5 +103,6 @@ public class Autonomous {
 
     public void autonomousEnd() {
         m_timer.stop();
+        m_robotDrive.setVoltages(0, 0);
     }
 }

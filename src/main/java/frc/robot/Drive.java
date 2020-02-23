@@ -22,7 +22,7 @@ public class Drive {
 
     private static final double kTrackWidth = 0.597; // meters
     private static final double kWheelRadius = 0.0762; // meters
-    private static final int kEncoderResolution = 1024;
+    private static final int kEncoderResolution = 256;
 
     private static final boolean kGyroReversed = false;
 
@@ -31,16 +31,16 @@ public class Drive {
     private final SpeedController m_rightMaster = new Spark(0);
     private final SpeedController m_rightFollower = new Spark(1);
 
-    private final Encoder m_leftEncoder = new Encoder(0, 1);
-    private final Encoder m_rightEncoder = new Encoder(2, 3);
+    private final Encoder m_leftEncoder = new Encoder(2, 3);
+    private final Encoder m_rightEncoder = new Encoder(0, 1);
 
     private final Gyro m_gyro = new ADXRS450_Gyro();
 
     private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
     private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
-    private final PIDController m_leftPIDController = new PIDController(13.9, 0, 0);
-    private final PIDController m_rightPIDController = new PIDController(13.9, 0, 0);
+    private final PIDController m_leftPIDController = new PIDController(2.0, 0, 0);
+    private final PIDController m_rightPIDController = new PIDController(2.0, 0, 0);
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
@@ -65,6 +65,8 @@ public class Drive {
 
         m_leftGroup.setInverted(false);
         m_rightGroup.setInverted(true);
+        m_leftEncoder.setReverseDirection(false);
+        m_rightEncoder.setReverseDirection(true);
     }
 
     public PIDController getLeftPIDController() {
@@ -178,10 +180,10 @@ public class Drive {
         double rightOutput = m_rightPIDController.calculate(m_rightEncoder.getRate(),
                 speeds.rightMetersPerSecond);
 
-        //double leftVoltage = leftOutput + leftFeedforward;
-        //double rightVoltage = rightOutput + rightFeedforward;
-        double leftVoltage = leftFeedforward;
-        double rightVoltage = rightFeedforward;
+        double leftVoltage = leftOutput + leftFeedforward;
+        double rightVoltage = rightOutput + rightFeedforward;
+        //double leftVoltage = leftFeedforward;
+        //double rightVoltage = rightFeedforward;
         m_leftGroup.setVoltage(leftVoltage);
         m_rightGroup.setVoltage(rightVoltage);
 

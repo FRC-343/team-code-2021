@@ -13,7 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -50,6 +50,8 @@ public class Robot extends TimedRobot {
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
+  
+  private final Encoder m_shootEncoder;
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -65,6 +67,7 @@ public class Robot extends TimedRobot {
       m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
       m_winch = new Spark(10);
+      m_shootEncoder = new Encoder(6, 7);
     }
   }
 
@@ -87,6 +90,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
+    SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
+    SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
   }
 
   /**
