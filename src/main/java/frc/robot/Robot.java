@@ -11,9 +11,8 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -53,16 +52,21 @@ public class Robot extends TimedRobot {
   private final Spark m_controlPanel;
   private final Spark m_winch;
 
+  private final DigitalInput m_cellDetector;
+
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
   public Robot() {
+    m_intake.setInverted(true);
+
     if (!RobotConstants.kPractice) {
       m_climberLift = new DoubleSolenoid(1, 2, 3);
       m_intakeLift = new DoubleSolenoid(1, 0, 1);
       m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
       m_winch = new Spark(10);
+      m_cellDetector = new DigitalInput(8);
     }
   }
 
@@ -159,26 +163,30 @@ public class Robot extends TimedRobot {
 
     if (m_controller.getBumper(Hand.kLeft)) {
       shooterCommand = Shooter.kShootSpeed;
-      // TODO lower intake
-      if (m_controller.getTriggerAxis(Hand.kRight) > .2) {
+      if (m_controller.getTriggerAxis(Hand.kRight) > 0.2) {
         kickerCommand = -1;
         if (m_shooter.getRate() > Shooter.kShootReadySpeed) {
-          hopperCommand = .65;
+          hopperCommand = 0.65;
         }
       }
-    } else if (m_controller.getTriggerAxis(Hand.kLeft) > .2) {
-      intakeCommand = -.65;
-      kickerCommand = .24;
-      hopperCommand = -.45;
+    } else if (m_controller.getTriggerAxis(Hand.kLeft) > 0.2) {
+      intakeCommand = 0.65;
+      if (m_cellDetector == null || m_cellDetector.get()) {
+        kickerCommand = 0.24;
+        hopperCommand = -0.45;
+      }
     }
 
-    if (m_controller.getBButton()) {
-      hopperCommand = .6;
-      kickerCommand = -.2343;
+    if (m_controller.getAButton()) {
+      hopperCommand = -0.6;
+      kickerCommand = 0.24;
+    } else if (m_controller.getBButton()) {
+      hopperCommand = 0.6;
+      kickerCommand = -0.24;
     }
 
     if (m_controller.getYButton()) {
-      intakeCommand = .5;
+      intakeCommand = -0.5;
     }
 
     m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));

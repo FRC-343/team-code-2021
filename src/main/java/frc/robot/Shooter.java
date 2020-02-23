@@ -7,15 +7,18 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 
 public class Shooter {
-    public static final double kShootSpeed = 0.8; // ratio
+    public static final double kShootSpeed = 110.0; // rev per sec
     public static final double kShootReadySpeed = 105.0; // rev per sec
+    public static final double kShootGarbage = 150.0; // rev per sec
 
     private final SpeedController m_shooter = new Spark(5);
 
     private final Encoder m_shooterEncoder;
-    
-    private final PIDController m_shooterPIDController = new PIDController(0.153, 0.0, 0.0);
+
+    private final PIDController m_shooterPIDController = new PIDController(0.10, 0.0, 0.0);
     private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(1.71, 0.0782);
+
+    private double m_lastRate = 0.0;
 
     public Shooter() {
         m_shooter.setInverted(true);
@@ -28,7 +31,11 @@ public class Shooter {
     }
 
     public double getRate() {
-        return m_shooterEncoder.getRate();
+        if (m_shooterEncoder != null && m_shooterEncoder.getRate() < kShootGarbage) {
+            m_lastRate = m_shooterEncoder.getRate();
+        }
+
+        return m_lastRate;
     }
 
     public void setVoltage(double volts) {
@@ -36,14 +43,18 @@ public class Shooter {
     }
 
     public void shoot(double speed) {
-        double shooterFeedforward = m_shooterFeedforward.calculate(speed);
-        double shooterPIDOutput = 0.0;
-        if (m_shooterEncoder != null) {
-            shooterPIDOutput = m_shooterPIDController.calculate(m_shooterEncoder.getRate(), speed);
-        }
+        if (speed > 0.01) {
+            double shooterFeedforward = m_shooterFeedforward.calculate(speed);
+            double shooterPIDOutput = 0.0;
+            if (m_shooterEncoder != null) {
+                shooterPIDOutput = m_shooterPIDController.calculate(getRate(), speed);
+            }
 
-        double shooterOutput = shooterFeedforward + shooterPIDOutput;
-        
-        m_shooter.setVoltage(shooterOutput);
+            double shooterOutput = shooterFeedforward + shooterPIDOutput;
+
+            m_shooter.setVoltage(shooterOutput);
+        } else {
+            m_shooter.setVoltage(0.0);
+        }
     }
 }
