@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorSensorV3;
+
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -52,6 +55,7 @@ public class Robot extends TimedRobot {
   private final Spark m_controlPanel;
   private final Spark m_winch;
 
+  private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
 
   private final XboxController m_controller = new XboxController(1);
@@ -66,6 +70,7 @@ public class Robot extends TimedRobot {
       m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
       m_winch = new Spark(10);
+      m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
     }
   }
