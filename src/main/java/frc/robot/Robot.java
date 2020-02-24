@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
       m_intakeLift = new DoubleSolenoid(1, 0, 1);
       m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
+      m_controlPanel.setInverted(true);
       m_winch = new Spark(10);
       m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
@@ -97,6 +98,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("color_blue", m_color.getBlue());
   }
 
   /**
@@ -176,16 +178,16 @@ public class Robot extends TimedRobot {
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > 0.2) {
       intakeCommand = 0.65;
-      if (m_cellDetector == null || m_cellDetector.get()) {
+      if (m_cellDetector == null || !m_cellDetector.get() || true) {
         kickerCommand = 0.24;
         hopperCommand = -0.45;
       }
     }
 
-    if (m_controller.getAButton()) {
+    if (m_controller.getBButton()) {
       hopperCommand = -0.6;
       kickerCommand = 0.24;
-    } else if (m_controller.getBButton()) {
+    } else if (m_controller.getAButton()) {
       hopperCommand = 0.6;
       kickerCommand = -0.24;
     }
