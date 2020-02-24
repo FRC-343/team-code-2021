@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Hood {
     private final Encoder m_hoodEncoder;
@@ -23,7 +24,8 @@ public class Hood {
     public boolean aim(double angle) {
         boolean aimed = false;
 
-        double target = (10 - angle)*30;
+        double target = 60 + 2*angle - 0.208*angle*angle - 0.0287*angle*angle*angle;
+        SmartDashboard.putNumber("hood_target", target);
 
         if (m_hoodEncoder != null && m_hoodZero != null) {
             if (!m_aiming) {
@@ -31,7 +33,7 @@ public class Hood {
                 m_zeroing = true;
             }
 
-            if (m_hoodEncoder.getRate() > 150 || m_hoodEncoder.getRate() < -250 || m_hoodEncoder.getDistance() > 70 | m_hoodEncoder.getDistance() < -5) {
+            if (m_hoodEncoder.getRate() > 150 || m_hoodEncoder.getRate() < -250 || m_hoodEncoder.getDistance() > 70 || m_hoodEncoder.getDistance() < -5) {
                 m_zeroing = true;
             }
 
@@ -55,6 +57,8 @@ public class Hood {
         } else {
             m_hoodMotor.set(0.0);
         }
+
+        SmartDashboard.putBoolean("hood_aimed", aimed);
 
         return aimed;
     }

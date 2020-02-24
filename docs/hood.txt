@@ -1,9 +1,6 @@
-THIS IS OUTDATED - NEED TO REMEASURE
-
-
-hood  lime: ty, tx
-42.5 lime: 0, 0
-41.75 lime: -10.5, .66
-38.5 lime: 5.29 0.46
-
-3.25 lime: n/a, n/a
+ hood   | lime tx  | lime ty
+--------|----------|---------
+ 45.75  | 0.38     | -6.90
+ 52.5   | -0.85    | -3.16
+ 63.25  | 0.20     | 2.54
+ 48.25  | 0.70     | 7.96

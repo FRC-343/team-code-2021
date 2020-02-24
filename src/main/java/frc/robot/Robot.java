@@ -160,6 +160,8 @@ public class Robot extends TimedRobot {
     } else {
       driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
       steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
+
+      m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }
     m_robotDrive.drive(driveCommand, steerCommand);
 
@@ -195,8 +197,6 @@ public class Robot extends TimedRobot {
     if (m_controller.getYButton()) {
       intakeCommand = -0.5;
     }
-
-    m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
 
     if (m_winch != null) {
       m_winch.set(kMaxWinchSpeed * m_controller.getY(Hand.kRight));
