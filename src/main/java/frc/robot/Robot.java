@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   public static final double kMaxHoodSpeed = 0.5; // ratio
   public static final double kMaxWinchSpeed = 1.0; // ratio
 
-  public static final double kTargetP = -0.085;
+  public static final double kTargetP = -0.065;
   public static final double kMinTargetCommand = -0.5;
 
   private final DoubleSolenoid m_climberLift;
