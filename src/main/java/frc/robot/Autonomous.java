@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -33,7 +34,7 @@ public class Autonomous {
                 m_robotDrive = robotDrive;
 
                 TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-                                m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 2);
+                                m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 10);
 
                 // Create config for trajectory
                 TrajectoryConfig config = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
@@ -47,9 +48,9 @@ public class Autonomous {
                                 // Start at the origin facing the +X direction
                                 new Pose2d(0, 0, new Rotation2d(0)),
                                 // Pass through these two interior waypoints, making an 's' curve path
-                                List.of(new Translation2d(1.0, 1.0), new Translation2d(2.0, -1.0)),
+                                List.of(new Translation2d(1.25, 0.75), new Translation2d(2.50, -0.75)),
                                 // End 3 meters straight ahead of where we started, facing forward
-                                new Pose2d(3.0, 0, new Rotation2d(0)),
+                                new Pose2d(3.25, 0, new Rotation2d(0)),
                                 //List.of(new Pose2d(0.0, 0.0, new Rotation2d(0.0)), new Pose2d(1.0, 0.0, new Rotation2d(0.0))),
                                 // Pass config
                                 config);
@@ -100,6 +101,9 @@ public class Autonomous {
 
                 m_prevTime = curTime;
                 m_prevSpeeds = targetWheelSpeeds;
+                
+                SmartDashboard.putNumber("auto_left", targetWheelSpeeds.leftMetersPerSecond);
+                SmartDashboard.putNumber("auto_right", targetWheelSpeeds.rightMetersPerSecond);
         }
 
         public void autonomousEnd() {

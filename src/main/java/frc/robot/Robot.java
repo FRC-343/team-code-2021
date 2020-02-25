@@ -37,8 +37,8 @@ public class Robot extends TimedRobot {
   public static final double kMaxHoodSpeed = 0.5; // ratio
   public static final double kMaxWinchSpeed = 1.0; // ratio
 
-  public static final double kTargetP = -0.065;
-  public static final double kMinTargetCommand = -0.5;
+  public static final double kTargetP = -0.055;
+  public static final double kMinTargetCommand = -0.35;
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
   private final Shooter m_shooter = new Shooter();
-  private final Autonomous m_auto;// = new Autonomous(m_robotDrive);
+  private final Autonomous m_auto = new Autonomous(m_robotDrive);
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
 
   public Robot() {
-    m_auto = null;
     m_intake.setInverted(true);
 
     if (!RobotConstants.kPractice) {
@@ -134,7 +133,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    //m_auto.autonomousEnd();
+    m_auto.autonomousEnd();
   }
 
   /**

@@ -20,11 +20,11 @@ public class Drive {
     public static final double kMaxAcceleration = 1.0; // meters per second squared
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-    private static final double kTrackWidth = 0.597; // meters
+    private static final double kTrackWidth = 0.568; // meters
     private static final double kWheelRadius = 0.0762; // meters
     private static final int kEncoderResolution = 256;
 
-    private static final boolean kGyroReversed = false;
+    private static final boolean kGyroReversed = true;
 
     private final SpeedController m_leftMaster = new Spark(2);
     private final SpeedController m_leftFollower = new Spark(3);
@@ -199,6 +199,10 @@ public class Drive {
     public void setVoltages(double left, double right) {
         m_leftGroup.setVoltage(left);
         m_rightGroup.setVoltage(right);
+
+        // Update the odometry in the periodic block
+        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
+                m_rightEncoder.getDistance());
     }
 
     /**
