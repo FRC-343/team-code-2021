@@ -1,5 +1,1 @@
-* slow hopper with lowered hood
-* take hood measurements
-* fix PD controller to overlay autonomous
-* add RamseteController logic (steal from RamseteCommand in WPILib source)
 * add trajectory from Ian's diagram

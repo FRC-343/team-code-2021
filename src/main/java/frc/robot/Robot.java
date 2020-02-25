@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
   private final Shooter m_shooter = new Shooter();
-  private final Autonomous m_auto = new Autonomous(m_robotDrive);
+  private final Autonomous m_auto;// = new Autonomous(m_robotDrive);
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
@@ -57,11 +57,13 @@ public class Robot extends TimedRobot {
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
+  private final Debouncer m_cellDetectorDebouncer = new Debouncer();
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
   public Robot() {
+    m_auto = null;
     m_intake.setInverted(true);
 
     if (!RobotConstants.kPractice) {
@@ -71,6 +73,7 @@ public class Robot extends TimedRobot {
       m_controlPanel = new Spark(11);
       m_controlPanel.setInverted(true);
       m_winch = new Spark(10);
+      m_winch.setInverted(true);
       m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
     }
@@ -131,7 +134,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    m_auto.autonomousEnd();
+    //m_auto.autonomousEnd();
   }
 
   /**
@@ -180,9 +183,9 @@ public class Robot extends TimedRobot {
       }
     } else if (m_controller.getTriggerAxis(Hand.kLeft) > 0.2) {
       intakeCommand = 0.65;
-      if (m_cellDetector == null || !m_cellDetector.get() || true) {
+      if (m_cellDetector == null || (m_cellDetectorDebouncer.isReady(m_cellDetector.get()) && !m_cellDetector.get())) {
+        hopperCommand = -0.6;
         kickerCommand = 0.24;
-        hopperCommand = -0.45;
       }
     }
 
@@ -199,7 +202,12 @@ public class Robot extends TimedRobot {
     }
 
     if (m_winch != null) {
-      m_winch.set(kMaxWinchSpeed * m_controller.getY(Hand.kRight));
+      double witchCommand = -kMaxWinchSpeed * m_controller.getY(Hand.kRight);
+      if (witchCommand > 0.0  || m_controller.getBackButton()) {
+        m_winch.set(witchCommand);
+      } else {
+        m_winch.set(0.0);
+      }
     }
 
     m_shooter.shoot(shooterCommand);
