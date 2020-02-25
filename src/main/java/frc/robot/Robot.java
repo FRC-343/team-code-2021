@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
       m_controlPanel = new Spark(11);
       m_controlPanel.setInverted(true);
       m_winch = new Spark(10);
-      m_winch.setInverted(true);
       m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
     }
@@ -202,7 +201,7 @@ public class Robot extends TimedRobot {
 
     if (m_winch != null) {
       double witchCommand = -kMaxWinchSpeed * m_controller.getY(Hand.kRight);
-      if (witchCommand > 0.0  || m_controller.getBackButton()) {
+      if (witchCommand > 0.0 || m_controller.getBackButton()) {
         m_winch.set(witchCommand);
       } else {
         m_winch.set(0.0);
