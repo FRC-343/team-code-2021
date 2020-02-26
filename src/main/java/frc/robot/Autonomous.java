@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -9,7 +10,6 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -20,18 +20,38 @@ public class Autonomous {
         public final double kRamseteB = 2.0;
         public final double kRamseteZeta = 0.7;
 
+        public enum State {
+                MOVE_TO_PICKUP, INTAKE, MOVE_TO_SHOOT, TARGET, SHOOT, END
+        };
+        
+        private final double kIntakeTime = 1.5;
+
         private final Timer m_timer = new Timer();
 
         private final Drive m_robotDrive;
+        private final Hood m_aimer;
+        private final Shooter m_shooter;
+        private final SpeedController m_kicker;
+        private final SpeedController m_hopper;
+        private final SpeedController m_intake;
+
         private final RamseteController m_follower;
 
         private DifferentialDriveWheelSpeeds m_prevSpeeds;
         private double m_prevTime;
 
-        private Trajectory m_trajectory;
+        private Trajectory m_pickupTrajectory;
+        private Trajectory m_shootTrajectory;
 
-        public Autonomous(Drive robotDrive) {
+        private State m_state;
+
+        public Autonomous(Drive robotDrive, Hood aimer, Shooter shooter, SpeedController kicker, SpeedController hopper, SpeedController intake) {
                 m_robotDrive = robotDrive;
+                m_aimer = aimer;
+                m_shooter = shooter;
+                m_kicker = kicker;
+                m_hopper = hopper;
+                m_intake = intake;
 
                 TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 10);
@@ -44,40 +64,49 @@ public class Autonomous {
                                 .addConstraint(voltageConstraint);
 
                 // An example trajectory to follow. All units in meters.
-                m_trajectory = TrajectoryGenerator.generateTrajectory(
+                m_pickupTrajectory = TrajectoryGenerator.generateTrajectory(
                                 // Start at the origin facing the +X direction
                                 new Pose2d(0, 0, new Rotation2d(0)),
                                 // Pass through these two interior waypoints, making an 's' curve path
-                                List.of(new Translation2d(1.25, 0.75), new Translation2d(2.50, -0.75)),
+                                List.of(),
                                 // End 3 meters straight ahead of where we started, facing forward
-                                new Pose2d(3.25, 0, new Rotation2d(0)),
-                                //List.of(new Pose2d(0.0, 0.0, new Rotation2d(0.0)), new Pose2d(1.0, 0.0, new Rotation2d(0.0))),
+                                new Pose2d(3.3111, 0, new Rotation2d(0)),
                                 // Pass config
                                 config);
+
+                m_shootTrajectory = TrajectoryGenerator.generateTrajectory(
+                        // Start at the origin facing the +X direction
+                        new Pose2d(3.3111, 0, new Rotation2d(0)),
+                        // Pass through these two interior waypoints, making an 's' curve path
+                        List.of(),
+                        // End 3 meters straight ahead of where we started, facing forward
+                        new Pose2d(0, -4.8616, new Rotation2d(180)),
+                        // Pass config
+                        config);
 
                 m_follower = new RamseteController(kRamseteB, kRamseteZeta);
         }
 
         public void autonomousInit() {
                 m_prevTime = 0;
-                Trajectory.State initialState = m_trajectory.sample(0);
+
+                Trajectory.State initialState = m_pickupTrajectory.sample(0);
                 m_prevSpeeds = m_robotDrive.getKinematics().toWheelSpeeds(new ChassisSpeeds(
                                 initialState.velocityMetersPerSecond, 0,
                                 initialState.curvatureRadPerMeter * initialState.velocityMetersPerSecond));
 
-                m_timer.reset();
-                m_timer.start();
+                changeState(State.MOVE_TO_PICKUP);
 
                 m_robotDrive.resetPID();
                 m_robotDrive.resetOdometry(new Pose2d());
         }
 
-        public void autonomousPeriodic() {
+        private void track(Trajectory trajectory) {
                 double curTime = m_timer.get();
                 double dt = curTime - m_prevTime;
 
                 DifferentialDriveWheelSpeeds targetWheelSpeeds = m_robotDrive.getKinematics().toWheelSpeeds(
-                                m_follower.calculate(m_robotDrive.getPose(), m_trajectory.sample(curTime)));
+                                m_follower.calculate(m_robotDrive.getPose(), trajectory.sample(curTime)));
 
                 double leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond;
                 double rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond;
@@ -101,9 +130,40 @@ public class Autonomous {
 
                 m_prevTime = curTime;
                 m_prevSpeeds = targetWheelSpeeds;
+        }
+
+        private void changeState(State state) {
+                m_state = state;
+
+                m_timer.reset();
+                m_timer.start();
                 
-                SmartDashboard.putNumber("auto_left", targetWheelSpeeds.leftMetersPerSecond);
-                SmartDashboard.putNumber("auto_right", targetWheelSpeeds.rightMetersPerSecond);
+                m_robotDrive.setVoltages(0, 0);
+        }
+
+        public void autonomousPeriodic() {
+                if (m_state == State.MOVE_TO_PICKUP) {
+                        track(m_pickupTrajectory);
+
+                        if (m_prevTime > m_pickupTrajectory.getTotalTimeSeconds()) {
+                                changeState(State.INTAKE);
+                        }
+                } else if (m_state == State.INTAKE) {
+                       m_intake.set(0.65);
+                       m_robotDrive.drive(0.1, 0.0);
+
+                       if (m_timer.get() > kIntakeTime) {
+                               changeState(State.MOVE_TO_SHOOT);
+                       }
+                } else if (m_state == State.MOVE_TO_SHOOT) {
+                        track(m_shootTrajectory);
+
+                        if (m_prevTime > m_shootTrajectory.getTotalTimeSeconds()) {
+                                changeState(State.TARGET);
+                        }
+                } else if (m_state == State.TARGET) {
+                } else if (m_state == State.SHOOT) {
+                }
         }
 
         public void autonomousEnd() {

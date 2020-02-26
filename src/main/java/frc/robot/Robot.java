@@ -47,13 +47,14 @@ public class Robot extends TimedRobot {
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
   private final Shooter m_shooter = new Shooter();
-  private final Autonomous m_auto = new Autonomous(m_robotDrive);
 
   private final Spark m_kicker = new Spark(4);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
+  
+  private final Autonomous m_auto = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake);
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -187,16 +188,16 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (m_controller.getBButton()) {
+    if (m_controller.getAButton()) {
       hopperCommand = -0.6;
       kickerCommand = 0.24;
-    } else if (m_controller.getAButton()) {
+    } else if (m_controller.getBButton()) {
       hopperCommand = 0.6;
       kickerCommand = -0.24;
     }
 
     if (m_controller.getYButton()) {
-      intakeCommand = -0.5;
+      intakeCommand = -0.299999999999;
     }
 
     if (m_winch != null) {
