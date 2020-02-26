@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   private final Spark m_controlPanel;
   private final Spark m_winch;
   
-  private final Autonomous m_auto = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake);
+  private final Autonomous m_auto;
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -77,6 +77,8 @@ public class Robot extends TimedRobot {
       m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
     }
+
+    m_auto = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
   }
 
   /**
