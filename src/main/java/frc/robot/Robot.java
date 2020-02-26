@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -99,7 +100,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("color_blue", m_color.getBlue());
+    
+    Color detectedColor = m_color.getColor();
+    double detectedIR = m_color.getIR();
+
+    SmartDashboard.putNumber("color_red", detectedColor.red);
+    SmartDashboard.putNumber("color_green", detectedColor.green);
+    SmartDashboard.putNumber("color_blue", detectedColor.blue);
+    SmartDashboard.putNumber("color_ir", detectedIR);
   }
 
   /**
