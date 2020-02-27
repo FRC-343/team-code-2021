@@ -55,7 +55,8 @@ public class Robot extends TimedRobot {
   private final Spark m_controlPanel;
   private final Spark m_winch;
   
-  private final Autonomous m_auto;
+  private final Autonomous m_autoEx;
+  private final Autonomous m_autoSimple;
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -78,7 +79,8 @@ public class Robot extends TimedRobot {
       m_cellDetector = new DigitalInput(8);
     }
 
-    m_auto = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_autoEx = new AutonomousEx(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
   }
 
   /**
@@ -127,7 +129,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_auto.autonomousInit();
+    m_autoEx.autonomousInit();
   }
 
   /**
@@ -135,7 +137,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    m_auto.autonomousPeriodic();
+    m_autoEx.autonomousPeriodic();
   }
 
   /**
@@ -143,7 +145,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    m_auto.autonomousEnd();
+    m_autoEx.autonomousEnd();
+    m_autoSimple.autonomousEnd();
   }
 
   /**
@@ -265,7 +268,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    m_auto.autonomousEnd();
+    m_autoEx.autonomousEnd();
+    m_autoSimple.autonomousEnd();
   }
 
   @Override
