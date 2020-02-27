@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -76,6 +77,9 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
+  private enum Auto { NO_AUTONOMOUS, AUTONOMOUS };
+  private final SendableChooser<Auto> m_autoChooser = new SendableChooser<Auto>();
+
   public Robot() {
     m_intake.setInverted(true);
 
@@ -103,6 +107,10 @@ public class Robot extends TimedRobot {
     m_colorMatcher.addColorMatch(kGreen);
     m_colorMatcher.addColorMatch(kBlue);
     m_colorMatcher.addColorMatch(kYellow);
+
+    m_autoChooser.setDefaultOption("Auto", Auto.AUTONOMOUS);
+    m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
+    SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
 
   /**
@@ -147,7 +155,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_auto.autonomousInit();
+    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS) {
+      m_auto.autonomousInit();
+    }
   }
 
   /**
@@ -155,7 +165,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    m_auto.autonomousPeriodic();
+    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS) {
+      m_auto.autonomousPeriodic();
+    }
   }
 
   /**
