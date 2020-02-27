@@ -28,8 +28,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -65,7 +63,8 @@ public class Robot extends TimedRobot {
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
-  
+
+  private final Autonomous m_autoNone;
   private final Autonomous m_autoEx;
   private final Autonomous m_autoSimple;
 
@@ -74,11 +73,15 @@ public class Robot extends TimedRobot {
   private final Debouncer m_cellDetectorDebouncer = new Debouncer();
 
   private final ColorMatch m_colorMatcher = new ColorMatch();
-  
+
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
-  private enum Auto { NO_AUTONOMOUS, AUTONOMOUS };
+  private enum Auto {
+    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_EX
+  };
+
+  private Autonomous m_auto;
   private final SendableChooser<Auto> m_autoChooser = new SendableChooser<Auto>();
 
   public Robot() {
@@ -95,8 +98,10 @@ public class Robot extends TimedRobot {
       m_cellDetector = new DigitalInput(8);
     }
 
+    m_autoNone = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoEx = new AutonomousEx(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_auto = m_autoNone;
   }
 
   /**
@@ -110,7 +115,8 @@ public class Robot extends TimedRobot {
     m_colorMatcher.addColorMatch(kBlue);
     m_colorMatcher.addColorMatch(kYellow);
 
-    m_autoChooser.setDefaultOption("Auto", Auto.AUTONOMOUS);
+    m_autoChooser.setDefaultOption("Auto_Simple", Auto.AUTONOMOUS_SIMPLE);
+    m_autoChooser.setDefaultOption("Auto_Ex", Auto.AUTONOMOUS_EX);
     m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
@@ -129,7 +135,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
-    
+
     ColorMatchResult detectedColor = m_colorMatcher.matchClosestColor(m_color.getColor());
 
     if (detectedColor.color == kRed) {
@@ -157,9 +163,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS) {
-    m_autoEx.autonomousInit();
+    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_EX) {
+      m_auto = m_autoEx;
+    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_SIMPLE) {
+      m_auto = m_autoSimple;
+    } else {
+      m_auto = m_autoNone;
     }
+
+    m_auto.autonomousInit();
   }
 
   /**
@@ -167,9 +179,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS) {
-      m_autoEx.autonomousPeriodic();
-    }
+    m_auto.autonomousPeriodic();
   }
 
   /**
@@ -177,8 +187,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    m_autoEx.autonomousEnd();
-    m_autoSimple.autonomousEnd();
+    m_auto.autonomousEnd();
   }
 
   /**
@@ -300,8 +309,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    m_autoEx.autonomousEnd();
-    m_autoSimple.autonomousEnd();
+    m_auto.autonomousEnd();
   }
 
   @Override
