@@ -8,6 +8,10 @@
 package frc.robot;
 
 import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.util.Color;
+
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorMatch;
 
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
@@ -25,6 +29,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -40,6 +45,11 @@ public class Robot extends TimedRobot {
 
   public static final double kTargetP = -0.055;
   public static final double kMinTargetCommand = -0.35;
+
+  private static final Color kRed = new Color(0.518311, 0.344971, 0.136963);
+  private static final Color kGreen = new Color(0.1689, 0.575439, 0.25585);
+  private static final Color kBlue = new Color(0.1267, 0.4160, 0.4575);
+  private static final Color kYellow = new Color(0.320068, 0.558105, 0.122070);
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
@@ -62,6 +72,8 @@ public class Robot extends TimedRobot {
   private final DigitalInput m_cellDetector;
   private final Debouncer m_cellDetectorDebouncer = new Debouncer();
 
+  private final ColorMatch m_colorMatcher = new ColorMatch();
+  
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
@@ -89,6 +101,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    m_colorMatcher.addColorMatch(kRed);
+    m_colorMatcher.addColorMatch(kGreen);
+    m_colorMatcher.addColorMatch(kBlue);
+    m_colorMatcher.addColorMatch(kYellow);
   }
 
   /**
@@ -106,13 +122,17 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
     
-    Color detectedColor = m_color.getColor();
-    double detectedIR = m_color.getIR();
+    ColorMatchResult detectedColor = m_colorMatcher.matchClosestColor(m_color.getColor());
 
-    SmartDashboard.putNumber("color_red", detectedColor.red);
-    SmartDashboard.putNumber("color_green", detectedColor.green);
-    SmartDashboard.putNumber("color_blue", detectedColor.blue);
-    SmartDashboard.putNumber("color_ir", detectedIR);
+    if (detectedColor.color == kRed) {
+      SmartDashboard.putString("color_detected", "red");
+    } else if (detectedColor.color == kGreen) {
+      SmartDashboard.putString("color_detected", "green");
+    } else if (detectedColor.color == kBlue) {
+      SmartDashboard.putString("color_detected", "blue");
+    } else if (detectedColor.color == kYellow) {
+      SmartDashboard.putString("color_detected", "yellow");
+    }
   }
 
   /**

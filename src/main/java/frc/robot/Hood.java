@@ -13,10 +13,9 @@ public class Hood {
 
     private boolean m_aiming = false;
     private boolean m_zeroing = false;
-
     public Hood() {
         if (!RobotConstants.kPractice) {
-            m_hoodEncoder = new Encoder(4, 5);
+            m_hoodEncoder = new Encoder(12, 13);
             m_hoodZero = new DigitalInput(9);
         }
     }
