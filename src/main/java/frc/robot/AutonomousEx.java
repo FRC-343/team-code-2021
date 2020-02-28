@@ -93,6 +93,7 @@ public class AutonomousEx extends Autonomous {
                 changeState("move_to_shoot");
             }
         } else if (m_state == "move_to_shoot") {
+            m_intake.set(0.65);
             running = track(m_shootTrajectory);
 
             if (!running) {
