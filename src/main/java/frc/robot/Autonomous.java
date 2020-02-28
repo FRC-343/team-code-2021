@@ -54,7 +54,7 @@ public class Autonomous {
 
                 m_prevSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
-                changeState("begin");
+                changeState("start");
 
                 m_robotDrive.resetPID();
                 m_robotDrive.resetOdometry(new Pose2d());
@@ -125,7 +125,7 @@ public class Autonomous {
                         m_robotDrive.drive(0.0, 0.0);
                 }
 
-                return steerReady && aimReady;
+                return !(steerReady && aimReady);
         }
 
         protected boolean shoot() {
