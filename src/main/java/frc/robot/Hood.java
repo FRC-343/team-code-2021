@@ -18,7 +18,7 @@ public class Hood {
         if (!RobotConstants.kPractice) {
             m_hoodEncoder = new Encoder(12, 13);
             m_hoodZero = new DigitalInput(9);
-            m_hoodForward = new DigitalInput(11);
+            m_hoodForward = new DigitalInput(22);
         }
     }
 
