@@ -3,12 +3,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Debouncer {
-    public static final double kDebouncePeriod = 0.1; // secs
-
     private final Timer m_timer = new Timer();
+
+    private final double m_period;
 
     private boolean m_lastVal = false;
     private boolean m_debouncing = false;
+
+    public Debouncer() {
+        this(0.5);
+    }
+
+    public Debouncer(double period) {
+        m_period = period;
+    }
 
     public boolean isReady(boolean val) {
         boolean ready = true;
@@ -22,7 +30,7 @@ public class Debouncer {
         } else {
             if (m_debouncing) {
                 double time = m_timer.get();
-                if (time >= kDebouncePeriod) {
+                if (time >= m_period) {
                     m_timer.stop();
                     m_debouncing = false;
                     ready = true;
