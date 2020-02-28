@@ -102,7 +102,7 @@ public class Autonomous {
                 boolean steerReady = false;
                 boolean aimReady = false;
 
-                if (tv.getBoolean(false)) {
+                if (tv.getDouble(0.0) > 0.5) {
                         double driveCommand = 0.0;
                         double steerCommand = 0.0;
 
