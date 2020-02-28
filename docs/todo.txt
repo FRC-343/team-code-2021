@@ -1,6 +1,3 @@
-* add trajectory from Ian's diagram
-
-
 = After Palmetto =
 
 * please for the love of <diety> separate out subsystems into files, make a full hardware description file with instance to pass around, and make Robot super simple and mostly concerned with Joystick commands or starting other subsystems
