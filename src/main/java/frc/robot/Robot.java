@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
     m_colorMatcher.addColorMatch(kYellow);
 
     m_autoChooser.setDefaultOption("Auto_Simple", Auto.AUTONOMOUS_SIMPLE);
-    m_autoChooser.setDefaultOption("Auto_Ex", Auto.AUTONOMOUS_EX);
+    m_autoChooser.addOption("Auto_Ex", Auto.AUTONOMOUS_EX);
     m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }

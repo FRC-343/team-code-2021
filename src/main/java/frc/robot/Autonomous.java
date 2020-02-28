@@ -97,27 +97,33 @@ public class Autonomous {
                 NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
                 NetworkTableEntry tx = table.getEntry("tx");
                 NetworkTableEntry ty = table.getEntry("ty");
-
-                double driveCommand = 0.0;
-                double steerCommand = 0.0;
-
-                double heading_error = -tx.getDouble(0.0);
-                double angle_error = ty.getDouble(0.0);
+                NetworkTableEntry tv = table.getEntry("tv");
 
                 boolean steerReady = false;
                 boolean aimReady = false;
 
-                if (heading_error > 1.0) {
-                        steerCommand = Robot.kTargetP * heading_error + Robot.kMinTargetCommand;
-                } else if (heading_error < -1.0) {
-                        steerCommand = Robot.kTargetP * heading_error - Robot.kMinTargetCommand;
-                } else if (m_timer.get() > 1.5) {
-                        steerReady = true;
+                if (tv.getBoolean(false)) {
+                        double driveCommand = 0.0;
+                        double steerCommand = 0.0;
+
+                        double heading_error = -tx.getDouble(0.0);
+                        double angle_error = ty.getDouble(0.0);
+
+                        if (heading_error > 1.0) {
+                                steerCommand = Robot.kTargetP * heading_error + Robot.kMinTargetCommand;
+                        } else if (heading_error < -1.0) {
+                                steerCommand = Robot.kTargetP * heading_error - Robot.kMinTargetCommand;
+                        } else if (m_timer.get() > 1.5) {
+                                steerReady = true;
+                        }
+
+                        aimReady = m_aimer.aim(angle_error);
+
+                        m_robotDrive.drive(driveCommand, steerCommand);
+                } else {
+                        m_aimer.move(0.0);
+                        m_robotDrive.drive(0.0, 0.0);
                 }
-
-                aimReady = m_aimer.aim(angle_error);
-
-                m_robotDrive.drive(driveCommand, steerCommand);
 
                 return steerReady && aimReady;
         }

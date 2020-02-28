@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Hood {
     private final Encoder m_hoodEncoder;
     private final DigitalInput m_hoodZero;
+    private final DigitalInput m_hoodForward;
     private final SpeedController m_hoodMotor = new Spark(RobotConstants.getInstance().kHoodMotor);
 
     private boolean m_aiming = false;
@@ -17,6 +18,7 @@ public class Hood {
         if (!RobotConstants.kPractice) {
             m_hoodEncoder = new Encoder(12, 13);
             m_hoodZero = new DigitalInput(9);
+            m_hoodForward = new DigitalInput(11);
         }
     }
 
@@ -45,7 +47,10 @@ public class Hood {
                 m_hoodMotor.set(-0.5);
             }
             else {
-                if (m_hoodEncoder.getDistance() < target) {
+                if (m_hoodForward.get()) {
+                    m_hoodMotor.set(0.0);
+                }
+                else if (m_hoodEncoder.getDistance() < target) {
                     m_hoodMotor.set(0.5);
                 }
                 else {
@@ -70,7 +75,7 @@ public class Hood {
                 m_hoodEncoder.reset();
             }
             m_hoodMotor.set(0.0);
-        } else if (m_hoodEncoder != null && m_hoodEncoder.getDistance() > 65.0 && speed > 0) {
+        } else if (m_hoodForward != null && m_hoodForward.get() && speed > 0) {
             m_hoodMotor.set(0.0);
         } else {
             m_hoodMotor.set(speed);
