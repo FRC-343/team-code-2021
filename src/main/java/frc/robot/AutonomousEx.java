@@ -64,7 +64,9 @@ public class AutonomousEx extends Autonomous {
     public void autonomousPeriodic() {
         boolean running = false;
 
-        if (m_state == "intake_drop") {
+        if (m_state == "start") {
+            changeState("intake_drop");
+        } else if (m_state == "intake_drop") {
             running = dropIntake();
 
             if (!running) {
