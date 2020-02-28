@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 
 public class AutonomousSimple extends Autonomous {
+    private final double kTargetTime = 0.0;
+
     private Trajectory m_backupTrajectory;
 
     public AutonomousSimple(Drive robotDrive, Hood aimer, Shooter shooter, SpeedController kicker,
@@ -49,6 +51,8 @@ public class AutonomousSimple extends Autonomous {
 
             if (!running) {
                 changeState("shoot");
+            } else if (m_timer.get() > kTargetTime) {
+                changeState("backup");
             }
         } else if (m_state == "shoot") {
             running = shoot();

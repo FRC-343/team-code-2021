@@ -13,11 +13,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
 public class Autonomous {
-        public final double kRamseteB = 2.0;
-        public final double kRamseteZeta = 0.7;
+        public static final double kRamseteB = 2.0;
+        public static final double kRamseteZeta = 0.7;
 
-        private final double kShootTimeStart = 1.5;
-        private final double kShootTimeEnd = 5.7;
+        private static final double kShootTimeStart = 1.5;
+        private static final double kShootTimeEnd = 5.7;
 
         protected final Timer m_timer = new Timer();
 
