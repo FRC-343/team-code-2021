@@ -48,6 +48,7 @@ public class Hood {
             }
             else {
                 if (m_hoodForward.get()) {
+                    m_zeroing = true;
                     m_hoodMotor.set(0.0);
                 }
                 else if (m_hoodEncoder.getDistance() < target) {

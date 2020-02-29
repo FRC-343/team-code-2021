@@ -86,6 +86,17 @@
               "_title": "SmartDashboard/pose_y"
             }
           },
+          "15,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight/tv",
+              "_title": "/limelight/tv"
+            }
+          },
           "14,1": {
             "size": [
               1,
