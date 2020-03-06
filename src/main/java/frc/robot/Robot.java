@@ -19,9 +19,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -286,16 +288,17 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (m_climberLift != null) {
-      if (m_stick.getRawButton(6)) {
-        m_climberLift.set(Value.kForward);
-      } else if (m_stick.getRawButton(7)) {
-        m_climberLift.set(Value.kReverse);
-      } else {
-        m_climberLift.set(Value.kOff);
+    if (DriverStation.getInstance().getMatchTime() < 30.0 || m_stick.getRawButtonPressed(2)) {
+      if (m_climberLift != null) {
+        if (m_stick.getRawButton(6)) {
+          m_climberLift.set(Value.kForward);
+        } else if (m_stick.getRawButton(7)) {
+          m_climberLift.set(Value.kReverse);
+        } else {
+          m_climberLift.set(Value.kOff);
+        }
       }
     }
-
     if (m_controlPanelLift != null) {
       if (m_stick.getRawButton(4)) {
         m_controlPanelLift.set(Value.kForward);
