@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -204,7 +203,7 @@ public class Robot extends TimedRobot {
     double driveCommand = 0.0;
     double steerCommand = 0.0;
 
-    if (m_stick.getRawButton(9)) {
+    /*if (m_stick.getRawButton(9)) {
       double heading_error = -tx.getDouble(0.0);
       double angle_error = ty.getDouble(0.0);
 
@@ -222,7 +221,7 @@ public class Robot extends TimedRobot {
       m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }
     m_robotDrive.drive(driveCommand, steerCommand);
-
+*/
     double shooterCommand = 0;
     double intakeCommand = 0;
     double kickerCommand = 0;
