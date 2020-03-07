@@ -300,9 +300,9 @@ public class Robot extends TimedRobot {
       }
     }
     if (m_controlPanelLift != null) {
-      if (m_controller.getXButtonPressed()) {
+      if (m_controller.getXButtonReleased()) {
         m_controlPanelLift.set(Value.kForward);
-      } else if (m_controller.getXButton()) {
+      } else if (m_controller.getXButtonPressed()) {
         m_controlPanelLift.set(Value.kReverse);
       } else {
         m_controlPanelLift.set(Value.kOff);
