@@ -1,4 +1,11 @@
 = After Palmetto =
 
+* make autonomouses relative to starting position (giving a field-absolute position)
+* more autonomouses
+* make 30s check inline with raising it -- leave the others functioning before then
+
+
+= After Season =
+
 * please separate out subsystems into files, make a full hardware description file with instance to pass around, and make Robot super simple and mostly concerned with Joystick commands or starting other subsystems
 * move to a subsystem/command architecture

@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 
-public class AutonomousEx extends Autonomous {
+public class AutonomousET extends Autonomous {
     private static final double kIntakeTime = 0.6;
 
     private Trajectory m_pickupTrajectory;
     private Trajectory m_shootTrajectory;
 
-    public AutonomousEx(Drive robotDrive, Hood aimer, Shooter shooter, SpeedController kicker, SpeedController hopper,
+    public AutonomousET(Drive robotDrive, Hood aimer, Shooter shooter, SpeedController kicker, SpeedController hopper,
             SpeedController intake, DoubleSolenoid intakeLift) {
         super(robotDrive, aimer, shooter, kicker, hopper, intake, intakeLift);
 
