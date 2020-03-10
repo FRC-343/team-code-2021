@@ -1,7 +1,7 @@
 = After Palmetto =
 
-* make autonomi relative to starting position (giving a field-absolute position)
-* more autonomi
+* make autonomouses relative to starting position (giving a field-absolute position)
+* more autonomouses
 * make 30s check inline with raising it -- leave the others functioning before then
 
 

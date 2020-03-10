@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
   private final Spark m_winch;
 
   private final Autonomous m_autoNone;
-  private final Autonomous m_autoEx;
+  private final Autonomous m_autoET;
   private final Autonomous m_autoSimple;
 
   private final ColorSensorV3 m_color;
@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
 
   private enum Auto {
-    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_EX
+    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET
   };
 
   private Autonomous m_auto;
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     }
 
     m_autoNone = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoEx = new AutonomousEx(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_autoET = new AutonomousET(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_auto = m_autoNone;
   }
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
     m_colorMatcher.addColorMatch(kYellow);
 
     m_autoChooser.setDefaultOption("Auto_Simple", Auto.AUTONOMOUS_SIMPLE);
-    m_autoChooser.addOption("Auto_Ex", Auto.AUTONOMOUS_EX);
+    m_autoChooser.addOption("Auto_ET", Auto.AUTONOMOUS_ET);
     m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
@@ -164,8 +164,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_EX) {
-      m_auto = m_autoEx;
+    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_ET) {
+      m_auto = m_autoET;
     } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_SIMPLE) {
       m_auto = m_autoSimple;
     } else {
@@ -203,7 +203,7 @@ public class Robot extends TimedRobot {
     double driveCommand = 0.0;
     double steerCommand = 0.0;
 
-    /*if (m_stick.getRawButton(9)) {
+    if (m_stick.getRawButton(9)) {
       double heading_error = -tx.getDouble(0.0);
       double angle_error = ty.getDouble(0.0);
 
@@ -221,7 +221,7 @@ public class Robot extends TimedRobot {
       m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }
     m_robotDrive.drive(driveCommand, steerCommand);
-*/
+
     double shooterCommand = 0;
     double intakeCommand = 0;
     double kickerCommand = 0;
@@ -287,17 +287,17 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (DriverStation.getInstance().getMatchTime() < 30.0 || m_stick.getRawButtonPressed(2)) {
-      if (m_climberLift != null) {
-        if (m_stick.getRawButton(6)) {
-          m_climberLift.set(Value.kForward);
-        } else if (m_stick.getRawButton(7)) {
-          m_climberLift.set(Value.kReverse);
-        } else {
-          m_climberLift.set(Value.kOff);
-        }
+    if (m_climberLift != null) {
+      if ((DriverStation.getInstance().getMatchTime() < 30.0 || m_stick.getRawButtonPressed(2))
+          && m_stick.getRawButton(6)) {
+        m_climberLift.set(Value.kForward);
+      } else if (m_stick.getRawButton(7)) {
+        m_climberLift.set(Value.kReverse);
+      } else {
+        m_climberLift.set(Value.kOff);
       }
     }
+
     if (m_controlPanelLift != null) {
       if (m_controller.getXButtonReleased()) {
         m_controlPanelLift.set(Value.kForward);
