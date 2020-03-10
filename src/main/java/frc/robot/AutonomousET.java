@@ -23,7 +23,7 @@ public class AutonomousET extends Autonomous {
         super(robotDrive, aimer, shooter, kicker, hopper, intake, intakeLift);
 
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-                m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 10);
+                m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
         // Create config for trajectory
         TrajectoryConfig forwardPickupConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
