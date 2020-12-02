@@ -1,4 +1,6 @@
-package frc.robot;
+package frc.robot.autonomous;
+
+import frc.robot.*;
 
 import java.util.List;
 

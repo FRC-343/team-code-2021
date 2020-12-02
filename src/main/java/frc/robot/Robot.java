@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.autonomous.*;
+
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 
