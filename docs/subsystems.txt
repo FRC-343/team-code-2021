@@ -1,0 +1,22 @@
+Robot Subsystems
+================
+
+* Hood
+* Intake
+* Drive
+* Hopper (+Kicker)
+* ClimbingLift
+* Winch
+* Shooter
+* Vision
+* ControlPanel
+* ColorSensor
+
+
+Commands
+========
+
+* Autonomice
+
+
+Example: https://github.com/wpilibsuite/allwpilib/tree/master/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/hatchbotinlined
