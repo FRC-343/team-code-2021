@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 
 public class Shooter {
-    public static final double kShootSpeed = 110.0; // rev per sec
+    public static final double kShootSpeed = 130.00; // rev per sec
     public static final double kShootReadySpeed = 100.0; // rev per sec
-    public static final double kShootGarbage = 150.0; // rev per sec
+    public static final double kShootGarbage = 150.0; // rev per sec, for irregular values
 
     private final SpeedController m_shooter = new Spark(5);
 
