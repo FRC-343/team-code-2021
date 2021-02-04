@@ -1,5 +1,6 @@
-Reshooter
-Check shooter speed
-Autonomi / autonomouses
-Joystick dead zone
 Remember code
+limit for hood mk3
+Aim hood
+
+
+Autonomi / autonomouses
