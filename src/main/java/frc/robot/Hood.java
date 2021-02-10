@@ -17,9 +17,9 @@ public class Hood {
     
     public Hood() {
         if (!RobotConstants.kPractice) {
-            m_hoodEncoder = new Encoder(12, 13);
-            m_hoodZero = new DigitalInput(9);
-            m_hoodForward = new DigitalInput(22);
+            m_hoodEncoder = new Encoder(4, 5, true);
+            m_hoodZero = new DigitalInput(22);
+            m_hoodForward = new DigitalInput(9);
         }
     }
 
@@ -73,12 +73,12 @@ public class Hood {
     public void move(double speed) {
         m_aiming = false;
 
-        if (m_hoodZero != null && m_hoodZero.get() && speed < 0) {
+        if (m_hoodZero != null && m_hoodZero.get() && speed > 0) {
             if (m_hoodEncoder != null) {
                 m_hoodEncoder.reset();
             }
             m_hoodMotor.set(0.0);
-        } else if (m_hoodForward != null && m_hoodForward.get() && speed > 0) {
+        } else if (m_hoodForward != null && m_hoodForward.get() && speed < 0) {
             m_hoodMotor.set(0.0);
         } else {
             m_hoodMotor.set(speed);
