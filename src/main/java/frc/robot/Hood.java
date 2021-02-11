@@ -12,8 +12,9 @@ public class Hood {
     private final DigitalInput m_hoodFront;
     private final SpeedController m_hoodMotor = new Spark(RobotConstants.getInstance().kHoodMotor);
 
-    private boolean m_aiming = false; 
-    private boolean m_zeroing = false;   
+    private boolean m_aiming = false;
+    private boolean m_zeroing = false;
+
     public Hood() {
         if (!RobotConstants.kPractice) {
             m_hoodEncoder = new Encoder(4, 5);
@@ -34,7 +35,7 @@ public class Hood {
                 m_zeroing = true;
             }
 
-            if (m_hoodEncoder.getRate() > 1700 || m_hoodEncoder.getRate() < -1700 || m_hoodEncoder.getDistance() > 2400 || m_hoodEncoder.getDistance() < -222) {
+            if (m_hoodEncoder.getRate() > 1700 || m_hoodEncoder.getRate() < -1700 || m_hoodEncoder.getDistance() > 4500 || m_hoodEncoder.getDistance() < -222) {
                 m_zeroing = true;
             }
 
