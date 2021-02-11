@@ -16,7 +16,7 @@ public class Hood {
     private boolean m_zeroing = false;   
     public Hood() {
         if (!RobotConstants.kPractice) {
-            m_hoodEncoder = new Encoder(4, 5, true);
+            m_hoodEncoder = new Encoder(4, 5);
             m_hoodBack = new DigitalInput(22);
             m_hoodFront = new DigitalInput(9);
         }
@@ -29,7 +29,7 @@ public class Hood {
         //  double target = -0.0357*angle*angle*angle - 7.3381*angle*angle - 74.092*angle + 3671.8 ; //60 + 2*angle - 0.208*angle*angle - 0.0287*angle*angle*angle;
         //  SmartDashboard.putNumber("hood_target", target);
 
-        //  if (m_hoodEncoder != null && m_hoodZero != null) {
+        //  if (m_hoodEncoder != null && m_hoodFront != null) {
         //      if (!m_aiming) {
         //          m_aiming = true;
         //          m_zeroing = true;
@@ -39,21 +39,21 @@ public class Hood {
         //          m_zeroing = true;
         //      }
 
-        //      if (m_hoodZero.get()) {
+        //      if (m_hoodFront.get()) {
         //          m_zeroing = false;
         //          m_hoodEncoder.reset();
         //      }
 
         //      if (m_zeroing) {
-        //          m_hoodMotor.set(0.5);
+        //          m_hoodMotor.set(-0.5);
         //      }
         //      else {
-        //          if (m_hoodForward.get()) {
+        //          if (m_hoodBack.get()) {
         //              m_zeroing = true;
         //              m_hoodMotor.set(0.0);
         //          }
         //          else if (m_hoodEncoder.getDistance() < target) {
-        //              m_hoodMotor.set(-0.5);
+        //              m_hoodMotor.set(0.5);
         //          }
         //          else {
         //              m_hoodMotor.set(0.0);
