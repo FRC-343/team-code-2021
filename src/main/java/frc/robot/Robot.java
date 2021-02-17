@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
 
   private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
-  private final DoubleSolenoid m_controlPanelLift;
+  // private final DoubleSolenoid m_controlPanelLift;
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     if (!RobotConstants.kPractice) {
       m_climberLift = new DoubleSolenoid(1, 2, 3);
       m_intakeLift = new DoubleSolenoid(1, 0, 1);
-      m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
+      // m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
       m_controlPanel = new Spark(11);
       m_controlPanel.setInverted(true);
       m_winch = new Spark(10);
