@@ -305,7 +305,7 @@ public class Robot extends TimedRobot {
       }
     }
 
-    if (m_controlPanelLift != null) {
+    /*if (m_controlPanelLift != null) {
       if (m_controller.getXButtonReleased()) {
         m_controlPanelLift.set(Value.kForward);
       } else if (m_controller.getXButtonPressed()) {
@@ -313,8 +313,8 @@ public class Robot extends TimedRobot {
       } else {
         m_controlPanelLift.set(Value.kOff);
       }
-    }
-  }
+    }*/
+  } 
 
   @Override
   public void testInit() {
