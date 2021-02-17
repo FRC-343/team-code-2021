@@ -24,50 +24,49 @@ public class Hood {
     }
 
     public boolean aim(double angle) {
-        return true;
-    //     boolean aimed = false;
+        boolean aimed = false;
 
-    //     double target = 0.2441*angle*angle*angle + 1.2016*angle*angle + 5.4673*angle + 667.17;
-    //     SmartDashboard.putNumber("hood_target", target);
+        double target = 5.1661*angle*angle + 175.32*angle + 1806.4;
+        SmartDashboard.putNumber("hood_target", target);
 
-    //     if (m_hoodEncoder != null && m_hoodFront != null) {
-    //         if (!m_aiming) {
-    //             m_aiming = true;
-    //             m_zeroing = true;
-    //         }
+        if (m_hoodEncoder != null && m_hoodFront != null) {
+            if (!m_aiming) {
+                m_aiming = true;
+                m_zeroing = true;
+            }
 
-    //         if (m_hoodEncoder.getRate() > 1700 || m_hoodEncoder.getRate() < -1700 || m_hoodEncoder.getDistance() > 4500 || m_hoodEncoder.getDistance() < -222) {
-    //             m_zeroing = true;
-    //         }
+            if (m_hoodEncoder.getRate() > 1700 || m_hoodEncoder.getRate() < -1700 || m_hoodEncoder.getDistance() > 4500 || m_hoodEncoder.getDistance() < -222) {
+                m_zeroing = true;
+            }
 
-    //         if (m_hoodFront.get()) {
-    //             m_zeroing = false;
-    //             m_hoodEncoder.reset();
-    //         }
+            if (m_hoodFront.get()) {
+                m_zeroing = false;
+                m_hoodEncoder.reset();
+            }
 
-    //         if (m_zeroing) {
-    //             m_hoodMotor.set(-0.5);
-    //         }
-    //         else {
-    //             if (m_hoodBack.get()) {
-    //                 m_zeroing = true;
-    //                 m_hoodMotor.set(0.0);
-    //             }
-    //             else if (m_hoodEncoder.getDistance() < target) {
-    //                 m_hoodMotor.set(0.5);
-    //             }
-    //             else {
-    //                 m_hoodMotor.set(0.0);
-    //                 aimed = true;
-    //             }
-    //         }
-    //     } else {
-    //         m_hoodMotor.set(0.0);
-    //     }
+            if (m_zeroing) {
+                m_hoodMotor.set(-0.5);
+            }
+            else {
+                if (m_hoodBack.get()) {
+                    m_zeroing = true;
+                    m_hoodMotor.set(0.0);
+                }
+                else if (m_hoodEncoder.getDistance() < target) {
+                    m_hoodMotor.set(0.5);
+                }
+                else {
+                    m_hoodMotor.set(0.0);
+                    aimed = true;
+                }
+            }
+        } else {
+            m_hoodMotor.set(0.0);
+        }
 
-    //     SmartDashboard.putBoolean("hood_aimed", aimed);
+        SmartDashboard.putBoolean("hood_aimed", aimed);
 
-    //     return aimed;
+        return aimed;
     }
 
     public void move(double speed) {
