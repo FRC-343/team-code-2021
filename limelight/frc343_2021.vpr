@@ -12,7 +12,7 @@ convexity_max:100
 convexity_min:10
 corner_approx:2
 cross_a_a:0.017332
-cross_a_x:0.036044
+cross_a_x:-0.04
 cross_a_y:0.387826
 cross_b_a:1
 cross_b_x:0

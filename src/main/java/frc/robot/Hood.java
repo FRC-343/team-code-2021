@@ -26,7 +26,7 @@ public class Hood {
     public boolean aim(double angle) {
         boolean aimed = false;
 
-        double target = 5.1661*angle*angle + 175.32*angle + 1806.4;
+        double target = 4.2425*angle*angle + 142.56*angle + 1491.1;
         SmartDashboard.putNumber("hood_target", target);
 
         if (m_hoodEncoder != null && m_hoodFront != null) {
