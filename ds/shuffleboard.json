@@ -209,15 +209,33 @@
               "imageWidth": 0,
               "imageHeight": 0
             }
+          },
+          "3,4": {
+            "size": [
+              13,
+              4
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[3]/Speed",
+              "_title": "LiveWindow/Ungrouped/Encoder[3]/Speed",
+              "Graph/Visible time": 60.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/LiveWindow/Ungrouped/Encoder[3]/Speed": true
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1382.0,
-    "height": 784.0
+    "x": -6.0,
+    "y": 1.0,
+    "width": 1378.0,
+    "height": 773.0
   }
 }
