@@ -1,13 +1,15 @@
 package frc.robot.autonomous;
+
 import frc.robot.*;
 
- import java.util.List;
+import java.util.List;
 
- import edu.wpi.first.wpilibj.DoubleSolenoid;
- import edu.wpi.first.wpilibj.SpeedController;
- import edu.wpi.first.wpilibj.geometry.Pose2d;
- import edu.wpi.first.wpilibj.geometry.Rotation2d;
- import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
  import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
  import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
  import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
@@ -15,8 +17,10 @@ import frc.robot.*;
 public class AutonomousCone extends Autonomous{
     private static final double kIntakeTime = 0.6;
 
-    private Trajectory m_pickupTrajectory;
-    private Trajectory m_shootTrajectory;
+    private Trajectory m_firstTrajectory;
+    private Trajectory m_secondTrajectory;
+    private Trajectory m_thirdTrajectory;
+    private Trajectory m_fourthTrajectory;
 
     public AutonomousCone(Drive robotDrive, Hood aimer, Shooter shooter, SpeedController kicker, SpeedController hopper,
             SpeedController intake, DoubleSolenoid intakeLift) {
@@ -25,44 +29,32 @@ public class AutonomousCone extends Autonomous{
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        // Create config for trajectory
-        TrajectoryConfig forwardPickupConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(m_robotDrive.getKinematics()).setEndVelocity(0.7)
-                // Apply the voltage constraint
-                .addConstraint(voltageConstraint);
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration).setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
-        // Create config for trajectory
-        TrajectoryConfig reverseShootConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(m_robotDrive.getKinematics())
-                // Apply the voltage constraint
-                .addConstraint(voltageConstraint).setReversed(true);
+        TrajectoryConfig reverseConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration).setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint).setReversed(true);
 
-        // An example trajectory to follow. All units in meters.
-        m_pickupTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(2.0, 0, new Rotation2d(0)),
-                // Pass config
-                forwardPickupConfig);
+        // All units in meters except the ones in radians
+        m_firstTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(/*new Translation2d(-2.5, 2.5)*/), new Pose2d(-1.524, 1.524, new Rotation2d(-(Math.PI / 2))), forwardConfig);
 
-        m_shootTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(2.0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0.2, 3.4999, new Rotation2d(135)),
-                // Pass config
-                reverseShootConfig);
-    }
+        //m_secondTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(-1.524, 1.524, new Rotation2d(-(Math.PI / 2))), List.of(), new Pose2d(0.0, 0.0, new Rotation2d(135)), reverseConfig);
+    
+        //m_thirdTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0, new Rotation2d(0)), List.of(), new Pose2d(0.0, 0.0, new Rotation2d(135)), forwardConfig);
+
+       //m_fourthTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0, new Rotation2d(0)), List.of(), new Pose2d(0.0, 0.0, new Rotation2d(135)), reverseConfig);
+}
 
     public void autonomousPeriodic() {
         boolean running = false;
+
+        if (m_state == "start") {
+                changeState("first");
+        } else if (m_state == "first") {
+                running = track(m_firstTrajectory);
+             if (!running) {
+                 changeState("end");
+             }
+                
+        }
 
         // if (m_state == "start") {
         //     changeState("intake_drop");
