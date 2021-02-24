@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
   private final Autonomous m_autoET;
   private final Autonomous m_autoSimple;
   private final Autonomous m_autoOT;
+  private final Autonomous m_autoCone;
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -82,7 +83,7 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
 
   private enum Auto {
-    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET, AUTONOMOUS_OT
+    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET, AUTONOMOUS_OT,AUTONOMOUS_CONE
   };
 
   private Autonomous m_auto;
@@ -106,6 +107,7 @@ public class Robot extends TimedRobot {
     m_autoET = new AutonomousET(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoOT = new AutonomousOT(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_autoCone = new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_auto = m_autoNone;
   }
 
@@ -123,6 +125,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.setDefaultOption("Auto_Simple", Auto.AUTONOMOUS_SIMPLE);
     m_autoChooser.addOption("Auto_ET", Auto.AUTONOMOUS_ET);
     m_autoChooser.addOption("Auto_OT", Auto.AUTONOMOUS_OT);
+    m_autoChooser.addOption("Auto_Cone", Auto.AUTONOMOUS_CONE);
     m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
@@ -175,6 +178,8 @@ public class Robot extends TimedRobot {
       m_auto = m_autoSimple;
     } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_OT) {
       m_auto = m_autoOT;
+    }  else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_CONE) {
+      m_auto = m_autoCone;
     } else {
       m_auto = m_autoNone;
     }
