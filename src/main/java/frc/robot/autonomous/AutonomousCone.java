@@ -34,7 +34,7 @@ public class AutonomousCone extends Autonomous{
         TrajectoryConfig reverseConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration).setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint).setReversed(true);
 
         // All units in meters except the ones in radians (I think) starts facing positive x by default not positive y
-        m_firstTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(/*new Translation2d(-2.5, 2.5)*/), new Pose2d(1.524, 1.524, new Rotation2d(-(Math.PI / 2))), forwardConfig);
+        m_firstTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(/*new Translation2d(2.5, 2.5)*/), new Pose2d(1.524, 1.524, new Rotation2d(-(Math.PI / 2))), forwardConfig);
 
         //m_secondTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(-1.524, 1.524, new Rotation2d(-(Math.PI / 2))), List.of(), new Pose2d(0.0, 0.0, new Rotation2d(135)), reverseConfig);
     
