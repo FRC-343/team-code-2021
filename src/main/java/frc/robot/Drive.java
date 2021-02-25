@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drive {
-    public static final double kMaxSpeed = 4.0; // meters per second
+    public static final double kMaxSpeed = 4.0/6; // meters per second
     public static final double kMaxAcceleration = 3.0; // meters per second squared
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
