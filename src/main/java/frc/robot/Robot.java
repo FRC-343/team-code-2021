@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
   private final Autonomous m_autoSimple;
   private final Autonomous m_autoOT;
   private final Autonomous m_autoCone;
+  private final Autonomous m_autoBarrel;
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -83,7 +84,7 @@ public class Robot extends TimedRobot {
   private final Joystick m_stick = new Joystick(0);
 
   private enum Auto {
-    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET, AUTONOMOUS_OT,AUTONOMOUS_CONE
+    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET, AUTONOMOUS_OT, AUTONOMOUS_CONE, AUTONOMOUS_BARREL
   };
 
   private Autonomous m_auto;
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoOT = new AutonomousOT(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_autoCone = new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
+    m_autoBarrel = new AutonomousBarrel(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
     m_auto = m_autoNone;
   }
 
@@ -126,6 +128,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption("Auto_ET", Auto.AUTONOMOUS_ET);
     m_autoChooser.addOption("Auto_OT", Auto.AUTONOMOUS_OT);
     m_autoChooser.addOption("Auto_Cone", Auto.AUTONOMOUS_CONE);
+    m_autoChooser.addOption("Auto_Barrel", Auto.AUTONOMOUS_BARREL);
     m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
@@ -178,8 +181,10 @@ public class Robot extends TimedRobot {
       m_auto = m_autoSimple;
     } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_OT) {
       m_auto = m_autoOT;
-    }  else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_CONE) {
+    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_CONE) {
       m_auto = m_autoCone;
+    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_BARREL) {
+      m_auto = m_autoBarrel;
     } else {
       m_auto = m_autoNone;
     }
@@ -310,16 +315,13 @@ public class Robot extends TimedRobot {
       }
     }
 
-    /*if (m_controlPanelLift != null) {
-      if (m_controller.getXButtonReleased()) {
-        m_controlPanelLift.set(Value.kForward);
-      } else if (m_controller.getXButtonPressed()) {
-        m_controlPanelLift.set(Value.kReverse);
-      } else {
-        m_controlPanelLift.set(Value.kOff);
-      }
-    }*/
-  } 
+    /*
+     * if (m_controlPanelLift != null) { if (m_controller.getXButtonReleased()) {
+     * m_controlPanelLift.set(Value.kForward); } else if
+     * (m_controller.getXButtonPressed()) { m_controlPanelLift.set(Value.kReverse);
+     * } else { m_controlPanelLift.set(Value.kOff); } }
+     */
+  }
 
   @Override
   public void testInit() {
