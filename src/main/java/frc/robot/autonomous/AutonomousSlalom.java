@@ -29,7 +29,7 @@ public class AutonomousSlalom extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.1 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.2 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
@@ -41,13 +41,14 @@ public class AutonomousSlalom extends Autonomous {
                 new Translation2d(3.05, 1.52),
                 new Translation2d(4.57, 1.52),
                 new Translation2d(6.1, 0.762),
-                new Translation2d(6.86, 0.0),
+                new Translation2d(6.86, 0.0), // TODO: pull back a bit so it misses cup
                 new Translation2d(7.62, 0.762),
                 new Translation2d(6.86, 1.52),
                 new Translation2d(6.1, 0.762),
                 new Translation2d(4.57, 0.0),
+                new Translation2d(3.86, 0.1),
                 new Translation2d(3.05, 0.0),
-                new Translation2d(1.52, 0.762)), 
+                new Translation2d(1.52, 0.762)), // TODO: pull to the side a bit so it misses cup
                 new Pose2d(0.381, 1.52, new Rotation2d(-Math.PI)), forwardConfig);
     }
 
