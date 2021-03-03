@@ -40,14 +40,19 @@ public class AutonomousSlalom extends Autonomous {
                 List.of(new Translation2d(1.52, 0.762),
                 new Translation2d(3.05, 1.52),
                 new Translation2d(4.57, 1.52),
-                new Translation2d(6.1, 0.762),
+                new Translation2d(5.71, 1.14),
+                new Translation2d(5.9, 0.762),
+                new Translation2d(6.2, 0.15),
                 new Translation2d(6.86, 0.0), // TODO: pull back a bit so it misses cup
                 new Translation2d(7.62, 0.762),
                 new Translation2d(6.86, 1.52),
+                new Translation2d(6.2, 1.374),
                 new Translation2d(6.1, 0.762),
+                new Translation2d(5.71, .384),
                 new Translation2d(4.57, 0.0),
                 new Translation2d(3.86, 0.1),
                 new Translation2d(3.05, 0.0),
+                new Translation2d(1.91, 0.38),
                 new Translation2d(1.52, 0.762)), // TODO: pull to the side a bit so it misses cup
                 new Pose2d(0.381, 1.52, new Rotation2d(-Math.PI)), forwardConfig);
     }
@@ -57,6 +62,7 @@ public class AutonomousSlalom extends Autonomous {
 
         if (m_state == "start") {
             changeState("first");
+            System.out.println("hello");
         } else if (m_state == "first") {
             running = track(m_trajectory);
             if (!running) {

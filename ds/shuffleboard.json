@@ -47,7 +47,7 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///FMSInfo/GameSpecificMessage",
+              "_source0": "network_table:///LiveWindow/Ungrouped/AnalogInput[0]",
               "_title": "FMSInfo/GameSpecificMessage"
             }
           },
@@ -117,6 +117,17 @@
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Auto_Choice",
               "_title": "SmartDashboard/Auto_Choice"
+            }
+          },
+          "12,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/AnalogInput[0]/Value",
+              "_title": "LiveWindow/Ungrouped/AnalogInput[0]/Value"
             }
           }
         }

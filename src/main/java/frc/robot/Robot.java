@@ -19,9 +19,11 @@ import com.revrobotics.ColorMatch;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -66,6 +68,8 @@ public class Robot extends TimedRobot {
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
+  
+  private final AnalogInput m_greg = new AnalogInput(0); //aNALOG INPUT
 
   private final Autonomous m_autoNone;
   private final Autonomous m_autoET;
