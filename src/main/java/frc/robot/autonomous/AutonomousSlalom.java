@@ -36,25 +36,27 @@ public class AutonomousSlalom extends Autonomous {
         // starts facing positive x by default not positive y
 
         // new Translation2d(x, y)
-        m_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(2 * Math.PI)),
-                List.of(new Translation2d(1.52, 0.762),
-                new Translation2d(3.05, 1.52),
-                new Translation2d(4.57, 1.52),
-                new Translation2d(5.71, 1.14),
-                new Translation2d(5.9, 0.762),
-                new Translation2d(6.2, 0.15),
-                new Translation2d(6.86, 0.0), // TODO: pull back a bit so it misses cup
-                new Translation2d(7.62, 0.762),
-                new Translation2d(6.86, 1.52),
-                new Translation2d(6.2, 1.374),
-                new Translation2d(6.1, 0.762),
-                new Translation2d(5.71, .384),
-                new Translation2d(4.57, 0.0),
-                new Translation2d(3.86, 0.1),
-                new Translation2d(3.05, 0.0),
-                new Translation2d(1.91, 0.38),
-                new Translation2d(1.52, 0.762)), // TODO: pull to the side a bit so it misses cup
-                new Pose2d(0.381, 1.52, new Rotation2d(-Math.PI)), forwardConfig);
+        m_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0.00, 0.00, new Rotation2d(Math.PI*2)),
+
+        List.of(new Translation2d(1.37, 0.15),
+        new Translation2d(1.52, 0.76),
+        new Translation2d(1.68, 1.37),
+        new Translation2d(3.81, 1.52),
+        new Translation2d(5.94, 1.37),
+        new Translation2d(6.10, 0.76),
+        new Translation2d(6.25, 0.15),
+        new Translation2d(6.86, 0.00),
+        new Translation2d(7.62, 0.76),
+        new Translation2d(6.86, 1.52),
+        new Translation2d(6.25, 1.37),
+        new Translation2d(6.10, 0.76),
+        new Translation2d(5.94, 0.15),
+        new Translation2d(3.81, 0.00),
+        new Translation2d(2.13, 0.15),
+        new Translation2d(1.52, 0.76),
+        new Translation2d(1.37, 1.37)),
+        
+        new Pose2d(0.00, 1.52, new Rotation2d(Math.PI)), forwardConfig);
     }
 
     public void autonomousPeriodic() {
