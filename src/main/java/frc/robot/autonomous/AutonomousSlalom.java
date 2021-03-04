@@ -29,7 +29,7 @@ public class AutonomousSlalom extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.2 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.4 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
