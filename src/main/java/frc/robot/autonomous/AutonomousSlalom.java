@@ -47,15 +47,15 @@ public class AutonomousSlalom extends Autonomous {
         new Translation2d(6.25, 0.15),
         new Translation2d(6.86, 0.00),
         new Translation2d(7.62, 0.76),
-        new Translation2d(6.86, 1.52),
-        new Translation2d(6.25, 1.37),
-        new Translation2d(6.10, 0.76),
+        new Translation2d(7.1, 1.52),
+        new Translation2d(7.0, 1.37),
+        new Translation2d(6.86, 0.76),
         new Translation2d(5.94, 0.15),
         new Translation2d(3.81, 0.00),
         new Translation2d(2.13, 0.15),
         new Translation2d(1.52, 0.76),
         new Translation2d(1.37, 1.37)),
-        
+
         new Pose2d(0.00, 1.52, new Rotation2d(Math.PI)), forwardConfig);
     }
 
