@@ -40,7 +40,7 @@ public class AutonomousSlalom extends Autonomous {
 
         List.of(new Translation2d(1.37, 0.15),
         new Translation2d(1.52, 0.76),
-        new Translation2d(1.68, 1.37),
+        new Translation2d(1.80, 1.37),
         new Translation2d(3.81, 1.52),
         new Translation2d(5.94, 1.37),
         new Translation2d(6.10, 0.76),
@@ -53,8 +53,8 @@ public class AutonomousSlalom extends Autonomous {
         new Translation2d(6.04, 0.30),
         new Translation2d(3.91, 0.15),
         new Translation2d(2.23, 0.30),
-        new Translation2d(1.62, 0.90),
-        new Translation2d(1.47, 1.50)),
+        new Translation2d(1.72, 0.90),
+        new Translation2d(1.57, 1.50)),
 
         new Pose2d(0.00, 1.52, new Rotation2d(Math.PI)), forwardConfig);
     }
