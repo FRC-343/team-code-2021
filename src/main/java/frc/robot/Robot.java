@@ -194,6 +194,19 @@ public class Robot extends TimedRobot {
       m_auto = m_autoBarrel;
     } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_SLALOM) {
       m_auto = m_autoSlalom;
+    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_GALACTIC) { //m_greg
+      if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 1) { //TODO
+        m_auto = 0;
+      } else if (m_greg.getVoltage() >= 1 && m_greg.getVoltage() < 2){
+        m_auto = 1;
+      } else if (m_greg.getVoltage() >= 2 && m_greg.getVoltage() < 3) {
+        m_auto = 2;
+      } else if (m_greg.getVoltage() >=3 && m_greg.getVoltage() < 4) {
+        m_auto = 3;
+      } else {
+        System.out.print("Hello world");
+      } 
+    
     } else {
       m_auto = m_autoNone;
     }
