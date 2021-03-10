@@ -68,16 +68,8 @@ public class Robot extends TimedRobot {
   private final Spark m_intake = new Spark(7);
   private final Spark m_controlPanel;
   private final Spark m_winch;
-  
-  private final AnalogInput m_greg = new AnalogInput(0); //aNALOG INPUT
 
-  private final Autonomous m_autoNone;
-  private final Autonomous m_autoET;
-  private final Autonomous m_autoSimple;
-  private final Autonomous m_autoOT;
-  private final Autonomous m_autoCone;
-  private final Autonomous m_autoBarrel;
-  private final AutonomousSlalom m_autoSlalom;
+  private final AnalogInput m_greg = new AnalogInput(0); //aNALOG INPUT
 
   private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
@@ -88,12 +80,8 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
-  private enum Auto {
-    NO_AUTONOMOUS, AUTONOMOUS_SIMPLE, AUTONOMOUS_ET, AUTONOMOUS_OT, AUTONOMOUS_CONE, AUTONOMOUS_BARREL, AUTONOMOUS_SLALOM
-  };
-
   private Autonomous m_auto;
-  private final SendableChooser<Auto> m_autoChooser = new SendableChooser<Auto>();
+  private final SendableChooser<Autonomous> m_autoChooser = new SendableChooser<Autonomous>();
 
   public Robot() {
     m_intake.setInverted(true);
@@ -109,14 +97,16 @@ public class Robot extends TimedRobot {
       m_cellDetector = new DigitalInput(8);
     }
 
-    m_autoNone = new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoET = new AutonomousET(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoSimple = new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoOT = new AutonomousOT(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoCone = new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoBarrel = new AutonomousBarrel(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_autoSlalom = new AutonomousSlalom(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift);
-    m_auto = m_autoNone;
+    m_autoChooser.setDefaultOption("No_Auto", new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_Cone", new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_Barrel", new AutonomousBarrel(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_Slalom", new AutonomousSlalom(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_Galactic", new AutonomousGalactic(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift, m_greg));
+    m_autoChooser.addOption("Auto_Simple", new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_ET", new AutonomousET(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.addOption("Auto_OT", new AutonomousOT(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+
+    m_auto = m_autoChooser.getSelected();
   }
 
   /**
@@ -130,13 +120,6 @@ public class Robot extends TimedRobot {
     m_colorMatcher.addColorMatch(kBlue);
     m_colorMatcher.addColorMatch(kYellow);
 
-    m_autoChooser.setDefaultOption("Auto_Simple", Auto.AUTONOMOUS_SIMPLE);
-    m_autoChooser.addOption("Auto_ET", Auto.AUTONOMOUS_ET);
-    m_autoChooser.addOption("Auto_OT", Auto.AUTONOMOUS_OT);
-    m_autoChooser.addOption("Auto_Cone", Auto.AUTONOMOUS_CONE);
-    m_autoChooser.addOption("Auto_Barrel", Auto.AUTONOMOUS_BARREL);
-    m_autoChooser.addOption("Auto_Slalom", Auto.AUTONOMOUS_SLALOM);
-    m_autoChooser.addOption("No_Auto", Auto.NO_AUTONOMOUS);
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
 
@@ -182,34 +165,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_ET) {
-      m_auto = m_autoET;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_SIMPLE) {
-      m_auto = m_autoSimple;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_OT) {
-      m_auto = m_autoOT;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_CONE) {
-      m_auto = m_autoCone;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_BARREL) {
-      m_auto = m_autoBarrel;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_SLALOM) {
-      m_auto = m_autoSlalom;
-    } else if (m_autoChooser.getSelected() == Auto.AUTONOMOUS_GALACTIC) { //m_greg
-      if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 1) { //TODO
-        m_auto = 0;
-      } else if (m_greg.getVoltage() >= 1 && m_greg.getVoltage() < 2){
-        m_auto = 1;
-      } else if (m_greg.getVoltage() >= 2 && m_greg.getVoltage() < 3) {
-        m_auto = 2;
-      } else if (m_greg.getVoltage() >=3 && m_greg.getVoltage() < 4) {
-        m_auto = 3;
-      } else {
-        System.out.print("Hello world");
-      } 
-    
-    } else {
-      m_auto = m_autoNone;
-    }
+    m_auto = m_autoChooser.getSelected();
 
     m_auto.autonomousInit();
   }
