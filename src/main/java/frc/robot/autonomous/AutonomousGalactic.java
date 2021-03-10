@@ -73,13 +73,13 @@ public class AutonomousGalactic extends Autonomous {
     public void autonomousInit() {
         super.autonomousInit();
 
-        if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 1) {
+        if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 2.28) {
             m_selection = Selection.A_RED;
-        } else if (m_greg.getVoltage() >= 1 && m_greg.getVoltage() < 2){
+        } else if (m_greg.getVoltage() >= 2.28 && m_greg.getVoltage() < 3.91){
             m_selection = Selection.A_BLUE;
-        } else if (m_greg.getVoltage() >= 2 && m_greg.getVoltage() < 3) {
+        } else if (m_greg.getVoltage() >= 3.91 && m_greg.getVoltage() < 4.90) {
             m_selection = Selection.B_RED;
-        } else if (m_greg.getVoltage() >= 3 && m_greg.getVoltage() < 4) {
+        } else if (m_greg.getVoltage() >= 4.90 && m_greg.getVoltage() < 2 + Math.PI){ //above 5
             m_selection = Selection.B_BLUE;
         } else {
             m_selection = Selection.NONE; 
@@ -166,10 +166,7 @@ public class AutonomousGalactic extends Autonomous {
             // if (!running) {
             //     changeState("end");
             // }
-            System.out.println("BBlueBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBbb");
-            for (int i= 0; i< 1000000; i++) {
-                System.out.print("b");
-            }
+            System.out.println("BBlue");
             changeState("end");
         }
     }
