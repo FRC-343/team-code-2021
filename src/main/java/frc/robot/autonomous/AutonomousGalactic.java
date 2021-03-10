@@ -109,15 +109,17 @@ public class AutonomousGalactic extends Autonomous {
 
     public void autonomousPeriodicARed() {
         boolean running = false;
-        
+
         if (m_state == "start") {
             changeState("first");
             System.out.println("hello");
         } else if (m_state == "first") {
-            running = track(m_trajectory);
-            if (!running) {
-                changeState("end");
-            }
+            // running = track(m_trajectory);
+            // if (!running) {
+            //     changeState("end");
+            // }
+            System.out.println("ARed");
+            changeState("end");
         }
     }
     
@@ -128,10 +130,12 @@ public class AutonomousGalactic extends Autonomous {
             changeState("first");
             System.out.println("hello");
         } else if (m_state == "first") {
-            running = track(m_trajectory);
-            if (!running) {
-                changeState("end");
-            }
+            // running = track(m_trajectory);
+            // if (!running) {
+            //     changeState("end");
+            // }
+            System.out.println("BRed");
+            changeState("end");
         }
     }
 
@@ -142,10 +146,12 @@ public class AutonomousGalactic extends Autonomous {
             changeState("first");
             System.out.println("hello");
         } else if (m_state == "first") {
-            running = track(m_trajectory);
-            if (!running) {
-                changeState("end");
-            }
+            // running = track(m_trajectory);
+            // if (!running) {
+            //     changeState("end");
+            // }
+            System.out.println("AbluE");
+            changeState("end");
         }
     }
 
@@ -156,10 +162,15 @@ public class AutonomousGalactic extends Autonomous {
             changeState("first");
             System.out.println("hello");
         } else if (m_state == "first") {
-            running = track(m_trajectory);
-            if (!running) {
-                changeState("end");
+            // running = track(m_trajectory);
+            // if (!running) {
+            //     changeState("end");
+            // }
+            System.out.println("BBlueBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBbb");
+            for (int i= 0; i< 1000000; i++) {
+                System.out.print("b");
             }
+            changeState("end");
         }
     }
 }
