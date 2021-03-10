@@ -35,7 +35,7 @@ public class AutonomousGalactic extends Autonomous {
 
         m_greg = greg;
 
-        m_selection = NONE;
+        m_selection = Selection.NONE;
 
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
@@ -74,29 +74,82 @@ public class AutonomousGalactic extends Autonomous {
         super.autonomousInit();
 
         if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 1) {
-            m_selection = 0; //TODO
+            m_selection = Selection.A_RED;
         } else if (m_greg.getVoltage() >= 1 && m_greg.getVoltage() < 2){
-            m_selection = 1; //TODO
+            m_selection = Selection.A_BLUE;
         } else if (m_greg.getVoltage() >= 2 && m_greg.getVoltage() < 3) {
-            m_selection = 2; //TODO
+            m_selection = Selection.B_RED;
         } else if (m_greg.getVoltage() >= 3 && m_greg.getVoltage() < 4) {
-            m_selection = 3; //TODO
+            m_selection = Selection.B_BLUE;
         } else {
-            m_selection = ; //TODO
+            m_selection = Selection.NONE; 
             System.out.print("Hello world");
         }
     }
 
     public void autonomousPeriodic() {
         switch (m_selection) {
-            case ???: //TODO
-                autonomous???(); //TODO
+            case A_RED: 
+                autonomousPeriodicARed(); 
                 break;
-            //TODO
+            case A_BLUE:
+                autonomousPeriodicABlue();
+                break;
+            case B_RED:
+                autonomousPeriodicBRed();
+                break;
+            case B_BLUE:
+                autonomousPeriodicBBlue();
+                break;
+            default:
+                break;
+            
         }
     }
 
     public void autonomousPeriodicARed() {
+        boolean running = false;
+        
+        if (m_state == "start") {
+            changeState("first");
+            System.out.println("hello");
+        } else if (m_state == "first") {
+            running = track(m_trajectory);
+            if (!running) {
+                changeState("end");
+            }
+        }
+    }
+    
+    public void autonomousPeriodicBRed() {
+        boolean running = false;
+
+        if (m_state == "start") {
+            changeState("first");
+            System.out.println("hello");
+        } else if (m_state == "first") {
+            running = track(m_trajectory);
+            if (!running) {
+                changeState("end");
+            }
+        }
+    }
+
+    public void autonomousPeriodicABlue() {
+        boolean running = false;
+
+        if (m_state == "start") {
+            changeState("first");
+            System.out.println("hello");
+        } else if (m_state == "first") {
+            running = track(m_trajectory);
+            if (!running) {
+                changeState("end");
+            }
+        }
+    }
+
+    public void autonomousPeriodicBBlue() {
         boolean running = false;
 
         if (m_state == "start") {
