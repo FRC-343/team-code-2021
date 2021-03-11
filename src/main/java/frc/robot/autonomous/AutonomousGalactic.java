@@ -24,7 +24,10 @@ import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 public class AutonomousGalactic extends Autonomous {
     private final AnalogInput m_greg;
 
-    private final Trajectory m_trajectory;
+    private final Trajectory m_firstARed;
+    private final Trajectory m_secondARed;
+    private final Trajectory m_thirdARed;
+
 
     private enum Selection {
         NONE, A_RED, A_BLUE, B_RED, B_BLUE
@@ -43,23 +46,23 @@ public class AutonomousGalactic extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.4 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.22* Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
         // starts facing positive x by default not positive y
 
         // new Translation2d(x, y)
-        m_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0.00, 0.00, new Rotation2d(Math.PI * 2)),
+        m_firstARed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(),
+            new Pose2d(1.52, 0.0, new Rotation2d(0)), forwardConfig);    
+        
+        m_secondARed = TrajectoryGenerator.generateTrajectory(new Pose2d(1.52, 0.0, new Rotation2d(0)), 
+            List.of(new Translation2d(1.91, -0.76), new Translation2d(3.05, -0.76)), new Pose2d(4.8, 1.02, new Rotation2d(0)), forwardConfig);
+        
+        m_thirdARed = TrajectoryGenerator.generateTrajectory(new Pose2d(4.8, 1.02, new Rotation2d(0)), 
+        List.of(), new Pose2d(7.6, 1.02, new Rotation2d(0)), forwardConfig);
+        
 
-                List.of(new Translation2d(1.37, 0.15), new Translation2d(1.52, 0.76), new Translation2d(1.80, 1.37),
-                        new Translation2d(3.81, 1.52), new Translation2d(5.94, 1.37), new Translation2d(6.10, 0.76),
-                        new Translation2d(6.25, 0.15), new Translation2d(6.86, 0.00), new Translation2d(7.62, 0.76),
-                        new Translation2d(6.86, 1.52), new Translation2d(6.35, 1.37), new Translation2d(6.20, 0.76),
-                        new Translation2d(6.04, 0.30), new Translation2d(3.91, 0.15), new Translation2d(2.23, 0.30),
-                        new Translation2d(1.72, 0.90), new Translation2d(1.57, 1.50)),
-
-                new Pose2d(0.00, 1.52, new Rotation2d(Math.PI)), forwardConfig);
     }
 
     public void autonomousInit() {
@@ -102,27 +105,43 @@ public class AutonomousGalactic extends Autonomous {
     /*
      * /////A Red Activate /////
      * 
-     * intake Drive forward 2 units and rotate Math.PI/2 to the right
-     *      (clockwise, facing neg y) 
-     * Trajectory curve (final 2 power cells): start at
-     *      c3, end at a6 (rotated Math.PI/2 left, conterclockwise, facing pos x), travel
-     *      through d5 (waypoint)
-     * Travel to a11 (5 units foward)
+     * intake Drive forward 2 units and rotate Math.PI/2 to the right (clockwise,
+     * facing neg y) Trajectory curve (final 2 power cells): start at c3, end at a6
+     * travel through d5 (waypoint) (rotated Math.PI/2 left, conterclockwise, facing
+     * pos x), travel to a11 (5 units foward)
      * 
      */
     public void autonomousPeriodicARed() {
         boolean running = false;
 
         if (m_state == "start") {
-            changeState("first");
-            System.out.println("hello");
+            changeState("intake_drop");
+        } else if (m_state == "intake_drop") {
+            running = dropIntake();
+            if (!running) {
+                changeState("first");
+            }
         } else if (m_state == "first") {
-            // running = track(m_trajectory);
-            // if (!running) {
-            // changeState("end");
-            // }
-            System.out.println("ARed");
-            changeState("end");
+            m_intake.set(0.65);
+            running = track(m_firstARed);
+            if (!running) {
+                changeState("second");
+            }
+        } else if (m_state == "second") {
+            m_intake.set(0.65);
+            running = track(m_secondARed);
+            if (!running) {
+                changeState("third");
+            }
+        } else if (m_state == "third") {
+            running = track(m_thirdARed);
+
+            if (!running) {
+                changeState("end");
+                for (int i = 0; i < 100; i++) {
+                    System.out.println("Touchdown");
+                }
+            }
         }
     }
 
