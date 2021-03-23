@@ -1,7 +1,7 @@
 {
   "tabPane": [
     {
-      "title": "dev",
+      "title": "op",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -10,69 +10,10 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "7,0": {
+          "2,0": {
             "size": [
-              4,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///limelight/tx",
-              "_title": "limelight/tx"
-            }
-          },
-          "7,1": {
-            "size": [
-              4,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///limelight/ty",
-              "_title": "limelight/ty"
-            }
-          },
-          "3,2": {
-            "size": [
-              8,
-              2
-            ],
-            "content": {
-              "_type": "Encoder",
-              "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[2]",
-              "_title": "LiveWindow/Ungrouped/Encoder[2]"
-            }
-          },
-          "3,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[22]/Value",
-              "_title": "LiveWindow/Ungrouped/DigitalInput[22]/Value",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "5,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[9]/Value",
-              "_title": "LiveWindow/Ungrouped/DigitalInput[9]/Value",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "11,0": {
-            "size": [
-              6,
-              4
+              10,
+              5
             ],
             "content": {
               "_type": "Camera Stream",
@@ -88,32 +29,116 @@
               "imageHeight": 0
             }
           },
-          "3,4": {
+          "12,0": {
             "size": [
-              13,
-              4
+              1,
+              1
             ],
             "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[3]/Speed",
-              "_title": "LiveWindow/Ungrouped/Encoder[3]/Speed",
-              "Graph/Visible time": 60.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/LiveWindow/Ungrouped/Encoder[3]/Speed": true
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/color_detected",
+              "_title": "/SmartDashboard/color_detected"
+            }
+          },
+          "12,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///FMSInfo/GameSpecificMessage",
+              "_title": "FMSInfo/GameSpecificMessage"
+            }
+          },
+          "12,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/hood_aimed",
+              "_title": "/SmartDashboard/hood_aimed",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "14,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/pose_x",
+              "_title": "SmartDashboard/pose_x"
+            }
+          },
+          "15,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/pose_y",
+              "_title": "SmartDashboard/pose_y"
+            }
+          },
+          "15,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight/tv",
+              "_title": "/limelight/tv"
+            }
+          },
+          "14,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/pose_rot",
+              "_title": "SmartDashboard/pose_rot"
+            }
+          },
+          "14,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto_Choice",
+              "_title": "SmartDashboard/Auto_Choice"
             }
           }
         }
       }
+    },
+    {
+      "title": "dev",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {}
+      }
     }
   ],
   "windowGeometry": {
-    "x": -2.0,
-    "y": 4.0,
-    "width": 1368.0,
-    "height": 561.0
+    "x": -7.0,
+    "y": 3.0,
+    "width": 1378.0,
+    "height": 572.0
   }
 }
