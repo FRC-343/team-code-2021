@@ -29,6 +29,7 @@ public class AutonomousGalactic extends Autonomous {
     private final Trajectory m_thirdARed;
     private final Trajectory m_firstABlue;
     private final Trajectory m_firstBRed;
+    private final Trajectory m_firstBBlue;
 
     private enum Selection {
         NONE, A_RED, A_BLUE, B_RED, B_BLUE
@@ -64,30 +65,23 @@ public class AutonomousGalactic extends Autonomous {
         m_thirdARed = TrajectoryGenerator.generateTrajectory(new Pose2d(4.8, 1.02, new Rotation2d(0)), List.of(),
                 new Pose2d(7.6, 1.02, new Rotation2d(0)), forwardConfig);
 
-        m_firstABlue = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
-                List.of(new Translation2d(3.05, -1.3), new Translation2d(3.96, -1),
-                        new Translation2d(5.05, 0.76), new Translation2d(6.0, 0.00)),
+        m_firstABlue = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.05, -1.3),
+                        new Translation2d(3.96, -1), new Translation2d(5.05, 0.76), new Translation2d(6.0, 0.00)),
                 new Pose2d(7.6, 0.0, new Rotation2d(0)), forwardConfig);
-        m_firstBRed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0,0.0,new Rotation2d(0)), 
-        List.of(new Translation2d(2.0,0.76), new Translation2d(3.25,-0.76), new Translation2d(5.45,1.14)),
-         new Pose2d(7.6, 1.14, new Rotation2d(0)), forwardConfig);
+        m_firstBRed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
+                List.of(new Translation2d(2.0, 0.76), new Translation2d(3.25, -0.76), new Translation2d(5.45, 1.14)),
+                new Pose2d(7.6, 1.14, new Rotation2d(0)), forwardConfig);
+
+        m_firstBBlue = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
+                List.of(new Translation2d(3.81, -0.76), new Translation2d(5.33, 0.76), new Translation2d(6.86, -0.76)),
+                new Pose2d(7.6, -1.52, new Rotation2d(0)), forwardConfig);
     }
 
     public void autonomousInit() {
         super.autonomousInit();
+        m_selection = Selection.B_BLUE;
 
-        if (m_greg.getVoltage() >= 0 && m_greg.getVoltage() < 1.8) {
-            m_selection = Selection.A_RED;
-        } else if (m_greg.getVoltage() >= 1.8 && m_greg.getVoltage() < 3.6) {
-            m_selection = Selection.A_BLUE;
-        } else if (m_greg.getVoltage() >= 3.6 && m_greg.getVoltage() < 4.90) {
-            m_selection = Selection.B_RED;
-        } else if (m_greg.getVoltage() >= 4.90 && m_greg.getVoltage() < 2 + Math.PI) { // above 5
-            m_selection = Selection.B_BLUE;
-        } else {
-            m_selection = Selection.NONE;
-            System.out.print("Hello world");
-        }
     }
 
     public void autonomousPeriodic() {
@@ -176,10 +170,10 @@ public class AutonomousGalactic extends Autonomous {
         } else if (m_state == "first") {
             m_intake.set(0.65);
             running = track(m_firstBRed);
-             if (!running) {
-             changeState("end");
-             }
-            
+            if (!running) {
+                changeState("end");
+            }
+
         }
     }
 
@@ -199,7 +193,7 @@ public class AutonomousGalactic extends Autonomous {
             if (!running) {
                 changeState("end");
             }
-            
+
         }
     }
 
@@ -207,15 +201,19 @@ public class AutonomousGalactic extends Autonomous {
         boolean running = false;
 
         if (m_state == "start") {
-            changeState("first");
-            System.out.println("hello");
+            changeState("intake_drop");
+        } else if (m_state == "intake_drop") {
+            running = dropIntake();
+            if (!running) {
+                changeState("first");
+            }
         } else if (m_state == "first") {
-            // running = track(m_trajectory);
-            // if (!running) {
-            // changeState("end");
-            // }
-            System.out.println("BBlue");
-            changeState("end");
+            m_intake.set(0.65);
+            running = track(m_firstBBlue);
+            if (!running) {
+                changeState("end");
+            }
+
         }
     }
 }
