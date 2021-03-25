@@ -48,7 +48,7 @@ public class AutonomousGalactic extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.22 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.5 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
@@ -73,19 +73,23 @@ public class AutonomousGalactic extends Autonomous {
                 List.of(new Translation2d(2.0, 0.76), new Translation2d(3.25, -0.76), new Translation2d(5.45, 1.14)),
                 new Pose2d(7.6, 1.14, new Rotation2d(0)), forwardConfig);
 
-        m_firstBBlue = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
-                List.of(new Translation2d(3.81, -0.76), new Translation2d(5.33, 0.76), new Translation2d(6.86, -0.76)),
+        m_firstBBlue = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.81, -0.76),
+                        new Translation2d(6.000000031415, 0.76), new Translation2d(6.86, -0.76)),
                 new Pose2d(7.6, -1.52, new Rotation2d(0)), forwardConfig);
     }
 
     public void autonomousInit() {
         super.autonomousInit();
-        m_selection = Selection.B_BLUE;
+        m_selection = Selection.NONE;
 
     }
 
     public void autonomousPeriodic() {
         switch (m_selection) {
+            case NONE:
+                autonomousPeriodicChooser();
+                break;
             case A_RED:
                 autonomousPeriodicARed();
                 break;
@@ -98,10 +102,24 @@ public class AutonomousGalactic extends Autonomous {
             case B_BLUE:
                 autonomousPeriodicBBlue();
                 break;
-            default:
-                break;
-
         }
+    }
+
+    public void autonomousPeriodicChooser() {
+        boolean running = false;
+
+        if (m_state == "start") {
+            changeState("ARedCheck");
+        } else if (m_state == "ARedCheck") {
+            if (false/*greg senses something*/) {
+                m_selection = Selection.A_RED;
+                changeState("start");
+            }
+            if (!running) {
+                changeState("ABlueCheck");
+            }
+        }
+
     }
 
     /*
@@ -148,13 +166,6 @@ public class AutonomousGalactic extends Autonomous {
     } //////// B RED //////////
     /*
      * Intake run all time
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
      */
 
     public void autonomousPeriodicBRed() {
