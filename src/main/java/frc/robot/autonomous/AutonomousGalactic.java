@@ -109,14 +109,43 @@ public class AutonomousGalactic extends Autonomous {
         boolean running = false;
 
         if (m_state == "start") {
-            changeState("ARedCheck");
+            changeState("RotateTo.873");
+        } else if (m_state == "RotateTo.873") {
+            m_robotDrive.drive(0, -.3);
+            if (m_robotDrive.getPose().getRotation().getRadians() <= -.873) {
+                changeState("ARedCheck");
+            }
         } else if (m_state == "ARedCheck") {
-            if (false/*greg senses something*/) {
+            m_robotDrive.drive(0, .1);
+            if (m_greg.getVoltage() <= 2.0){
                 m_selection = Selection.A_RED;
                 changeState("start");
+            } else if(m_robotDrive.getPose().getRotation().getRadians() >= -.5) {
+               changeState("BRedCheck"); 
             }
-            if (!running) {
+        } else if (m_state == "BRedCheck") {
+            m_robotDrive.drive(0, 0.1);
+            if (m_greg.getVoltage() < 2.0) {
+                m_selection = Selection.B_RED;
+                changeState("start");
+            } else if (m_robotDrive.getPose().getRotation().getRadians() >= -.123) {
                 changeState("ABlueCheck");
+            }
+        } else if (m_state == "ABlueCheck") {
+            m_robotDrive.drive(0, 0.1);
+            if (m_greg.getVoltage() < 2.0) {
+                m_selection = Selection.A_BLUE;
+                changeState("start");
+            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.18) {
+                changeState("BBlueCheck");
+            }
+        } else if (m_state == "BBlueCheck") {
+            m_robotDrive.drive(0, 0.1);
+            if (m_greg.getVoltage() < 2.0) {
+                m_selection = Selection.B_BLUE;
+                changeState("start");
+            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.44) {
+                changeState("end");
             }
         }
 

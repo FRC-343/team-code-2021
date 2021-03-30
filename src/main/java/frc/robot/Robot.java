@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   private final Spark m_controlPanel;
   private final Spark m_winch;
 
-  private final AnalogInput m_greg = new AnalogInput(0); //aNALOG INPUT
+  private final AnalogInput m_greg = new AnalogInput(1); //aNALOG INPUT
 
   // private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
