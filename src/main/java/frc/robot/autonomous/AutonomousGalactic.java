@@ -63,20 +63,20 @@ public class AutonomousGalactic extends Autonomous {
                 new Pose2d(4.8, 1.02, new Rotation2d(0)), forwardConfig);
 
         m_thirdARed = TrajectoryGenerator.generateTrajectory(new Pose2d(4.8, 1.02, new Rotation2d(0)), List.of(),
-                new Pose2d(7.6, 1.02, new Rotation2d(0)), forwardConfig);
+                new Pose2d(7.2, 1.02, new Rotation2d(0)), forwardConfig);
 
         m_firstABlue = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.05, -1.3),
                         new Translation2d(3.96, -1), new Translation2d(5.05, 0.76), new Translation2d(6.0, 0.00)),
-                new Pose2d(7.6, 0.0, new Rotation2d(0)), forwardConfig);
+                new Pose2d(7.2, 0.0, new Rotation2d(0)), forwardConfig);
         m_firstBRed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
                 List.of(new Translation2d(2.0, 0.76), new Translation2d(3.25, -0.76), new Translation2d(5.45, 1.14)),
-                new Pose2d(7.6, 1.14, new Rotation2d(0)), forwardConfig);
+                new Pose2d(7.2, 1.14, new Rotation2d(0)), forwardConfig);
 
         m_firstBBlue = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.81, -0.76),
                         new Translation2d(6.000000031415, 0.76), new Translation2d(6.86, -0.76)),
-                new Pose2d(7.6, -1.52, new Rotation2d(0)), forwardConfig);
+                new Pose2d(7.2, -1.52, new Rotation2d(0)), forwardConfig);
     }
 
     public void autonomousInit() {
@@ -107,43 +107,43 @@ public class AutonomousGalactic extends Autonomous {
 
     public void autonomousPeriodicChooser() {
         if (m_state == "start") {
-            changeState("RotateTo.873");
-        } else if (m_state == "RotateTo.873") {
-            m_robotDrive.drive(0, -1.0);
+            changeState("RotateTo.8");
+        } else if (m_state == "RotateTo.8") {
+            m_robotDrive.drive(0, 1.5);
             System.err.println(m_robotDrive.getPose().getRotation().getRadians());
-            if (m_robotDrive.getPose().getRotation().getRadians() <= -.873) {
+            if (m_robotDrive.getPose().getRotation().getRadians() >= .8) {
                 changeState("BRedCheck");
             }
         } else if (m_state == "BRedCheck") {
-            m_robotDrive.drive(0, 0.5);
-            if (m_greg.getVoltage() <= 2.0){
+            m_robotDrive.drive(0, -1);
+            if (m_greg.getVoltage() < 1.6){
                 m_selection = Selection.B_RED;
                 changeState("start");
-            } else if(m_robotDrive.getPose().getRotation().getRadians() >= -.5) {
+            } else if(m_robotDrive.getPose().getRotation().getRadians() <= .5) {
                changeState("ARedCheck"); 
             }
         } else if (m_state == "ARedCheck") {
-            m_robotDrive.drive(0, 0.5);
-            if (m_greg.getVoltage() < 2.0) {
+            m_robotDrive.drive(0, -1);
+            if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.A_RED;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() >= -.123) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= .123) {
                 changeState("BBlueCheck");
             }
         } else if (m_state == "BBlueCheck") {
-            m_robotDrive.drive(0, 0.5);
-            if (m_greg.getVoltage() < 2.0) {
+            m_robotDrive.drive(0, -1);
+            if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.B_BLUE;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.18) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.18) {
                 changeState("ABlueCheck");
             }
         } else if (m_state == "ABlueCheck") {
-            m_robotDrive.drive(0, 0.5);
-            if (m_greg.getVoltage() < 2.0) {
+            m_robotDrive.drive(0, -1);
+            if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.A_BLUE;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.44) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.44) {
                 changeState("end");
             }
         }
