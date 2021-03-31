@@ -48,7 +48,7 @@ public class AutonomousGalactic extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.5 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.2 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
@@ -113,36 +113,36 @@ public class AutonomousGalactic extends Autonomous {
         } else if (m_state == "RotateTo.873") {
             m_robotDrive.drive(0, -.3);
             if (m_robotDrive.getPose().getRotation().getRadians() <= -.873) {
-                changeState("ARedCheck");
-            }
-        } else if (m_state == "ARedCheck") {
-            m_robotDrive.drive(0, .1);
-            if (m_greg.getVoltage() <= 2.0){
-                m_selection = Selection.A_RED;
-                changeState("start");
-            } else if(m_robotDrive.getPose().getRotation().getRadians() >= -.5) {
-               changeState("BRedCheck"); 
+                changeState("BRedCheck");
             }
         } else if (m_state == "BRedCheck") {
-            m_robotDrive.drive(0, 0.1);
-            if (m_greg.getVoltage() < 2.0) {
+            m_robotDrive.drive(0, .1);
+            if (m_greg.getVoltage() <= 2.0){
                 m_selection = Selection.B_RED;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() >= -.123) {
-                changeState("ABlueCheck");
+            } else if(m_robotDrive.getPose().getRotation().getRadians() >= -.5) {
+               changeState("ARedCheck"); 
             }
-        } else if (m_state == "ABlueCheck") {
+        } else if (m_state == "ARedCheck") {
             m_robotDrive.drive(0, 0.1);
             if (m_greg.getVoltage() < 2.0) {
-                m_selection = Selection.A_BLUE;
+                m_selection = Selection.A_RED;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.18) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() >= -.123) {
                 changeState("BBlueCheck");
             }
         } else if (m_state == "BBlueCheck") {
             m_robotDrive.drive(0, 0.1);
             if (m_greg.getVoltage() < 2.0) {
                 m_selection = Selection.B_BLUE;
+                changeState("start");
+            } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.18) {
+                changeState("ABlueCheck");
+            }
+        } else if (m_state == "ABlueCheck") {
+            m_robotDrive.drive(0, 0.1);
+            if (m_greg.getVoltage() < 2.0) {
+                m_selection = Selection.A_BLUE;
                 changeState("start");
             } else if (m_robotDrive.getPose().getRotation().getRadians() >= 0.44) {
                 changeState("end");
