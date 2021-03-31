@@ -106,17 +106,16 @@ public class AutonomousGalactic extends Autonomous {
     }
 
     public void autonomousPeriodicChooser() {
-        boolean running = false;
-
         if (m_state == "start") {
             changeState("RotateTo.873");
         } else if (m_state == "RotateTo.873") {
-            m_robotDrive.drive(0, -.3);
+            m_robotDrive.drive(0, -1.0);
+            System.err.println(m_robotDrive.getPose().getRotation().getRadians());
             if (m_robotDrive.getPose().getRotation().getRadians() <= -.873) {
                 changeState("BRedCheck");
             }
         } else if (m_state == "BRedCheck") {
-            m_robotDrive.drive(0, .1);
+            m_robotDrive.drive(0, 0.5);
             if (m_greg.getVoltage() <= 2.0){
                 m_selection = Selection.B_RED;
                 changeState("start");
@@ -124,7 +123,7 @@ public class AutonomousGalactic extends Autonomous {
                changeState("ARedCheck"); 
             }
         } else if (m_state == "ARedCheck") {
-            m_robotDrive.drive(0, 0.1);
+            m_robotDrive.drive(0, 0.5);
             if (m_greg.getVoltage() < 2.0) {
                 m_selection = Selection.A_RED;
                 changeState("start");
@@ -132,7 +131,7 @@ public class AutonomousGalactic extends Autonomous {
                 changeState("BBlueCheck");
             }
         } else if (m_state == "BBlueCheck") {
-            m_robotDrive.drive(0, 0.1);
+            m_robotDrive.drive(0, 0.5);
             if (m_greg.getVoltage() < 2.0) {
                 m_selection = Selection.B_BLUE;
                 changeState("start");
@@ -140,7 +139,7 @@ public class AutonomousGalactic extends Autonomous {
                 changeState("ABlueCheck");
             }
         } else if (m_state == "ABlueCheck") {
-            m_robotDrive.drive(0, 0.1);
+            m_robotDrive.drive(0, 0.5);
             if (m_greg.getVoltage() < 2.0) {
                 m_selection = Selection.A_BLUE;
                 changeState("start");
