@@ -108,7 +108,7 @@ public class Autonomous {
                         double driveCommand = 0.0;
                         double steerCommand = 0.0;
 
-                        double heading_error = -tx.getDouble(0.0);
+                        double heading_error = tx.getDouble(0.0);
                         double angle_error = ty.getDouble(0.0);
 
                         if (heading_error > 1.0) {

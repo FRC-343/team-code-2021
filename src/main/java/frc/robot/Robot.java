@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
     double steerCommand = 0.0;
 
     if (m_stick.getRawButton(9)) {
-      double heading_error = -tx.getDouble(0.0);
+      double heading_error = tx.getDouble(0.0);
       double angle_error = ty.getDouble(0.0);
 
       if (heading_error > 1.0) {
@@ -211,7 +211,7 @@ public class Robot extends TimedRobot {
       m_aimer.aim(angle_error);
     } else {
       driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
-      steerCommand = kMaxJoyTurn * Util.deadband(m_stick.getX());
+      steerCommand = kMaxJoyTurn * Util.deadband(-m_stick.getX());
 
       m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }

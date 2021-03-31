@@ -212,7 +212,7 @@ public class Drive {
      * @param rot    Angular velocity in rad/s.
      */
     public void drive(double xSpeed, double rot) {
-        DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, -rot));
+        DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
         setSpeeds(wheelSpeeds);
     }
 }
