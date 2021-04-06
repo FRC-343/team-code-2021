@@ -70,8 +70,8 @@ public class AutonomousGalactic extends Autonomous {
                         new Translation2d(3.96, -1), new Translation2d(5.05, 0.76), new Translation2d(6.0, 0.00)),
                 new Pose2d(7.4, 0.0, new Rotation2d(0)), forwardConfig);
         m_firstBRed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
-                List.of(new Translation2d(2.0, 0.76), new Translation2d(3.25, -0.76), new Translation2d(5.45, 1.14)),
-                new Pose2d(7.4, 1.14, new Rotation2d(0)), forwardConfig);
+                List.of(new Translation2d(2.0, 0.76), new Translation2d(3.25, -0.76), new Translation2d(5.45, .70) ),
+                new Pose2d(7.4, .70, new Rotation2d(0)), forwardConfig);
 
         m_firstBBlue = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(1.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.81, -0.76),
@@ -111,7 +111,7 @@ public class AutonomousGalactic extends Autonomous {
         } else if (m_state == "Rotate") {
             m_robotDrive.drive(0, 1.5);
             System.err.println(m_robotDrive.getPose().getRotation().getRadians());
-            if (m_robotDrive.getPose().getRotation().getRadians() >= .6) {
+            if (m_robotDrive.getPose().getRotation().getRadians() >= .35) {
                 changeState("BRedCheck");
             }
         } else if (m_state == "BRedCheck") {
@@ -119,7 +119,7 @@ public class AutonomousGalactic extends Autonomous {
             if (m_greg.getVoltage() < 1.6){
                 m_selection = Selection.B_RED;
                 changeState("start");
-            } else if(m_robotDrive.getPose().getRotation().getRadians() <= .35) {
+            } else if(m_robotDrive.getPose().getRotation().getRadians() <= .3) {
                changeState("ARedCheck"); 
             }
         } else if (m_state == "ARedCheck") {
