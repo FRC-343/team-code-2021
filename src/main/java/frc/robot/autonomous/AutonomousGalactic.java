@@ -48,7 +48,7 @@ public class AutonomousGalactic extends Autonomous {
         TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
                 m_robotDrive.getRightFeedforward(), m_robotDrive.getKinematics(), 11.0);
 
-        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.2 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
+        TrajectoryConfig forwardConfig = new TrajectoryConfig(0.4 * Drive.kMaxSpeed, Drive.kMaxAcceleration)
                 .setKinematics(m_robotDrive.getKinematics()).addConstraint(voltageConstraint);
 
         // All units in meters except the ones in radians (I think)
@@ -66,7 +66,7 @@ public class AutonomousGalactic extends Autonomous {
                 new Pose2d(7.2, 1.02, new Rotation2d(0)), forwardConfig);
 
         m_firstABlue = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.05, -1.3),
+                new Pose2d(1.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.05, -1.3),
                         new Translation2d(3.96, -1), new Translation2d(5.05, 0.76), new Translation2d(6.0, 0.00)),
                 new Pose2d(7.2, 0.0, new Rotation2d(0)), forwardConfig);
         m_firstBRed = TrajectoryGenerator.generateTrajectory(new Pose2d(0.0, 0.0, new Rotation2d(0)),
@@ -74,7 +74,7 @@ public class AutonomousGalactic extends Autonomous {
                 new Pose2d(7.2, 1.14, new Rotation2d(0)), forwardConfig);
 
         m_firstBBlue = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.81, -0.76),
+                new Pose2d(1.0, 0.0, new Rotation2d(0)), List.of(new Translation2d(3.81, -0.76),
                         new Translation2d(6.000000031415, 0.76), new Translation2d(6.86, -0.76)),
                 new Pose2d(7.2, -1.52, new Rotation2d(0)), forwardConfig);
     }
@@ -127,7 +127,12 @@ public class AutonomousGalactic extends Autonomous {
             if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.A_RED;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() <= .123) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= 0) {
+                changeState("moveFoward");
+            }
+        } else if (m_state == "moveFoward") {
+            m_robotDrive.drive(1.3, 0);
+            if (m_timer.get() >= 1) {
                 changeState("BBlueCheck");
             }
         } else if (m_state == "BBlueCheck") {
@@ -135,7 +140,7 @@ public class AutonomousGalactic extends Autonomous {
             if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.B_BLUE;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.18) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.322) {
                 changeState("ABlueCheck");
             }
         } else if (m_state == "ABlueCheck") {
@@ -143,7 +148,7 @@ public class AutonomousGalactic extends Autonomous {
             if (m_greg.getVoltage() < 1.6) {
                 m_selection = Selection.A_BLUE;
                 changeState("start");
-            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.44) {
+            } else if (m_robotDrive.getPose().getRotation().getRadians() <= -0.642) {
                 changeState("end");
             }
         }
