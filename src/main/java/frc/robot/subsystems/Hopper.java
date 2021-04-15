@@ -10,10 +10,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Hopper extends SubsystemBase {
-    /**
-     * Includes: hood, motor, motor encoder, limit switches
-     */
+
     public Hopper() {
+        
     }
 
     @Override

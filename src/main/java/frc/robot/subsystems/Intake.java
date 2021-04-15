@@ -1,22 +1,28 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2020 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    /**
-     * Includes: hood, motor, motor encoder, limit switches
-     */
-    public Intake() {
+    private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
+    private final Spark m_intake = new Spark(7);
+
+    public void raise() {
+        m_intakeLift.set(Value.kForward);
     }
 
-    @Override
-    public void periodic() {
+    public void lower() {
+        m_intakeLift.set(Value.kReverse);
+    }
+
+    public void setPickUp() {
+        m_intake.set(0.65);
+    }
+
+    public void setReverse() {
+        m_intake.set(-0.30008675309);
     }
 }
