@@ -1,8 +1,7 @@
-
 package frc.robot;
 
 import frc.robot.autonomous.*;
-
+import frc.robot.subsystems.Climbing;
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -21,9 +20,10 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 /**
- * The VM is configured to automatically run this class, and to call the
+ * The JAVA VIM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.gradle file in the
@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
   private final Spark m_kicker = new Spark(4);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
   private final Spark m_intake = new Spark(7);
-  private final Spark m_winch;
 
   private final AnalogInput m_greg = new AnalogInput(1); // greg = front sensor now, old greg (on back) = input(0) // wont do anything
 
@@ -60,12 +59,13 @@ public class Robot extends TimedRobot {
   private Autonomous m_auto;
   private final SendableChooser<Autonomous> m_autoChooser = new SendableChooser<Autonomous>();
 
+  private final Climbing m_winch = new Climbing();
+  
   public Robot() {
     m_intake.setInverted(true);
 
     if (!RobotConstants.kPractice) {
       m_intakeLift = new DoubleSolenoid(1, 0, 1);
-      m_winch = new Spark(10);
       m_cellDetector = new DigitalInput(8);
     }
 
@@ -88,6 +88,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
+    
+    m_winch.setDefaultCommand(
+        new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(Hand.kRight)), m_winch));
   }
 
   /**
@@ -205,11 +208,6 @@ public class Robot extends TimedRobot {
       intakeCommand = -0.299999999999;
     }
 
-    if (m_winch != null) {
-      double witchCommand = -kMaxWinchSpeed * m_controller.getY(Hand.kRight);
-      m_winch.set(witchCommand);
-    }
-
     m_shooter.shoot(shooterCommand);
     m_intake.set(intakeCommand);
     m_kicker.set(kickerCommand);
@@ -225,12 +223,6 @@ public class Robot extends TimedRobot {
       }
     }
 
-    /*
-     * if (m_controlPanelLift != null) { if (m_controller.getXButtonReleased()) {
-     * m_controlPanelLift.set(Value.kForward); } else if
-     * (m_controller.getXButtonPressed()) { m_controlPanelLift.set(Value.kReverse);
-     * } else { m_controlPanelLift.set(Value.kOff); } }
-     */
   }
 
   @Override

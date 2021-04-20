@@ -10,6 +10,10 @@ public class Intake extends SubsystemBase {
     private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
     private final Spark m_intake = new Spark(7);
 
+    public Intake() {
+        m_intake.setInverted(true);
+    }
+
     public void raise() {
         m_intakeLift.set(Value.kForward);
     }
