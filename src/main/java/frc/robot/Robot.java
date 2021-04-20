@@ -1,19 +1,7 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot;
 
 import frc.robot.autonomous.*;
-
-// import com.revrobotics.ColorSensorV3;
-// import edu.wpi.first.wpilibj.util.Color;
-
-// import com.revrobotics.ColorMatchResult;
-// import com.revrobotics.ColorMatch;
 
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
@@ -50,14 +38,7 @@ public class Robot extends TimedRobot {
   public static final double kTargetP = -0.055;
   public static final double kMinTargetCommand = -0.35;
 
-  // private static final Color kRed = new Color(0.518311, 0.344971, 0.136963);
-  // private static final Color kGreen = new Color(0.1689, 0.575439, 0.25585);
-  // private static final Color kBlue = new Color(0.1267, 0.4160, 0.4575);
-  // private static final Color kYellow = new Color(0.320068, 0.558105, 0.122070);
-
-  private final DoubleSolenoid m_climberLift;
   private final DoubleSolenoid m_intakeLift;
-  // private final DoubleSolenoid m_controlPanelLift;
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
@@ -66,16 +47,12 @@ public class Robot extends TimedRobot {
   private final Spark m_kicker = new Spark(4);
   private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
   private final Spark m_intake = new Spark(7);
-  private final Spark m_controlPanel;
   private final Spark m_winch;
 
   private final AnalogInput m_greg = new AnalogInput(1); // greg = front sensor now, old greg (on back) = input(0) // wont do anything
 
-  // private final ColorSensorV3 m_color;
   private final DigitalInput m_cellDetector;
   private final Debouncer m_cellDetectorDebouncer = new Debouncer();
-
-  // private final ColorMatch m_colorMatcher = new ColorMatch();
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -87,13 +64,8 @@ public class Robot extends TimedRobot {
     m_intake.setInverted(true);
 
     if (!RobotConstants.kPractice) {
-      m_climberLift = new DoubleSolenoid(1, 2, 3);
       m_intakeLift = new DoubleSolenoid(1, 0, 1);
-      // m_controlPanelLift = new DoubleSolenoid(1, 6, 7);
-      m_controlPanel = new Spark(11);
-      m_controlPanel.setInverted(true);
       m_winch = new Spark(10);
-      // m_color = new ColorSensorV3(Port.kOnboard);
       m_cellDetector = new DigitalInput(8);
     }
 
@@ -115,11 +87,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // m_colorMatcher.addColorMatch(kRed);
-    // m_colorMatcher.addColorMatch(kGreen);
-    // m_colorMatcher.addColorMatch(kBlue);
-    // m_colorMatcher.addColorMatch(kYellow);
-
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
   }
 
@@ -137,18 +104,6 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
     // SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
     // SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
-
-    // ColorMatchResult detectedColor = m_colorMatcher.matchClosestColor(m_color.getColor());
-
-    // if (detectedColor.color == kRed) {
-    //   SmartDashboard.putString("color_detected", "red");
-    // } else if (detectedColor.color == kGreen) {
-    //   SmartDashboard.putString("color_detected", "green");
-    // } else if (detectedColor.color == kBlue) {
-    //   SmartDashboard.putString("color_detected", "blue");
-    // } else if (detectedColor.color == kYellow) {
-    //   SmartDashboard.putString("color_detected", "yellow");
-    // }
   }
 
   /**
@@ -252,25 +207,13 @@ public class Robot extends TimedRobot {
 
     if (m_winch != null) {
       double witchCommand = -kMaxWinchSpeed * m_controller.getY(Hand.kRight);
-      if (witchCommand > 0.0 || m_controller.getBackButton()) {
-        m_winch.set(witchCommand);
-      } else {
-        m_winch.set(0.0);
-      }
+      m_winch.set(witchCommand);
     }
 
     m_shooter.shoot(shooterCommand);
     m_intake.set(intakeCommand);
     m_kicker.set(kickerCommand);
     m_hopper.set(hopperCommand);
-
-    if (m_controlPanel != null) {
-      if (m_controller.getXButton()) {
-        m_controlPanel.set(1);
-      } else {
-        m_controlPanel.set(0);
-      }
-    }
 
     if (m_intakeLift != null) {
       if (m_stick.getRawButton(11)) {
@@ -279,17 +222,6 @@ public class Robot extends TimedRobot {
         m_intakeLift.set(Value.kReverse);
       } else {
         m_intakeLift.set(Value.kOff);
-      }
-    }
-
-    if (m_climberLift != null) {
-      if ((DriverStation.getInstance().getMatchTime() < 30.0 || m_stick.getRawButtonPressed(2))
-          && m_stick.getRawButton(6)) {
-        m_climberLift.set(Value.kForward);
-      } else if (m_stick.getRawButton(7)) {
-        m_climberLift.set(Value.kReverse);
-      } else {
-        m_climberLift.set(Value.kOff);
       }
     }
 
