@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 
 public class AutonomousCone extends Autonomous {
-    private static final double kIntakeTime = 0.6;
-
     private Trajectory m_firstTrajectory;
     private Trajectory m_secondTrajectory;
     private Trajectory m_thirdTrajectory;
@@ -79,54 +77,5 @@ public class AutonomousCone extends Autonomous {
                 changeState("end");
             }
         }
-
-        // if (m_state == "start") {
-        // changeState("intake_drop");
-        // } else if (m_state == "intake_drop") {
-        // running = dropIntake();
-
-        // if (!running) {
-        // changeState("move_to_pickup");
-        // }
-        // } else if (m_state == "move_to_pickup") {
-        // running = track(m_pickupTrajectory);
-
-        // if (!running) {
-        // changeState("intake_forward");
-        // }
-        // } else if (m_state == "intake_forward") {
-        // m_intake.set(0.65);
-        // m_robotDrive.drive(0.7, 0.0);
-
-        // if (m_timer.get() > kIntakeTime) {
-        // changeState("intake_backward");
-        // }
-        // } else if (m_state == "intake_backward") {
-        // m_intake.set(0.65);
-        // m_robotDrive.drive(-0.7, 0.0);
-
-        // if (m_timer.get() > kIntakeTime) {
-        // changeState("move_to_shoot");
-        // }
-        // } else if (m_state == "move_to_shoot") {
-        // m_intake.set(0.65);
-        // running = track(m_shootTrajectory);
-
-        // if (!running) {
-        // changeState("target");
-        // }
-        // } else if (m_state == "target") {
-        // running = target();
-
-        // if (!running) {
-        // changeState("shoot");
-        // }
-        // } else if (m_state == "shoot") {
-        // running = shoot();
-
-        // if (!running) {
-        // changeState("end");
-        // }
-        // }
     }
 }
