@@ -8,6 +8,7 @@ import frc.robot.utils.Debouncer;
 
 public class Hopper extends SubsystemBase {
     private final Spark m_hopper = new Spark(9);
+    private final Spark m_kicker = new Spark(4);
 
     private final DigitalInput m_cellDetector = new DigitalInput(8);
     private final Debouncer m_cellDetectorDebouncer = new Debouncer();
@@ -18,5 +19,9 @@ public class Hopper extends SubsystemBase {
 
     public void setHopper(double speed) {
         m_hopper.set(speed);
+    }
+
+    public void setKicker(double speed) {
+        m_kicker.set(speed);
     }
 }
