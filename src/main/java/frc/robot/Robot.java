@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.autonomous.*;
 import frc.robot.subsystems.Climbing;
+import frc.robot.utils.Debouncer;
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
