@@ -36,19 +36,19 @@ public class Robot extends TimedRobot {
   public static final double kTargetP = -0.055;
   public static final double kMinTargetCommand = -0.35;
 
-  private final DoubleSolenoid m_intakeLift;
+  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
 
   private final Drive m_robotDrive = new Drive();
   private final Hood m_aimer = new Hood();
   private final Shooter m_shooter = new Shooter();
 
   private final Spark m_kicker = new Spark(4);
-  private final Spark m_hopper = new Spark(RobotConstants.getInstance().kHopper);
+  private final Spark m_hopper = new Spark(9);
   private final Spark m_intake = new Spark(7);
 
   private final AnalogInput m_greg = new AnalogInput(1); // greg = front sensor now, old greg (on back) = input(0) // wont do anything
 
-  private final DigitalInput m_cellDetector;
+  private final DigitalInput m_cellDetector = new DigitalInput(8);
   private final Debouncer m_cellDetectorDebouncer = new Debouncer();
 
   private final XboxController m_controller = new XboxController(1);
@@ -61,11 +61,6 @@ public class Robot extends TimedRobot {
   
   public Robot() {
     m_intake.setInverted(true);
-
-    if (!RobotConstants.kPractice) {
-      m_intakeLift = new DoubleSolenoid(1, 0, 1);
-      m_cellDetector = new DigitalInput(8);
-    }
 
     m_autoChooser.setDefaultOption("No_Auto", new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
     m_autoChooser.addOption("Auto_Cone", new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));

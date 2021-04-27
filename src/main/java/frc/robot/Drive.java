@@ -44,8 +44,8 @@ public class Drive {
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveLeftS, RobotConstants.getInstance().kDriveLeftV, RobotConstants.getInstance().kDriveLeftA);
-    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(RobotConstants.getInstance().kDriveRightS, RobotConstants.getInstance().kDriveRightV, RobotConstants.getInstance().kDriveRightA);
+    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.86, 0.716);
+    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.11, 2.81, 0.698);
 
     private DifferentialDriveOdometry m_odometry;
 

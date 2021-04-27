@@ -7,21 +7,13 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Hood {
-    private final Encoder m_hoodEncoder;
-    private final DigitalInput m_hoodBack;
-    private final DigitalInput m_hoodFront;
-    private final SpeedController m_hoodMotor = new Spark(RobotConstants.getInstance().kHoodMotor);
+    private final Encoder m_hoodEncoder = new Encoder(4, 5);
+    private final DigitalInput m_hoodBack = new DigitalInput(22);
+    private final DigitalInput m_hoodFront = new DigitalInput(9);
+    private final SpeedController m_hoodMotor = new Spark(6);
 
     private boolean m_aiming = false;
     private boolean m_zeroing = false;
-
-    public Hood() {
-        if (!RobotConstants.kPractice) {
-            m_hoodEncoder = new Encoder(4, 5);
-            m_hoodBack = new DigitalInput(22);
-            m_hoodFront = new DigitalInput(9);
-        }
-    }
 
     public boolean aim(double angle) {
         boolean aimed = false;
