@@ -43,8 +43,7 @@ public class Robot extends TimedRobot {
   private final Shooter m_shooter = new Shooter();
 
   private final Spark m_kicker = new Spark(4);
-  private final Spark m_hopper = new Spark(9);
-  private final Spark m_intake = new Spark(7);
+  private final Spark m_hopper = new Spark(9);  private final Spark m_intake = new Spark(7);
 
   private final AnalogInput m_greg = new AnalogInput(1); // greg = front sensor now, old greg (on back) = input(0) // wont do anything
 
