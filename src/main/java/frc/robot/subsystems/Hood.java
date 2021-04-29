@@ -13,11 +13,11 @@ public class Hood extends SubsystemBase {
     private final DigitalInput m_hoodFront = new DigitalInput(9);
     private final SpeedController m_hoodMotor = new Spark(6);
 
-    private boolean m_aimed = false;
-    private double m_target = 0.0;
-    private double m_speed = 0.0;
-    private boolean m_aiming = false;
-    private boolean m_zeroing = false;
+    private boolean m_aimed = false; //if shooter is currently aimed
+    private double m_target = 0.0; //where it needs to be aiming
+    private double m_speed = 0.0; //manual control 
+    private boolean m_aiming = false; //if currently aiming (for automatic)
+    private boolean m_zeroing = false; //resetting hood
 
     public void aim(double angle) {
         m_target = 4.2425 * angle * angle + 142.56 * angle + 1491.1;
