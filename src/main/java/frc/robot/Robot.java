@@ -1,4 +1,4 @@
-package frc.robot; 
+package frc.robot;
 
 import frc.robot.autonomous.*;
 import frc.robot.subsystems.Climbing;
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Autonomous> m_autoChooser = new SendableChooser<Autonomous>();
 
   private final Climbing m_winch = new Climbing();
-  
+
   public Robot() {
     m_intake.setInverted(true);
 
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
-    
+
     m_winch.setDefaultCommand(
         new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(Hand.kRight)), m_winch));
   }

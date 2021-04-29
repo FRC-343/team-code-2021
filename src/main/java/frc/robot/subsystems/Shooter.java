@@ -19,7 +19,7 @@ public class Shooter extends SubsystemBase {
     private final PIDController m_shooterPIDController = new PIDController(0.10, 0.0, 0.0);
     private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(1.71, 0.0782);
 
-    private double m_speed = 0.0; 
+    private double m_speed = 0.0;
 
     private double m_lastRate = 0.0;
 

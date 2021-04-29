@@ -19,11 +19,11 @@ public class Vision extends SubsystemBase {
     private final NetworkTableEntry ty = table.getEntry("ty");
 
     public double getTx() {
-        return tx.getDouble(0.0); 
+        return tx.getDouble(0.0);
     }
 
     public double getTy() {
-        return ty.getDouble(0.0); 
+        return ty.getDouble(0.0);
     }
 
 }

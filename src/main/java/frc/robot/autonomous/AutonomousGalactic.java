@@ -115,7 +115,7 @@ public class AutonomousGalactic extends Autonomous {
                 m_selection = Selection.B_RED;
                 changeState("start");
             } else if(m_robotDrive.getPose().getRotation().getRadians() <= .3) {
-               changeState("ARedCheck"); 
+               changeState("ARedCheck");
             }
         } else if (m_state == "ARedCheck") {
             m_robotDrive.drive(0, -1);
@@ -152,12 +152,12 @@ public class AutonomousGalactic extends Autonomous {
 
     /*
      * /////A Red Activate /////
-     * 
+     *
      * intake Drive forward 2 units and rotate Math.PI/2 to the right (clockwise,
      * facing neg y) Trajectory curve (final 2 power cells): start at c3, end at a6
      * travel through d5 (waypoint) (rotated Math.PI/2 left, conterclockwise, facing
      * pos x), travel to a11 (5 units foward)
-     * 
+     *
      */
     public void autonomousPeriodicARed() {
         boolean running = false;

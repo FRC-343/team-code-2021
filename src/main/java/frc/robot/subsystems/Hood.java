@@ -15,7 +15,7 @@ public class Hood extends SubsystemBase {
 
     private boolean m_aimed = false; //if shooter is currently aimed
     private double m_target = 0.0; //where it needs to be aiming
-    private double m_speed = 0.0; //manual control 
+    private double m_speed = 0.0; //manual control
     private boolean m_aiming = false; //if currently aiming (for automatic)
     private boolean m_zeroing = false; //resetting hood
 

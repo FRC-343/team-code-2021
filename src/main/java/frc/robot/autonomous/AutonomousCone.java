@@ -44,7 +44,7 @@ public class AutonomousCone extends Autonomous {
                 List.of(new Translation2d(3.23, -1.559910000003435), new Translation2d(3.792, -0.579)),
                 new Pose2d(3.792, 1.001, new Rotation2d(-(Math.PI / 2))), reverseConfig);
 
-        m_thirdTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(3.792, 1.001, new Rotation2d(-(Math.PI / 2))), 
+        m_thirdTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(3.792, 1.001, new Rotation2d(-(Math.PI / 2))),
         List.of(new Translation2d(4.091, -1.524), new Translation2d(4.953, -1.59), new Translation2d(5.715, -1.524)), new Pose2d(6.178, 1.001, new Rotation2d(((Math.PI / 2)))), forwardConfig);
 
         m_fourthTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(6.078, 1.001, new Rotation2d(((Math.PI / 2)))), List.of(), new Pose2d(7.40, 0.0, new Rotation2d(Math.PI)),
