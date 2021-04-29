@@ -1,5 +1,6 @@
-Remember code
-~Aim hood
-
-Autonomi / autonomouses
-    -galatic search w/ greg_the_second
+1. Create basic commands
+2. Replace everything in Robot.java to use them
+3. Delete old subsystem-ish files
+4. Disabled autonomice
+5. test x 100
+6. Rewrite autonomice with commands
