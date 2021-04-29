@@ -19,6 +19,8 @@ public class Shooter extends SubsystemBase {
     private final PIDController m_shooterPIDController = new PIDController(0.10, 0.0, 0.0);
     private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(1.71, 0.0782);
 
+    private double m_speed = 0.0; 
+
     private double m_lastRate = 0.0;
 
     public Shooter() {
@@ -28,25 +30,22 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getRate() {
-        if (m_shooterEncoder != null && m_shooterEncoder.getRate() < kShootGarbage) {
+        if (m_shooterEncoder.getRate() < kShootGarbage) {
             m_lastRate = m_shooterEncoder.getRate();
         }
 
         return m_lastRate;
     }
 
-    public void setVoltage(double volts) {
-        m_shooter.setVoltage(volts);
+    public void shoot(double speed) {
+        m_speed = speed;
     }
 
-    public void shoot(double speed) {
-        if (speed > 0.01) {
-            double shooterFeedforward = m_shooterFeedforward.calculate(speed);
-            double shooterPIDOutput = 0.0;
-            if (m_shooterEncoder != null) {
-                shooterPIDOutput = m_shooterPIDController.calculate(getRate(), speed);
-            }
-
+    @Override
+    public void periodic() {
+        if (m_speed > 0.01) {
+            double shooterFeedforward = m_shooterFeedforward.calculate(m_speed);
+            double shooterPIDOutput = m_shooterPIDController.calculate(getRate(), m_speed);
             double shooterOutput = shooterFeedforward + shooterPIDOutput;
 
             m_shooter.setVoltage(shooterOutput);
