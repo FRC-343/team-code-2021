@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Util;
+import frc.robot.utils.MiscMath;
 
 public class Drive extends SubsystemBase {
     public static final double kMaxSpeed = 4.0; // meters per second
@@ -182,9 +182,9 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         if (m_PIDEnabled) {
-            m_wheelSpeeds.leftMetersPerSecond = Util.clamp(m_wheelSpeeds.leftMetersPerSecond, -m_maxOutput,
+            m_wheelSpeeds.leftMetersPerSecond = MiscMath.clamp(m_wheelSpeeds.leftMetersPerSecond, -m_maxOutput,
                     m_maxOutput);
-            m_wheelSpeeds.rightMetersPerSecond = Util.clamp(m_wheelSpeeds.rightMetersPerSecond, -m_maxOutput,
+            m_wheelSpeeds.rightMetersPerSecond = MiscMath.clamp(m_wheelSpeeds.rightMetersPerSecond, -m_maxOutput,
                     m_maxOutput);
 
             double leftFeedforward = m_leftFeedforward.calculate(m_wheelSpeeds.leftMetersPerSecond);

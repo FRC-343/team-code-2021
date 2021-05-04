@@ -1,6 +1,6 @@
-package frc.robot;
+package frc.robot.utils;
 
-public class Util {
+public class MiscMath {
     public static final double kDefaultDeadband = .08;
 
     public static double deadband(double value, double min) {

@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.autonomous.*;
 import frc.robot.subsystems.Climbing;
 import frc.robot.utils.Debouncer;
+import frc.robot.utils.MiscMath;
 // This is the limelight
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -160,8 +161,8 @@ public class Robot extends TimedRobot {
 
       m_aimer.aim(angle_error);
     } else {
-      driveCommand = kMaxJoySpeed * Util.deadband(-m_stick.getY());
-      steerCommand = kMaxJoyTurn * Util.deadband(-m_stick.getX());
+      driveCommand = kMaxJoySpeed * MiscMath.deadband(-m_stick.getY());
+      steerCommand = kMaxJoyTurn * MiscMath.deadband(-m_stick.getX());
 
       m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }

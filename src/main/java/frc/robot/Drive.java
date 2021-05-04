@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import frc.robot.utils.MiscMath;
 
 public class Drive {
     public static final double kMaxSpeed = 4.0; // meters per second
@@ -170,8 +171,8 @@ public class Drive {
      * @param speeds The desired wheel speeds.
      */
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        speeds.leftMetersPerSecond = Util.clamp(speeds.leftMetersPerSecond, -m_maxOutput, m_maxOutput);
-        speeds.rightMetersPerSecond = Util.clamp(speeds.rightMetersPerSecond, -m_maxOutput, m_maxOutput);
+        speeds.leftMetersPerSecond = MiscMath.clamp(speeds.leftMetersPerSecond, -m_maxOutput, m_maxOutput);
+        speeds.rightMetersPerSecond = MiscMath.clamp(speeds.rightMetersPerSecond, -m_maxOutput, m_maxOutput);
 
         double leftFeedforward = m_leftFeedforward.calculate(speeds.leftMetersPerSecond);
         double rightFeedforward = m_rightFeedforward.calculate(speeds.rightMetersPerSecond);
