@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * An example command that uses an example subsystem.
  */
 public class AutonomousBase extends CommandBase {
-  // private final Drive m_drive;
+  private final Drive m_drive;
 
   /**
    * TODO: replace with real info later
    */
   public AutonomousBase(Drive drive) {
-    // m_drive = drive;
+    m_drive = drive;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
