@@ -1,7 +1,8 @@
 package frc.robot;
 
 import frc.robot.autonomous.*;
-import frc.robot.subsystems.Climbing;
+import frc.robot.subsystems.*;
+
 import frc.robot.utils.Debouncer;
 import frc.robot.utils.MiscMath;
 // This is the limelight
@@ -17,9 +18,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * The JAVA VIM is configured to automatically run this class, and to call the
@@ -37,16 +41,12 @@ public class Robot extends TimedRobot {
   public static final double kTargetP = -0.055;
   public static final double kMinTargetCommand = -0.35;
 
-  private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
-
-  private final Drive m_robotDrive = new Drive();
-  private final Hood m_aimer = new Hood();
+  private final Drive m_drive = new Drive();
+  private final Hood m_hood = new Hood();
   private final Shooter m_shooter = new Shooter();
 
-  private final Spark m_kicker = new Spark(4);
-  private final Spark m_hopper = new Spark(9);  private final Spark m_intake = new Spark(7);
-
-  private final AnalogInput m_greg = new AnalogInput(1); // greg = front sensor now, old greg (on back) = input(0) // wont do anything
+  private final Hopper m_hopper = new Hopper();
+  private final Intake m_intake = new Intake();
 
   private final DigitalInput m_cellDetector = new DigitalInput(8);
   private final Debouncer m_cellDetectorDebouncer = new Debouncer();
@@ -54,22 +54,13 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
-  private Autonomous m_auto;
-  private final SendableChooser<Autonomous> m_autoChooser = new SendableChooser<Autonomous>();
+  private AutonomousBase m_auto;
+  private final SendableChooser<AutonomousBase> m_autoChooser = new SendableChooser<AutonomousBase>();
 
   private final Climbing m_winch = new Climbing();
 
   public Robot() {
-    m_intake.setInverted(true);
-
-    m_autoChooser.setDefaultOption("No_Auto", new Autonomous(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_Cone", new AutonomousCone(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_Barrel", new AutonomousBarrel(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_Slalom", new AutonomousSlalom(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_Galactic", new AutonomousGalactic(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift, m_greg));
-    m_autoChooser.addOption("Auto_Simple", new AutonomousSimple(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_ET", new AutonomousET(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
-    m_autoChooser.addOption("Auto_OT", new AutonomousOT(m_robotDrive, m_aimer, m_shooter, m_kicker, m_hopper, m_intake, m_intakeLift));
+    m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous(m_drive));
 
     m_auto = m_autoChooser.getSelected();
   }
@@ -84,6 +75,38 @@ public class Robot extends TimedRobot {
 
     m_winch.setDefaultCommand(
         new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(Hand.kRight)), m_winch));
+
+    m_drive.setDefaultCommand(new RunCommand(() -> m_drive.drive(kMaxJoySpeed * MiscMath.deadband(-m_stick.getY()),
+        kMaxJoyTurn * MiscMath.deadband(-m_stick.getX()))));
+
+    m_hood.setDefaultCommand(new RunCommand(() -> m_hood.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft))));
+
+    new JoystickButton(m_controller, Button.kA.value).whenPressed(() -> {
+      m_hopper.setHopper(-0.6);
+      m_hopper.setKicker(0.24);
+    }).whenReleased(() -> {
+      m_hopper.setHopper(0);
+      m_hopper.setKicker(0);
+    });
+
+    new JoystickButton(m_controller, Button.kB.value).whenPressed(() -> {
+      m_hopper.setHopper(0.6);
+      m_hopper.setKicker(-0.24);
+    }).whenReleased(() -> {
+      m_hopper.setHopper(0);
+      m_hopper.setKicker(0);
+    });
+
+    new JoystickButton(m_controller, Button.kY.value).whenPressed(() -> {
+      m_intake.setIntake(-0.3);
+    }).whenReleased(() -> {
+      m_intake.setIntake(0);
+    });
+
+    new JoystickButton(m_stick, 11).whenPressed(new InstantCommand(m_intake::raise, m_intake));
+    new JoystickButton(m_stick, 10).whenPressed(new InstantCommand(m_intake::lower, m_intake));
+
+    
   }
 
   /**
@@ -97,9 +120,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
-    // SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
-    // SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
+    // SmartDashboard.putNumber("pose_x",
+    // m_robotDrive.getPose().getTranslation().getX());
+    // SmartDashboard.putNumber("pose_y",
+    // m_robotDrive.getPose().getTranslation().getY());
+    // SmartDashboard.putNumber("pose_rot",
+    // m_robotDrive.getPose().getRotation().getDegrees());
   }
 
   /**
@@ -118,7 +144,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_auto = m_autoChooser.getSelected();
 
-    m_auto.autonomousInit();
+    // m_auto.autonomousInit();
   }
 
   /**
@@ -126,7 +152,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    m_auto.autonomousPeriodic();
+    // m_auto.autonomousPeriodic();
   }
 
   /**
@@ -134,7 +160,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    m_auto.autonomousEnd();
+    // m_auto.autonomousEnd();
   }
 
   /**
@@ -159,14 +185,12 @@ public class Robot extends TimedRobot {
         steerCommand = kTargetP * heading_error - kMinTargetCommand;
       }
 
-      m_aimer.aim(angle_error);
+      // m_aimer.aim(angle_error);
     } else {
       driveCommand = kMaxJoySpeed * MiscMath.deadband(-m_stick.getY());
       steerCommand = kMaxJoyTurn * MiscMath.deadband(-m_stick.getX());
 
-      m_aimer.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft));
     }
-    m_robotDrive.drive(driveCommand, steerCommand);
 
     double shooterCommand = 0;
     double intakeCommand = 0;
@@ -201,26 +225,11 @@ public class Robot extends TimedRobot {
       intakeCommand = -0.299999999999;
     }
 
-    m_shooter.shoot(shooterCommand);
-    m_intake.set(intakeCommand);
-    m_kicker.set(kickerCommand);
-    m_hopper.set(hopperCommand);
-
-    if (m_intakeLift != null) {
-      if (m_stick.getRawButton(11)) {
-        m_intakeLift.set(Value.kForward);
-      } else if (m_stick.getRawButton(10)) {
-        m_intakeLift.set(Value.kReverse);
-      } else {
-        m_intakeLift.set(Value.kOff);
-      }
-    }
-
   }
 
   @Override
   public void testInit() {
-    m_auto.autonomousEnd();
+    // m_auto.autonomousEnd();
   }
 
   @Override

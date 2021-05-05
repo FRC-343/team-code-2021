@@ -22,11 +22,7 @@ public class Intake extends SubsystemBase {
         m_intakeLift.set(Value.kReverse);
     }
 
-    public void setPickUp() {
-        m_intake.set(0.65);
-    }
-
-    public void setReverse() {
-        m_intake.set(-0.30008675309);
+    public void setIntake(double speed) {
+        m_intake.set(speed);
     }
 }
