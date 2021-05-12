@@ -1,33 +1,20 @@
 package frc.robot;
 
 import frc.robot.autonomous.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-import frc.robot.utils.Debouncer;
 import frc.robot.utils.MiscMath;
-// This is the limelight
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
-/**
- * The JAVA VIM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
   public static final double kMaxJoySpeed = 3.0; // meters per sec
   public static final double kMaxJoyTurn = 5.0; // radians per sec
@@ -40,12 +27,10 @@ public class Robot extends TimedRobot {
   private final Drive m_drive = new Drive();
   private final Hood m_hood = new Hood();
   private final Shooter m_shooter = new Shooter();
+  private final Vision m_vision = new Vision();
 
   private final Hopper m_hopper = new Hopper();
   private final Intake m_intake = new Intake();
-
-  private final DigitalInput m_cellDetector = new DigitalInput(8);
-  private final Debouncer m_cellDetectorDebouncer = new Debouncer();
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
@@ -70,39 +55,43 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
 
     m_winch.setDefaultCommand(
-        new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(Hand.kRight)), m_winch));
+        new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(XboxController.Hand.kRight)), m_winch));
 
     m_drive.setDefaultCommand(new RunCommand(() -> m_drive.drive(kMaxJoySpeed * MiscMath.deadband(-m_stick.getY()),
-        kMaxJoyTurn * MiscMath.deadband(-m_stick.getX()))));
+        kMaxJoyTurn * MiscMath.deadband(-m_stick.getX())), m_drive));
 
-    m_hood.setDefaultCommand(new RunCommand(() -> m_hood.move(kMaxHoodSpeed * m_controller.getY(Hand.kLeft))));
+    m_hood.setDefaultCommand(new RunCommand(() -> m_hood.move(kMaxHoodSpeed * m_controller.getY(XboxController.Hand.kLeft)), m_hood));
 
-    new JoystickButton(m_controller, Button.kA.value).whenPressed(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kA.value).whenPressed(new RunCommand(() -> {
       m_hopper.setHopper(-0.6);
       m_hopper.setKicker(0.24);
-    }).whenReleased(() -> {
+    }, m_hopper)).whenReleased(new RunCommand(() -> {
       m_hopper.setHopper(0);
       m_hopper.setKicker(0);
-    });
+    }, m_hopper));
 
-    new JoystickButton(m_controller, Button.kB.value).whenPressed(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kB.value).whenPressed(new RunCommand(() -> {
       m_hopper.setHopper(0.6);
       m_hopper.setKicker(-0.24);
-    }).whenReleased(() -> {
+    }, m_hopper)).whenReleased(new RunCommand(() -> {
       m_hopper.setHopper(0);
       m_hopper.setKicker(0);
-    });
+    }, m_hopper));
 
-    new JoystickButton(m_controller, Button.kY.value).whenPressed(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kY.value).whenPressed(new RunCommand(() -> {
       m_intake.setIntake(-0.3);
-    }).whenReleased(() -> {
+    }, m_intake)).whenReleased(new RunCommand(() -> {
       m_intake.setIntake(0);
-    });
+    }, m_intake));
 
     new JoystickButton(m_stick, 11).whenPressed(new InstantCommand(m_intake::raise, m_intake));
     new JoystickButton(m_stick, 10).whenPressed(new InstantCommand(m_intake::lower, m_intake));
+    new JoystickButton(m_stick, 9).whenHeld(new AimCommand(m_vision, m_hood, m_drive));
 
-    
+    new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value).whenHeld(new ShootCommand(m_shooter, m_hopper, () -> m_controller.getTriggerAxis(XboxController.Hand.kRight) > 0.2));
+
+    new Button(() -> m_controller.getTriggerAxis(XboxController.Hand.kLeft) > 0.2).whenHeld(new IntakeCommand(m_intake, m_hopper));
+
   }
 
   /**
@@ -116,12 +105,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // SmartDashboard.putNumber("pose_x",
-    // m_robotDrive.getPose().getTranslation().getX());
-    // SmartDashboard.putNumber("pose_y",
-    // m_robotDrive.getPose().getTranslation().getY());
-    // SmartDashboard.putNumber("pose_rot",
-    // m_robotDrive.getPose().getRotation().getDegrees());
   }
 
   /**
@@ -164,63 +147,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-
-    double driveCommand = 0.0;
-    double steerCommand = 0.0;
-
-    if (m_stick.getRawButton(9)) {
-      double heading_error = tx.getDouble(0.0);
-      double angle_error = ty.getDouble(0.0);
-
-      if (heading_error > 1.0) {
-        steerCommand = kTargetP * heading_error + kMinTargetCommand;
-      } else if (heading_error < -1.0) {
-        steerCommand = kTargetP * heading_error - kMinTargetCommand;
-      }
-
-      // m_aimer.aim(angle_error);
-    } else {
-      driveCommand = kMaxJoySpeed * MiscMath.deadband(-m_stick.getY());
-      steerCommand = kMaxJoyTurn * MiscMath.deadband(-m_stick.getX());
-
-    }
-
-    double shooterCommand = 0;
-    double intakeCommand = 0;
-    double kickerCommand = 0;
-    double hopperCommand = 0;
-
-    if (m_controller.getBumper(Hand.kLeft)) {
-      shooterCommand = Shooter.kShootSpeed;
-      if (m_controller.getTriggerAxis(Hand.kRight) > 0.2) {
-        kickerCommand = -1;
-        if (m_shooter.getRate() > Shooter.kShootReadySpeed) {
-          hopperCommand = 0.65;
-        }
-      }
-    } else if (m_controller.getTriggerAxis(Hand.kLeft) > 0.2) {
-      intakeCommand = 0.65;
-      if (m_cellDetector == null || (m_cellDetectorDebouncer.isReady(m_cellDetector.get()) && !m_cellDetector.get())) {
-        hopperCommand = -0.6;
-        kickerCommand = 0.24;
-      }
-    }
-
-    if (m_controller.getAButton()) {
-      hopperCommand = -0.6;
-      kickerCommand = 0.24;
-    } else if (m_controller.getBButton()) {
-      hopperCommand = 0.6;
-      kickerCommand = -0.24;
-    }
-
-    if (m_controller.getYButton()) {
-      intakeCommand = -0.299999999999;
-    }
-
   }
 
   @Override
