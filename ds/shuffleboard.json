@@ -158,9 +158,11 @@
               "_source0": "network_table:///LiveWindow/Ungrouped/Spark[5]/Value",
               "_title": "LiveWindow/Ungrouped/Spark[5]/Value",
               "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
               "Visible data/LiveWindow/Ungrouped/Spark[5]/Value": true
             }
           },
@@ -174,9 +176,11 @@
               "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[3]/Speed",
               "_title": "LiveWindow/Ungrouped/Encoder[3]/Speed",
               "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
               "Visible data/LiveWindow/Ungrouped/Encoder[3]/Speed": true
             }
           }
