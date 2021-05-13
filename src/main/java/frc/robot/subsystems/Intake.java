@@ -15,11 +15,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void raise() {
-        m_intakeLift.set(Value.kForward);
+        m_intakeLift.set(Value.kReverse);
     }
 
     public void lower() {
-        m_intakeLift.set(Value.kReverse);
+        m_intakeLift.set(Value.kForward);
     }
 
     public void setIntake(double speed) {

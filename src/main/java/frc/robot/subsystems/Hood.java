@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -11,14 +12,24 @@ public class Hood extends SubsystemBase {
     private final Encoder m_hoodEncoder = new Encoder(4, 5);
     private final DigitalInput m_hoodBack = new DigitalInput(22);
     private final DigitalInput m_hoodFront = new DigitalInput(9);
-    private final SpeedController m_hoodMotor = new Spark(6);
+    private final Spark m_hoodMotor = new Spark(6);
 
     private boolean m_aimed = false; //if shooter is currently aimed
     private double m_target = 0.0; //where it needs to be aiming
     private double m_speed = 0.0; //manual control
     private boolean m_aiming = false; //if currently aiming (for automatic)
     private boolean m_zeroing = false; //resetting hood
-
+public Hood() {
+    SendableRegistry.setSubsystem(m_hoodEncoder, this.getClass().getName());
+    SendableRegistry.setName(m_hoodEncoder, "Hood Encoder");
+    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getName());
+    SendableRegistry.setName(m_hoodFront, "Hood Front limit");
+    SendableRegistry.setSubsystem(m_hoodMotor, this.getClass().getName());
+    SendableRegistry.setName(m_hoodMotor, "Hood Motor");
+    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getName());
+    SendableRegistry.setName(m_hoodBack, "Hood Back limit");
+   
+  }
     public void aim(double angle) {
         m_target = 4.2425 * angle * angle + 142.56 * angle + 1491.1;
         SmartDashboard.putNumber("hood_target", m_target);

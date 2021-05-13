@@ -27,7 +27,11 @@ public class IntakeCommand extends CommandBase {
         if (m_hopper.checkReady()) {
             m_hopper.setHopper(-0.6);
             m_hopper.setKicker(0.24);
-        }
+        }    else{
+                m_hopper.setHopper(0);
+                m_hopper.setKicker(0);
+            }
+        
     }
 
     // Called once the command ends or is interrupted.
