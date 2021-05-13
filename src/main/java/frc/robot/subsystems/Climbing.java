@@ -8,8 +8,8 @@ public class Climbing extends SubsystemBase {
   private final Spark m_winch = new Spark(10);
 
   public Climbing() {
-    SendableRegistry.setSubsystem(m_winch, this.getClass().getName());
-    SendableRegistry.setName(m_winch, "winch");
+    SendableRegistry.setSubsystem(m_winch, this.getClass().getSimpleName());
+    SendableRegistry.setName(m_winch, "Winch Motor");
   }
 
   public void setWinch(double speed) {

@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,14 +19,14 @@ public class Hood extends SubsystemBase {
     private boolean m_aiming = false; //if currently aiming (for automatic)
     private boolean m_zeroing = false; //resetting hood
 public Hood() {
-    SendableRegistry.setSubsystem(m_hoodEncoder, this.getClass().getName());
+    SendableRegistry.setSubsystem(m_hoodEncoder, this.getClass().getSimpleName());
     SendableRegistry.setName(m_hoodEncoder, "Hood Encoder");
-    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getName());
-    SendableRegistry.setName(m_hoodFront, "Hood Front limit");
-    SendableRegistry.setSubsystem(m_hoodMotor, this.getClass().getName());
+    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
+    SendableRegistry.setName(m_hoodBack, "Hood Back Limit");
+    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
+    SendableRegistry.setName(m_hoodFront, "Hood Front Limit");
+    SendableRegistry.setSubsystem(m_hoodMotor, this.getClass().getSimpleName());
     SendableRegistry.setName(m_hoodMotor, "Hood Motor");
-    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getName());
-    SendableRegistry.setName(m_hoodBack, "Hood Back limit");
    
   }
     public void aim(double angle) {

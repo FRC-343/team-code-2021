@@ -35,6 +35,13 @@ public class ShootCommand extends CommandBase {
         if (m_shooter.getRate() > kShootReadySpeed) {
           m_hopper.setHopper(0.65);
         }
+        else {
+          m_hopper.setHopper(0);
+        }
+      }
+      else {
+        m_hopper.setKicker(0);
+        m_hopper.setHopper(0);
       }
     }
 

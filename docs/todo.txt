@@ -3,5 +3,6 @@
     - ShootCommand
     - IntakeCommand
 2. Replace everything in Robot.java to use them
-3. test x 100
-4. Rewrite autonomice with commands
+3. Add sendable registry stuff for everything
+4. test x 100
+5. Rewrite autonomice with commands
