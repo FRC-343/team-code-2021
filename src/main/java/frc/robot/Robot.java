@@ -124,7 +124,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_auto = m_autoChooser.getSelected();
-
+      // schedule the autonomous command (example)
+      if (m_auto != null) {
+        m_auto.schedule();
+      }
     // m_auto.autonomousInit();
   }
 
@@ -141,7 +144,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    // m_auto.autonomousEnd();
+    // m_auto.autonomousEnd( );\
+    if (m_auto != null) {
+      m_auto.cancel();
+    }
   }
 
   /**
