@@ -15,6 +15,14 @@ public class Wheel {
         m_wheelLift.set(Value.kForward);
     }
 
+    public void raiseOrLower() {
+        if (m_wheelLift.get() == Value.kReverse) {
+            lower();
+        } else {
+            raise();
+        }
+    }
+
     public void setWheel(double speed) {
         m_wheel.set(speed);
     }
