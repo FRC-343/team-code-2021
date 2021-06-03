@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   private final Shooter m_shooter = new Shooter();
   private final Vision m_vision = new Vision();
 
+  private final Wheel m_wheel = new Wheel();
   private final Hopper m_hopper = new Hopper();
   private final Intake m_intake = new Intake();
 
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
     new JoystickButton(m_stick, 9).whenHeld(new AimCommand(m_vision, m_hood, m_drive));
     
     
-    new JoystickButton(m_controller, XboxController.Button.kX.value).whenPressed(new InstantCommand());
+    new JoystickButton(m_controller, XboxController.Button.kX.value).whenPressed(new InstantCommand(m_wheel::raiseOrLower));
 
     new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value).whenHeld(new ShootCommand(m_shooter, m_hopper, () -> m_controller.getTriggerAxis(XboxController.Hand.kRight) > 0.2));
 
