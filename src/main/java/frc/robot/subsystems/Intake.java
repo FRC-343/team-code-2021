@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -15,11 +14,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void raise() {
-        m_intakeLift.set(Value.kReverse);
+        m_intakeLift.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void lower() {
-        m_intakeLift.set(Value.kForward);
+        m_intakeLift.set(DoubleSolenoid.Value.kForward);
     }
 
     public void setIntake(double speed) {
