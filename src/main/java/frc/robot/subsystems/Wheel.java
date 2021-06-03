@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Wheel {
+public class Wheel extends SubsystemBase{
     private final Spark m_wheel = new Spark(11);
     private final DoubleSolenoid m_wheelLift = new DoubleSolenoid(1, 6, 7);
 
