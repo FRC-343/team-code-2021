@@ -52,6 +52,7 @@ public Hood() {
 
             if (m_hoodEncoder.getRate() > 1700 || m_hoodEncoder.getRate() < -1700 || m_hoodEncoder.getDistance() > 4500
                     || m_hoodEncoder.getDistance() < -222) {
+                System.err.println("Hood encoder sent garbage values, zeroing again...");
                 m_zeroing = true;
             }
 
