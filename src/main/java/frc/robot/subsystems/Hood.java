@@ -33,8 +33,10 @@ public Hood() {
         m_target = 4.2425 * angle * angle + 142.56 * angle + 1491.1;
         SmartDashboard.putNumber("hood_target", m_target);
 
-        m_aiming = true;
-        m_zeroing = true;
+        if (!m_aiming) {
+            m_aiming = true;
+            m_zeroing = true;
+        }
     }
 
     public boolean isAimed() {
