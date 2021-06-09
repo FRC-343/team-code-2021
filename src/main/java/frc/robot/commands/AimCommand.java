@@ -14,9 +14,9 @@ public class AimCommand extends CommandBase {
     private final Drive m_drive;
 
 
-    public AimCommand(Vision vision, Hood hoooooo0ooood, Drive drive) {
+    public AimCommand(Vision vision, Hood hooooooooood, Drive drive) {
         m_vision = vision;
-        m_hood = hoooooo0ooood;
+        m_hood = hooooooooood;
         m_drive = drive;
         addRequirements(m_vision, m_hood, m_drive);
     }
@@ -51,7 +51,7 @@ public class AimCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return  Math.abs(m_vision.getTx()) < 1 && m_hood.isAimed();
+        return  Math.abs(m_vision.getTx()) < 1.0 && m_hood.isAimed();
     }
 
 }

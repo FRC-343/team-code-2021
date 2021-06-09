@@ -4,6 +4,11 @@ import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
+// import com.revrobotics.ColorSensorV3;
+// import edu.wpi.first.wpilibj.util.Color; 
+// import com.revrobotics.ColorMatchResult;
+// import com.revrobotics.ColorMatch;
+
 import frc.robot.utils.MiscMath;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -29,6 +34,7 @@ public class Robot extends TimedRobot {
   private final Hood m_hood = new Hood();
   private final Shooter m_shooter = new Shooter();
   private final Vision m_vision = new Vision();
+  private final Climbing m_climbing = new Climbing();
 
   private final Wheel m_wheel = new Wheel();
   private final Hopper m_hopper = new Hopper();
@@ -37,10 +43,18 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
+  // private final ColorSensorV3 m_color;
+
+  // private final ColorMatch m_colorMatcher = new ColorMatch();
+
+  // private static final Color kRed = new Color(0.518311, 0.344971, 0.136963);
+  // private static final Color kGreen = new Color(0.1689, 0.575439, 0.25585);
+  // private static final Color kBlue = new Color(0.1267, 0.4160, 0.4575);
+  // private static final Color kYellow = new Color(0.320068, 0.558105, 0.122070);
+
   private AutonomousBase m_auto;
   private final SendableChooser<AutonomousBase> m_autoChooser = new SendableChooser<AutonomousBase>();
 
-  private final Climbing m_winch = new Climbing();
 
   public Robot() {
     m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous(m_drive));
@@ -56,8 +70,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
 
-    m_winch.setDefaultCommand(
-        new RunCommand(() -> m_winch.setWinch(-kMaxWinchSpeed * m_controller.getY(XboxController.Hand.kRight)), m_winch));
+    m_climbing.setDefaultCommand(new RunCommand(() -> m_climbing.setWinch(-kMaxWinchSpeed * m_controller.getY(XboxController.Hand.kRight)), m_climbing));
 
     m_drive.setDefaultCommand(new RunCommand(() -> m_drive.drive(kMaxJoySpeed * MiscMath.deadband(-m_stick.getY()),
         kMaxJoyTurn * MiscMath.deadband(-m_stick.getX())), m_drive));
@@ -111,6 +124,30 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    // SmartDashboard.putNumber("pose_x", m_robotDrive.getPose().getTranslation().getX());
+    // SmartDashboard.putNumber("pose_y", m_robotDrive.getPose().getTranslation().getY());
+    // SmartDashboard.putNumber("pose_rot", m_robotDrive.getPose().getRotation().getDegrees());
+    
+    // Color detectedColor = m_color.getColor();
+    // double detectedIR = m_color.getIR();
+
+    // m_colorMatcher.addColorMatch(kRed);
+    // m_colorMatcher.addColorMatch(kGreen);
+    // m_colorMatcher.addColorMatch(kBlue);
+    // m_colorMatcher.addColorMatch(kYellow);
+
+    // ColorMatchResult detectedColor = m_colorMatcher.matchClosestColor(m_color.getColor());
+
+    // if (detectedColor.color == kRed) {
+    //   SmartDashboard.putString("color_detected", "red");
+    // } else if (detectedColor.color == kGreen) {
+    //   SmartDashboard.putString("color_detected", "green");
+    // } else if (detectedColor.color == kBlue) {
+    //   SmartDashboard.putString("color_detected", "blue");
+    // } else if (detectedColor.color == kYellow) {
+    //   SmartDashboard.putString("color_detected", "yellow");
+    // }
   }
 
   /**
