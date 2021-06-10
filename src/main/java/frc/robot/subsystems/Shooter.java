@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 
 public class Shooter extends SubsystemBase {
     private static final double kShootGarbage = 150.0; // rev per sec, for irregular values 
@@ -25,6 +26,10 @@ public class Shooter extends SubsystemBase {
         m_shooter.setInverted(true);
         m_shooterEncoder.setDistancePerPulse(0.333);
         m_shooterEncoder.setReverseDirection(true);
+        SendableRegistry.setSubsystem(m_shooterEncoder, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_shooterEncoder, "Shooter Encoder");
+        SendableRegistry.setSubsystem(m_shooterPIDController, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_shooterPIDController, "Shooter PIDController");
     }
 
     public double getRate() {

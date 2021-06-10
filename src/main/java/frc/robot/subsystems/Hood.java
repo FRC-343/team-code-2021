@@ -13,22 +13,24 @@ public class Hood extends SubsystemBase {
     private final DigitalInput m_hoodFront = new DigitalInput(9);
     private final Spark m_hoodMotor = new Spark(6);
 
-    private boolean m_aimed = false; //if shooter is currently aimed
-    private double m_target = 0.0; //where it needs to be aiming
-    private double m_speed = 0.0; //manual control
-    private boolean m_aiming = false; //if currently aiming (for automatic)
-    private boolean m_zeroing = false; //resetting hood
-public Hood() {
-    SendableRegistry.setSubsystem(m_hoodEncoder, this.getClass().getSimpleName());
-    SendableRegistry.setName(m_hoodEncoder, "Hood Encoder");
-    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
-    SendableRegistry.setName(m_hoodBack, "Hood Back Limit");
-    SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
-    SendableRegistry.setName(m_hoodFront, "Hood Front Limit");
-    SendableRegistry.setSubsystem(m_hoodMotor, this.getClass().getSimpleName());
-    SendableRegistry.setName(m_hoodMotor, "Hood Motor");
-   
-  }
+    private boolean m_aimed = false; // if shooter is currently aimed
+    private double m_target = 0.0; // where it needs to be aiming
+    private double m_speed = 0.0; // manual control
+    private boolean m_aiming = false; // if currently aiming (for automatic)
+    private boolean m_zeroing = false; // resetting hood
+
+    public Hood() {
+        SendableRegistry.setSubsystem(m_hoodEncoder, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_hoodEncoder, "Hood Encoder");
+        SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_hoodBack, "Hood Back Limit");
+        SendableRegistry.setSubsystem(m_hoodBack, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_hoodFront, "Hood Front Limit");
+        SendableRegistry.setSubsystem(m_hoodMotor, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_hoodMotor, "Hood Motor");
+
+    }
+
     public void aim(double angle) {
         m_target = 4.2425 * angle * angle + 142.56 * angle + 1491.1;
         SmartDashboard.putNumber("hood_target", m_target);
@@ -67,7 +69,7 @@ public Hood() {
                 m_hoodMotor.set(-0.5);
             } else {
                 if (m_hoodBack.get()) {
-                    m_zeroing = true;
+                    m_zeroing = true; 
                     m_hoodMotor.set(0.0);
                 } else if (m_hoodEncoder.getDistance() < m_target) {
                     m_hoodMotor.set(0.5);
@@ -77,9 +79,9 @@ public Hood() {
                 }
             }
         } else {
-            if (m_hoodBack.get() && m_speed > 0) {
+            if (m_hoodBack.get() && m_speed > 0.0) {
                 m_hoodMotor.set(0.0);
-            } else if (m_hoodFront.get() && m_speed < 0) {
+            } else if (m_hoodFront.get() && m_speed < 0.0) {
                 m_hoodEncoder.reset();
                 m_hoodMotor.set(0.0);
             } else {

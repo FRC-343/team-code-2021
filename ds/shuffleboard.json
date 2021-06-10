@@ -148,40 +148,40 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "10,0": {
+          "5,0": {
             "size": [
-              6,
+              4,
               4
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///LiveWindow/Ungrouped/Spark[5]/Value",
-              "_title": "LiveWindow/Ungrouped/Spark[5]/Value",
+              "_source0": "network_table:///LiveWindow/Hood/Hood Encoder/Distance",
+              "_title": "LiveWindow/Hood/Hood Encoder/Distance",
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
               "Y-axis/Unit": "ul",
-              "Visible data/LiveWindow/Ungrouped/Spark[5]/Value": true
+              "Visible data/LiveWindow/Hood/Hood Encoder/Distance": true
             }
           },
-          "5,0": {
+          "10,0": {
             "size": [
               5,
               4
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[3]/Speed",
-              "_title": "LiveWindow/Ungrouped/Encoder[3]/Speed",
+              "_source0": "network_table:///LiveWindow/Shooter/Shooter Encoder/Speed",
+              "_title": "LiveWindow/Shooter/Shooter Encoder/Speed",
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
               "Y-axis/Unit": "ul",
-              "Visible data/LiveWindow/Ungrouped/Encoder[3]/Speed": true
+              "Visible data/LiveWindow/Shooter/Shooter Encoder/Speed": true
             }
           }
         }
@@ -191,7 +191,7 @@
   "windowGeometry": {
     "x": -7.0,
     "y": 3.0,
-    "width": 1378.0,
+    "width": 1380.0,
     "height": 572.0
   }
 }

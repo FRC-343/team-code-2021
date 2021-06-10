@@ -7,7 +7,7 @@ import frc.robot.subsystems.Vision;
 
 public class AimCommand extends CommandBase {
     private static final double kTargetP = -0.055;
-    private static final double kMinTargetCommand = -0.35;
+    private static final double kMinTargetCommand = -0.20; //-0.35;
 
     private final Vision m_vision;
     private final Hood m_hood;
@@ -44,14 +44,14 @@ public class AimCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      m_hood.move(0);
+      m_hood.move(0.0);
       m_drive.drive(0.0, 0.0);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return  Math.abs(m_vision.getTx()) < 1.0 && m_hood.isAimed();
+        return (Math.abs(m_vision.getTx()) < 1.0 && m_hood.isAimed());
     }
 
 }
