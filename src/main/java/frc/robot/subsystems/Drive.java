@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.MiscMath;
 
@@ -29,15 +30,15 @@ public class Drive extends SubsystemBase {
 
     private static final boolean kGyroReversed = true;
 
-    private final SpeedController m_leftMaster = new Spark(2);
-    private final SpeedController m_leftFollower = new Spark(3);
-    private final SpeedController m_rightMaster = new Spark(0);
-    private final SpeedController m_rightFollower = new Spark(1);
+    private final Spark m_leftMaster = new Spark(2);
+    private final Spark m_leftFollower = new Spark(3);
+    private final Spark m_rightMaster = new Spark(0);
+    private final Spark m_rightFollower = new Spark(1);
 
     private final Encoder m_leftEncoder = new Encoder(2, 3);
     private final Encoder m_rightEncoder = new Encoder(0, 1);
 
-    private final Gyro m_gyro = new ADXRS450_Gyro();
+    private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
     private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
     private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
@@ -73,6 +74,36 @@ public class Drive extends SubsystemBase {
         m_rightGroup.setInverted(true);
         m_leftEncoder.setReverseDirection(false);
         m_rightEncoder.setReverseDirection(true);
+        
+        SendableRegistry.setSubsystem(m_leftMaster, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_leftMaster, "Left Master Drive Thingy");
+        SendableRegistry.setSubsystem(m_rightMaster, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_rightMaster, "Right Master Drive Thingy");
+        SendableRegistry.setSubsystem(m_leftFollower, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_leftFollower, "Left Follower Drive Thingy");
+        SendableRegistry.setSubsystem(m_rightFollower, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_rightFollower, "Right Follower Drive Thingy");
+
+        SendableRegistry.setSubsystem(m_leftEncoder, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_leftEncoder, "Left Encoder Drive Thingy");
+        SendableRegistry.setSubsystem(m_rightEncoder, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_rightEncoder, "Right Encoder Drive Thingy");
+
+        SendableRegistry.setSubsystem(m_gyro, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_gyro, "Gyro Drive Thingy");
+
+        SendableRegistry.setSubsystem(m_leftGroup, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_leftGroup, "Left Drive Wheel Group Thingy");
+        SendableRegistry.setSubsystem(m_rightGroup, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_rightGroup, "Right Drive Wheel Group Thingy");
+
+        SendableRegistry.setSubsystem(m_leftPIDController, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_leftPIDController, "Left Drive PID Controller Thingy");
+        SendableRegistry.setSubsystem(m_rightPIDController, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_rightPIDController, "Right Drive PID Controller Thingy");
+
+        SendableRegistry.setSubsystem(m_stopSensor, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_stopSensor, "Drive Stopping Sensor Thingy on wheel Thingy");
     }
 
     public PIDController getLeftPIDController() {

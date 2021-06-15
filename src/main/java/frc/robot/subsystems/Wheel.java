@@ -7,15 +7,17 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Wheel extends SubsystemBase{
+public class Wheel extends SubsystemBase {
     private final Spark m_wheel = new Spark(10);
     private final DoubleSolenoid m_wheelLift = new DoubleSolenoid(1, 6, 7);
 
-    private final ColorSensorV3 m_color = new ColorSensorV3(I2C.Port.kOnboard); 
+    private final ColorSensorV3 m_color = new ColorSensorV3(I2C.Port.kOnboard);
 
     private final ColorMatch m_colorMatcher = new ColorMatch();
 
@@ -29,6 +31,12 @@ public class Wheel extends SubsystemBase{
         m_colorMatcher.addColorMatch(kGreen);
         m_colorMatcher.addColorMatch(kBlue);
         m_colorMatcher.addColorMatch(kYellow);
+
+        SendableRegistry.setSubsystem(m_wheel, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_wheel, "Wheel");
+
+        SendableRegistry.setSubsystem(m_wheelLift, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_wheelLift, "Wheel Lift");
     }
     
     @Override

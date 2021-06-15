@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -11,6 +12,12 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         m_intake.setInverted(true);
+
+        SendableRegistry.setSubsystem(m_intake, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_intake, "Intake");
+
+        SendableRegistry.setSubsystem(m_intakeLift, this.getClass().getSimpleName());
+        SendableRegistry.setName(m_intakeLift, "Intake Lift");
     }
 
     public void raise() {
