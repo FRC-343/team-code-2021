@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -48,6 +49,8 @@ public class Drive extends SubsystemBase {
 
     private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.86, 0.716);
     private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.11, 2.81, 0.698);
+
+    private final DigitalInput m_stopSensor = new DigitalInput(14);//help
 
     private DifferentialDriveOdometry m_odometry;
 
@@ -175,7 +178,11 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double xSpeed, double rot) {
-        m_wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+        if (xSpeed > 0.0 && m_stopSensor.get()) {
+            m_wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(0.0, 0.0, 0.0));
+        } else {
+            m_wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+        }
         m_PIDEnabled = true;
     }
 
@@ -205,5 +212,6 @@ public class Drive extends SubsystemBase {
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 m_rightEncoder.getDistance());
+        
     }
 }
