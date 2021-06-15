@@ -14,7 +14,7 @@ public class Intake extends SubsystemBase {
         m_intake.setInverted(true);
 
         SendableRegistry.setSubsystem(m_intake, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_intake, "Intake");
+        SendableRegistry.setName(m_intake, "Intake Motor");
 
         SendableRegistry.setSubsystem(m_intakeLift, this.getClass().getSimpleName());
         SendableRegistry.setName(m_intakeLift, "Intake Lift");

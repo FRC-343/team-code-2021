@@ -16,10 +16,10 @@ public class Hopper extends SubsystemBase {
 
     public Hopper() {
         SendableRegistry.setSubsystem(m_hopper, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_hopper, "Hopper");
+        SendableRegistry.setName(m_hopper, "Hopper Motor");
 
         SendableRegistry.setSubsystem(m_kicker, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_kicker, "Kicker");
+        SendableRegistry.setName(m_kicker, "Kicker Motor");
 
         SendableRegistry.setSubsystem(m_cellDetector, this.getClass().getSimpleName());
         SendableRegistry.setName(m_cellDetector, "Hopper Cell Detector");

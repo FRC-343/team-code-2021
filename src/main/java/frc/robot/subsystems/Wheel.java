@@ -32,10 +32,10 @@ public class Wheel extends SubsystemBase {
         m_colorMatcher.addColorMatch(kYellow);
 
         SendableRegistry.setSubsystem(m_wheel, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_wheel, "Wheel");
+        SendableRegistry.setName(m_wheel, "Wheel Spinner Motor");
 
         SendableRegistry.setSubsystem(m_wheelLift, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_wheelLift, "Wheel Lift");
+        SendableRegistry.setName(m_wheelLift, "Wheel Spinner Lift");
     }
     
     @Override

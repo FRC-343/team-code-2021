@@ -74,18 +74,18 @@ public class Drive extends SubsystemBase {
         m_rightEncoder.setReverseDirection(true);
         
         SendableRegistry.setSubsystem(m_leftMaster, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_leftMaster, "Left Master Drive Thingy");
+        SendableRegistry.setName(m_leftMaster, "Left Master Drive Motor Thingy");
         SendableRegistry.setSubsystem(m_rightMaster, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_rightMaster, "Right Master Drive Thingy");
+        SendableRegistry.setName(m_rightMaster, "Right Master Drive Motor Thingy");
         SendableRegistry.setSubsystem(m_leftFollower, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_leftFollower, "Left Follower Drive Thingy");
+        SendableRegistry.setName(m_leftFollower, "Left Follower Drive Motor Thingy");
         SendableRegistry.setSubsystem(m_rightFollower, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_rightFollower, "Right Follower Drive Thingy");
+        SendableRegistry.setName(m_rightFollower, "Right Follower Drive Motor Thingy");
 
         SendableRegistry.setSubsystem(m_leftEncoder, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_leftEncoder, "Left Encoder Drive Thingy");
+        SendableRegistry.setName(m_leftEncoder, "Left Drive Encoder Thingy");
         SendableRegistry.setSubsystem(m_rightEncoder, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_rightEncoder, "Right Encoder Drive Thingy");
+        SendableRegistry.setName(m_rightEncoder, "Right Drive Encoder Thingy");
 
         SendableRegistry.setSubsystem(m_gyro, this.getClass().getSimpleName());
         SendableRegistry.setName(m_gyro, "Gyro Drive Thingy");

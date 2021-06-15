@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
         SendableRegistry.setName(m_shooterPIDController, "Shooter PIDController");
 
         SendableRegistry.setSubsystem(m_shooter, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_shooter, "Shooter");
+        SendableRegistry.setName(m_shooter, "Shooter Motor");
     }
 
     public double getRate() {
