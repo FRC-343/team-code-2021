@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase {
     private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.86, 0.716);
     private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.11, 2.81, 0.698);
 
-    private final DigitalInput m_stopSensor = new DigitalInput(14);//help
+    private final DigitalInput m_stopSensor = new DigitalInput(15);//help
 
     private DifferentialDriveOdometry m_odometry;
 
