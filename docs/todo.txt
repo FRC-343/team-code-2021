@@ -1,3 +1,2 @@
-3. Add sendable registry stuff for everything
-4. test x 3.1415 (Color wheel and other stuff)
+4. test x 1.44 (other stuff):
 5. Rewrite autonomice with commands

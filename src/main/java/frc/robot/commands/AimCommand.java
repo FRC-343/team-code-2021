@@ -6,8 +6,8 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Vision;
 
 public class AimCommand extends CommandBase {
-    private static final double kTargetP = -0.055;
-    private static final double kMinTargetCommand = -0.20; //-0.35;
+    private static final double kTargetP = -0.04;
+    private static final double kMinTargetCommand = -0.35; 
 
     private final Vision m_vision;
     private final Hood m_hood;
