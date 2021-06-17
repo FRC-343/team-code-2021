@@ -47,6 +47,7 @@ public class Hood extends SubsystemBase {
 
     public void move(double speed) {
         m_aiming = false;
+        m_aimed = false;
         m_speed = speed;
     }
 
@@ -78,6 +79,7 @@ public class Hood extends SubsystemBase {
                     m_aimed = true;
                 }
             }
+            SmartDashboard.putBoolean("hood_aimed", m_aimed);
         } else {
             if (m_hoodBack.get() && m_speed > 0.0) {
                 m_hoodMotor.set(0.0);
@@ -89,6 +91,5 @@ public class Hood extends SubsystemBase {
             }
 
         }
-        SmartDashboard.putBoolean("hood_aimed", m_aimed);
     }
 }
