@@ -207,7 +207,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void drive(double xSpeed, double rot) {
-        if (xSpeed > 0.0 && m_stopSensor.get()) {
+        if (xSpeed > 0.0 && !m_stopSensor.get()) {
             m_wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(0.0, 0.0, 0.0));
         } else {
             m_wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
