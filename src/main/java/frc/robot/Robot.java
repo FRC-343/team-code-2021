@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,12 +39,12 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
-  private AutonomousBase m_auto;
-  private final SendableChooser<AutonomousBase> m_autoChooser = new SendableChooser<AutonomousBase>();
+  private CommandBase m_auto;
+  private final SendableChooser<CommandBase> m_autoChooser = new SendableChooser<CommandBase>();
 
 
   public Robot() {
-    m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous(m_drive));
+    m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous());
 
     m_auto = m_autoChooser.getSelected();
   }

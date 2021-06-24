@@ -2,12 +2,9 @@ package frc.robot.autonomous;
 
 import frc.robot.subsystems.Drive;
 
-public class NoAutonomous extends AutonomousBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-  public NoAutonomous(Drive drive) {
-      super(drive);
-  }
-
+public class NoAutonomous extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
