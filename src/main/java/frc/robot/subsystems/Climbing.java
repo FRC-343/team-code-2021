@@ -13,6 +13,7 @@ public class Climbing extends SubsystemBase {
   private final DoubleSolenoid m_ratchetLift = new DoubleSolenoid(1, 2, 3);
 
   public Climbing() {
+    m_winch.setInverted(true);
     SendableRegistry.setSubsystem(m_winch, this.getClass().getSimpleName());
     SendableRegistry.setName(m_winch, "Winch Motor");
     SendableRegistry.setSubsystem(m_isBottom, this.getClass().getSimpleName());
