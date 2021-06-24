@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase {
     private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.86, 0.716);
     private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.11, 2.81, 0.698);
 
-    private final DigitalInput m_stopSensor = new DigitalInput(15);//help
+    private final DigitalInput m_stopSensor = new DigitalInput(15);// help
 
     private DifferentialDriveOdometry m_odometry;
 
@@ -72,7 +72,7 @@ public class Drive extends SubsystemBase {
         m_rightGroup.setInverted(true);
         m_leftEncoder.setReverseDirection(false);
         m_rightEncoder.setReverseDirection(true);
-        
+
         SendableRegistry.setSubsystem(m_leftMaster, this.getClass().getSimpleName());
         SendableRegistry.setName(m_leftMaster, "Left Master Drive Motor Thingy");
         SendableRegistry.setSubsystem(m_rightMaster, this.getClass().getSimpleName());
@@ -236,11 +236,11 @@ public class Drive extends SubsystemBase {
 
             m_leftGroup.setVoltage(leftOutput);
             m_rightGroup.setVoltage(rightOutput);
-        } 
+        }
 
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 m_rightEncoder.getDistance());
-        
+
     }
 }

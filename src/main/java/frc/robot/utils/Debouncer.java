@@ -34,8 +34,7 @@ public class Debouncer {
                     m_timer.stop();
                     m_debouncing = false;
                     ready = true;
-                }
-                else {
+                } else {
                     ready = false;
                 }
             } else {

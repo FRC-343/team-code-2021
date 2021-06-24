@@ -22,11 +22,9 @@ public class MiscMath {
     public static double clamp(double value, double min, double max) {
         if (value < min) {
             return min;
-        }
-        else if (value > max) {
+        } else if (value > max) {
             return max;
-        }
-        else {
+        } else {
             return value;
         }
     }

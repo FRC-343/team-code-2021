@@ -37,7 +37,7 @@ public class Wheel extends SubsystemBase {
         SendableRegistry.setSubsystem(m_wheelLift, this.getClass().getSimpleName());
         SendableRegistry.setName(m_wheelLift, "Wheel Spinner Lift");
     }
-    
+
     @Override
     public void periodic() {
         ColorMatchResult detectedColor = m_colorMatcher.matchClosestColor(m_color.getColor());
@@ -74,6 +74,5 @@ public class Wheel extends SubsystemBase {
     public void setWheel(double speed) {
         m_wheel.set(speed);
     }
-
 
 }

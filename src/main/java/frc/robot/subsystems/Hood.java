@@ -70,7 +70,7 @@ public class Hood extends SubsystemBase {
                 m_hoodMotor.set(-0.5);
             } else {
                 if (m_hoodBack.get()) {
-                    m_zeroing = true; 
+                    m_zeroing = true;
                     m_hoodMotor.set(0.0);
                 } else if (m_hoodEncoder.getDistance() < m_target) {
                     m_hoodMotor.set(0.5);
