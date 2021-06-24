@@ -97,6 +97,8 @@ public class Robot extends TimedRobot {
     
     new JoystickButton(m_controller, XboxController.Button.kX.value).whenPressed(new InstantCommand(m_wheel::raiseOrLower, m_wheel));
 
+    new JoystickButton(m_controller, XboxController.Button.kBack.value).whenPressed(new InstantCommand(m_climbing::engageOrNot, m_climbing));
+
     new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value).whenHeld(new ShootCommand(m_shooter, m_hopper, () -> m_controller.getTriggerAxis(XboxController.Hand.kRight) > 0.2));
 
     new Button(() -> m_controller.getTriggerAxis(XboxController.Hand.kLeft) > 0.2).whenHeld(new IntakeCommand(m_intake, m_hopper));

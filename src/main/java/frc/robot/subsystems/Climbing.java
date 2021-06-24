@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,7 +10,7 @@ public class Climbing extends SubsystemBase {
   private final Spark m_winch = new Spark(11);
   private final DigitalInput m_isBottom = new DigitalInput(12); 
   private final DigitalInput m_isTop = new DigitalInput(13);
-
+  private final DoubleSolenoid m_ratchetLift = new DoubleSolenoid(1, 2, 3);
 
   public Climbing() {
     SendableRegistry.setSubsystem(m_winch, this.getClass().getSimpleName());
@@ -38,4 +39,19 @@ public class Climbing extends SubsystemBase {
     }
     
   }
+    public void disEngage() {
+        m_ratchetLift.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void engage() {
+        m_ratchetLift.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void engageOrNot() {
+        if (m_ratchetLift.get() == DoubleSolenoid.Value.kReverse) {
+            engage();
+        } else {
+            disEngage();
+        }
+    }
 }
