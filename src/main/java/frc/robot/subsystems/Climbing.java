@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climbing extends SubsystemBase {
@@ -41,6 +42,11 @@ public class Climbing extends SubsystemBase {
       m_winch.set(speed);
     }
 
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putBoolean("Ratchet State", m_ratchetLift.get() == DoubleSolenoid.Value.kForward);
   }
 
   public void disEngage() {
