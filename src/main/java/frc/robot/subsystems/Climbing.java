@@ -25,7 +25,7 @@ public class Climbing extends SubsystemBase {
   }
 
   public void setWinch(double speed) {
-    if (m_isBottom.get()) {
+    if (m_isBottom.get() || m_ratchetLift.get() == DoubleSolenoid.Value.kForward) {
       if (speed < 0) {
         m_winch.set(0.0);
       } else {
