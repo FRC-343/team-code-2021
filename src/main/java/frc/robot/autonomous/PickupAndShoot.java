@@ -1,5 +1,14 @@
-package edu.wpi.first.wpilibj.examples.hatchbottraditional.commands;
+package frc.robot.autonomous;
 
+import java.util.List;
+
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -9,12 +18,17 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TrajectoryCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 public class PickupAndShoot extends SequentialCommandGroup {
   private static final double kIntakeDriveDistance = 0.42;
   private static final double kIntakeDriveSpeed = 0.7;
 
-  public PickupAndShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood) {
+  public PickupAndShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood, Shooter shooter) {
     TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
         drive.getRightFeedforward(), drive.getKinematics(), 11.0);
 
@@ -50,9 +64,9 @@ public class PickupAndShoot extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
           new SequentialCommandGroup(
             new DriveDistanceCommand(kIntakeDriveDistance, kIntakeDriveSpeed, drive),
-            new DriveDistanceCommand(kIntakeDriveDistance, -kIntakeDriveSpeed, drive),
+            new DriveDistanceCommand(kIntakeDriveDistance, -kIntakeDriveSpeed, drive)
             ),
-          new IntakeCommand(intake, hopper),
+          new IntakeCommand(intake, hopper)
           ),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(
@@ -66,7 +80,7 @@ public class PickupAndShoot extends SequentialCommandGroup {
               reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive),
-        new ShootCommand(shooter, hopper),
+        new ShootCommand(shooter, hopper)
         );
   }
 }

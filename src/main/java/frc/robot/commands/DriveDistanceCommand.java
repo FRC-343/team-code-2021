@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Drive;
@@ -11,9 +12,9 @@ public class DriveDistanceCommand extends CommandBase {
   private final double m_distance;
   private final double m_speed;
 
-  private Pose2d m_startPose = new Pose2d(0, 0);
+  private Pose2d m_startPose = new Pose2d(0, 0, new Rotation2d(0));
 
-  public DriveDistance(double distance, double speed, DriveSubsystem drive) {
+  public DriveDistanceCommand(double distance, double speed, Drive drive) {
     m_distance = distance;
     m_speed = speed;
     m_drive = drive;
@@ -40,6 +41,6 @@ public class DriveDistanceCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return m_drive.getPose().minus(m_startPose).getTranslation.getNorm() >= m_distance;
+    return m_drive.getPose().minus(m_startPose).getTranslation().getNorm() >= m_distance;
   }
 }
