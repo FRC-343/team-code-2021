@@ -1,5 +1,3 @@
-4. test x 1.44 (other stuff):
-5. Rewrite autonomice with commands
+12. test x 1.44 (other stuff and PAS auto):
+6. Rewrite new autonomice with commands
 3. climbing button to 8 + button on top of joystick
-1. ratchet button to 6 and 7 on joystick
-2. reorder the todolist
