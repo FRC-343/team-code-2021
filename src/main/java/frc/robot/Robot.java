@@ -45,6 +45,8 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous());
     m_autoChooser.addOption("PAS", new PickupAndShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
+    m_autoChooser.addOption("OFS", new OurTrenchFishtailShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
+    m_autoChooser.addOption("BIAS", new JustBackItUpAndShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
     m_auto = m_autoChooser.getSelected();
   }
 
