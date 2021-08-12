@@ -14,7 +14,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class JustBackItUpAndShoot extends SequentialCommandGroup {
-  private static final double kBackupDriveDistance = -1.001;
+  private static final double kBackupDriveDistance = 1.0;
   private static final double kBackupDriveSpeed = -0.7;
 
   public JustBackItUpAndShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood, Shooter shooter) {

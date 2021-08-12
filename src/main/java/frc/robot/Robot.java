@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import edu.wpi.first.cameraserver.CameraServer; 
 
 public class Robot extends TimedRobot {
   public static final double kMaxJoySpeed = 3.0; // meters per sec
@@ -48,8 +47,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous());
     m_autoChooser.addOption("PAS", new PickupAndShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
     m_autoChooser.addOption("OFS", new OurTrenchFishtailShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
-    m_autoChooser.addOption("BackUp", new JustBackItUp(m_drive, m_intake));
-    m_autoChooser.addOption("forward", new fowardIntake(m_drive, m_intake));
+    m_autoChooser.addOption("BIAS", new JustBackItUpAndShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
     m_auto = m_autoChooser.getSelected();
     
   }
