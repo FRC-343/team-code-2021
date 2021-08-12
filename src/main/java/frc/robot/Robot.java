@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.cameraserver.CameraServer; 
 
 public class Robot extends TimedRobot {
   public static final double kMaxJoySpeed = 3.0; // meters per sec
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
   private final Hopper m_hopper = new Hopper();
   private final Intake m_intake = new Intake();
 
+
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption("OFS", new OurTrenchFishtailShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
     m_autoChooser.addOption("BIAS", new JustBackItUpAndShoot(m_drive, m_intake, m_hopper, m_vision, m_hood, m_shooter));
     m_auto = m_autoChooser.getSelected();
+    
   }
 
   /**
