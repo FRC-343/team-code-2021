@@ -7,7 +7,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
 public class ShootCommand extends CommandBase {
-  private static final double kShootSpeed = 125.00; // rev per sec
+  private static final double kShootSpeed = 125.00; // rev per sec 125.0
   private static final double kShootReadySpeed = 116.0; // rev per sec
 
   private final Shooter m_shooter;
@@ -35,7 +35,7 @@ public class ShootCommand extends CommandBase {
   public void execute() {
     m_shooter.shoot(kShootSpeed);
     if (m_whenToShoot.getAsBoolean()) {
-      m_hopper.setKicker(-1);
+      m_hopper.setKicker(-1.0);
       if (m_shooter.getRate() > kShootReadySpeed) {
         m_hopper.setHopper(0.65);
       } else {
