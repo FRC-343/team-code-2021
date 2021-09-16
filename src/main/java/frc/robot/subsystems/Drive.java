@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.MiscMath;
 
 public class Drive extends SubsystemBase {
-    public static final double kMaxSpeed = 6.0; // meters per second
-    public static final double kMaxAcceleration = 4.0; // meters per second squared
+    public static final double kMaxSpeed = 4.0; // meters per second
+    public static final double kMaxAcceleration = 3.0; // meters per second squared
     public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
     private static final double kTrackWidth = 0.568; // meters
@@ -46,8 +46,8 @@ public class Drive extends SubsystemBase {
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.86, 0.716);
-    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.11, 2.81, 0.698);
+    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.84, 0.705);
+    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(1.11, 2.84, 0.705);
 
     private final DigitalInput m_stopSensor = new DigitalInput(15);// help
 
