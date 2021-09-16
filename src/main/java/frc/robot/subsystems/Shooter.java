@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
 public class Shooter extends SubsystemBase {
     private static final double kShootGarbage = 150.0; // rev per sec, for irregular values
 
-    private final Spark m_shooter = new Spark(5);
+    private final Spark m_shooter = new Spark(8);
 
     private final Encoder m_shooterEncoder = new Encoder(6, 7);
 
