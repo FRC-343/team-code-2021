@@ -1,4 +1,9 @@
 {
+    # Ports for motors
+    # If doing drive test, treat this as the left side of the drivetrain
+    "motorPorts": [2, 3],
+    # Only if you are doing drive (leave empty "[]" if not)
+    "rightMotorPorts": [0, 1],
     # Class names of motor controllers used.
     # Options:
     # 'Spark'
@@ -6,34 +11,32 @@
     # 'VictorSP'
     # 'PWMTalonSRX'
     # 'PWMVictorSPX'
-    # 'WPI_TalonSRX'
-    # 'WPI_VictorSPX'
+    # If doing drive test, treat this as the left side of the drivetrain
+    "controllerTypes": ["Spark", "Spark"],
+    # Only if you are doing drive (leave empty "[]" if not)
     "rightControllerTypes": ["Spark", "Spark"],
-    "leftControllerTypes": ["Spark", "Spark"],
-    # Ports for the left-side motors
-    "leftMotorPorts": [2, 3],
-    # Ports for the right-side motors
-    "rightMotorPorts": [0, 1],
-    # Inversions for the left-side motors
-    "leftMotorsInverted": [False, False],
-    # Inversions for the right side motors
+    # Set motors to inverted or not
+    # If doing drive test, treat this as the left side of the drivetrain
+    "motorsInverted": [False, False],
+    # Only if you are doing drive (leave empty "[]" if not)
     "rightMotorsInverted": [False, False],
-    # Wheel diameter (in units of your choice - will dictate units of analysis)
-    "wheelDiameter": 0.152,
-    # If your robot has only one encoder, set all right encoder fields to `None`
     # Encoder edges-per-revolution (*NOT* cycles per revolution!)
-    # This value should be the edges per revolution *of the wheels*, and so
-    # should take into account gearing between the encoder and the wheels
+    # For the AMT 103-V, use 8192 (2048 * 4)
     "encoderEPR": 1024,
-    # Ports for the left-side encoder
-    "leftEncoderPorts": [2, 3],
-    # Ports for the right-side encoder
+    # Gearing accounts for the gearing between the encoder and the output shaft
+    "gearing": 1,
+    # Encoder ports
+    # If doing drive test, treat this as the left side of the drivetrain
+    "encoderPorts": [2, 3],
+    # Only if you are doing drive (leave empty "[]" if not)
     "rightEncoderPorts": [0, 1],
-    # Whether the left encoder is inverted
-    "leftEncoderInverted": False,
-    # Whether the right encoder is inverted:
+    # Set to True if encoders need to be inverted
+    # If doing drive test, treat this as the left side of the drivetrain
+    "encoderInverted": False,
+    # Only if you are doing drive (set to False if not needed)
     "rightEncoderInverted": True,
-    # Your gyro type (one of "NavX", "Pigeon", "ADXRS450", "AnalogGyro", or "None")
+    # ** The following is only if you are using a gyro for the DriveTrain test**
+    # Gyro type (one of "NavX", "Pigeon", "ADXRS450", "AnalogGyro", or "None")
     "gyroType": "ADXRS450",
     # Whatever you put into the constructor of your gyro
     # Could be:
@@ -45,4 +48,3 @@
     # "" (NavX using default SPI, ADXRS450 using onboard CS0, or no gyro)
     "gyroPort": "",
 }
-
