@@ -46,8 +46,8 @@ public class Drive extends SubsystemBase {
 
     private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(kTrackWidth);
 
-    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.11, 2.84, 0.705);
-    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(1.11, 2.84, 0.705);
+    private final SimpleMotorFeedforward m_leftFeedforward = new SimpleMotorFeedforward(2.55, 2.84, 0.237);
+    private final SimpleMotorFeedforward m_rightFeedforward = new SimpleMotorFeedforward(2.58, 2.69, 0.0718);
 
     private final DigitalInput m_stopSensor = new DigitalInput(15);// help
 
