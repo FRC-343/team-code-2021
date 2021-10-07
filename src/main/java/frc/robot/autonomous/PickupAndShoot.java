@@ -60,7 +60,7 @@ public class PickupAndShoot extends SequentialCommandGroup {
             new IntakeCommand(intake, hopper)),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(2.0, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(0.2, 3.4999, new Rotation2d(135)), reverseShootConfig), drive),
+            new Pose2d(0.2, 1.4999, new Rotation2d(135)), reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive), new ShootCommand(shooter, hopper));
   }
