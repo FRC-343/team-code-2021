@@ -50,7 +50,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
     addCommands(
         // drop intake
         new InstantCommand(intake::lower, intake),
-        // pickup trajectory
+        // pickup trajectorY
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(),
             new Pose2d(1.5, 0, new Rotation2d(0)), forwardPickupConfig), drive),
         // move forward to pick up yellow spheres
@@ -60,7 +60,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
             new IntakeCommand(intake, hopper)),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(1.5, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(0.5, -1.0, new Rotation2d(3.4)), reverseShootConfig), drive),
+            new Pose2d(0.5, -2.0, new Rotation2d(2.8)), reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive), new ShootCommand(shooter, hopper));
   }
