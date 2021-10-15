@@ -25,7 +25,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class OurTrenchFishtailShoot extends SequentialCommandGroup {
-  private static final double kIntakeDriveDistance = 1.22;
+  private static final double kIntakeDriveDistance = 2.3;
   private static final double kIntakeDriveSpeed = 0.7;
 
   public OurTrenchFishtailShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood, Shooter shooter) {
@@ -48,11 +48,12 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
 
     // commands in this autonomous
     addCommands(
+        
         // drop intake
         new InstantCommand(intake::lower, intake),
         // pickup trajectorY
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(1.5, 0, new Rotation2d(0)), forwardPickupConfig), drive),
+            new Pose2d(2, 0, new Rotation2d(0)), forwardPickupConfig), drive),
         // move forward to pick up yellow spheres
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(new DriveDistanceCommand(kIntakeDriveDistance, kIntakeDriveSpeed, drive),
@@ -60,7 +61,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
             new IntakeCommand(intake, hopper)),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(1.5, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(0.5, -2.0, new Rotation2d(2.8)), reverseShootConfig), drive),
+            new Pose2d(0.5, -2.0, new Rotation2d(3.8)), reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive), new ShootCommand(shooter, hopper));
   }
