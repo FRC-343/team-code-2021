@@ -61,7 +61,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
             new IntakeCommand(intake, hopper)),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(1.5, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(0.5, -2.0, new Rotation2d(3.8)), reverseShootConfig), drive),
+            new Pose2d(1.0, -2.6, new Rotation2d(3.8)), reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive), new ShootCommand(shooter, hopper));
   }
