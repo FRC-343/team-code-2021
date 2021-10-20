@@ -26,7 +26,7 @@ import frc.robot.subsystems.Vision;
 
 public class OurTrenchFishtailShoot extends SequentialCommandGroup {
   private static final double kIntakeDriveDistance = 2.3;
-  private static final double kIntakeDriveSpeed = 0.7;
+  private static final double kIntakeDriveSpeed = 2.0;
 
   public OurTrenchFishtailShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood, Shooter shooter) {
     TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(drive.getRightFeedforward(),
@@ -35,7 +35,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
     // Create config for trajectory
     TrajectoryConfig forwardPickupConfig = new TrajectoryConfig(Drive.kMaxSpeed, Drive.kMaxAcceleration)
         // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(drive.getKinematics()).setEndVelocity(0.7)
+        .setKinematics(drive.getKinematics()).setEndVelocity(2.0)
         // Apply the voltage constraint
         .addConstraint(voltageConstraint);
 
@@ -61,7 +61,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
             new IntakeCommand(intake, hopper, true)),
         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(1.5, 0, new Rotation2d(0)), List.of(),
-            new Pose2d(1.0, -2.6, new Rotation2d(3.8)), reverseShootConfig), drive),
+            new Pose2d(1.3, -2.0, new Rotation2d(3.8)), reverseShootConfig), drive),
         // aim
         new AimCommand(vision, hood, drive), new ShootCommand(shooter, hopper));
   }

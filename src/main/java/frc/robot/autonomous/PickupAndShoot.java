@@ -26,7 +26,7 @@ import frc.robot.subsystems.Vision;
 
 public class PickupAndShoot extends SequentialCommandGroup {
   private static final double kIntakeDriveDistance = 0.42;
-  private static final double kIntakeDriveSpeed = 0.7;
+  private static final double kIntakeDriveSpeed = 1.5;
 
   public PickupAndShoot(Drive drive, Intake intake, Hopper hopper, Vision vision, Hood hood, Shooter shooter) {
     TrajectoryConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(drive.getRightFeedforward(),
@@ -57,8 +57,8 @@ public class PickupAndShoot extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(new DriveDistanceCommand(kIntakeDriveDistance, kIntakeDriveSpeed, drive),
                 new DriveDistanceCommand(kIntakeDriveDistance, -kIntakeDriveSpeed, drive)),
-            new IntakeCommand(intake, hopper, true)),
-        // shoot trajectory
+            new IntakeCommand(intake, hopper, false)),
+         // shoot trajectory
         new TrajectoryCommand(TrajectoryGenerator.generateTrajectory(new Pose2d(2.0, 0, new Rotation2d(0)), List.of(),
             new Pose2d(0.2, 1.4999, new Rotation2d(135)), reverseShootConfig), drive),
         // aim
