@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
         new ShootCommand(m_shooter, m_hopper, () -> m_controller.getTriggerAxis(XboxController.Hand.kRight) > 0.2));
 
     new Button(() -> m_controller.getTriggerAxis(XboxController.Hand.kLeft) > 0.2)
-        .whenHeld(new IntakeCommand(m_intake, m_hopper));
+        .whenHeld(new IntakeCommand(m_intake, m_hopper, false));
 
   }
 
