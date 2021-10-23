@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveDistanceCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ResetGyroCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TrajectoryCommand;
 import frc.robot.subsystems.Drive;
@@ -48,7 +49,7 @@ public class OurTrenchFishtailShoot extends SequentialCommandGroup {
 
     // commands in this autonomous
     addCommands(
-        
+        new ResetGyroCommand(drive),
         // drop intake
         new InstantCommand(intake::lower, intake),
         // pickup trajectorY
