@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Vision;
 
-public class AimCommand extends CommandBase {
+public class AimCommand extends Command {
   private static final double kTargetP = -0.125;
   private static final double kTargetD = -1.0;
 

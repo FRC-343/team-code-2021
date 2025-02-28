@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.utils.Debouncer;

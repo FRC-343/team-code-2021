@@ -6,16 +6,18 @@ import frc.robot.subsystems.*;
 
 import frc.robot.utils.MiscMath;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj.Compressor;
+// import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class Robot extends TimedRobot {
   public static final double kMaxJoySpeed = 3.0; // meters per sec
@@ -36,12 +38,14 @@ public class Robot extends TimedRobot {
   private final Hopper m_hopper = new Hopper();
   private final Intake m_intake = new Intake();
 
+  private final Compressor pressy = new Compressor(PneumaticsModuleType.CTREPCM);
+
 
   private final XboxController m_controller = new XboxController(1);
   private final Joystick m_stick = new Joystick(0);
 
-  private CommandBase m_auto;
-  private final SendableChooser<CommandBase> m_autoChooser = new SendableChooser<CommandBase>();
+  private Command m_auto;
+  private final SendableChooser<Command> m_autoChooser = new SendableChooser<Command>();
 
   public Robot() {
     m_autoChooser.setDefaultOption("No_Auto", new NoAutonomous());
@@ -58,60 +62,58 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    pressy.enableDigital();
     SmartDashboard.putData("Auto_Choice", m_autoChooser);
 
     m_climbing.setDefaultCommand(new RunCommand(
-        () -> m_climbing.setWinch(-kMaxWinchSpeed * m_controller.getY(XboxController.Hand.kRight)), m_climbing));
+        () -> m_climbing.setWinch(-kMaxWinchSpeed * m_controller.getRightY()), m_climbing));
 
     m_drive.setDefaultCommand(new RunCommand(() -> m_drive.drive(kMaxJoySpeed * MiscMath.deadband(-m_stick.getY()),
         kMaxJoyTurn * MiscMath.deadband(-m_stick.getX())), m_drive));
 
     m_hood.setDefaultCommand(
-        new RunCommand(() -> m_hood.move(kMaxHoodSpeed * m_controller.getY(XboxController.Hand.kLeft)), m_hood));
+        new RunCommand(() -> m_hood.move(kMaxHoodSpeed * m_controller.getLeftY()), m_hood));
 
-    new JoystickButton(m_controller, XboxController.Button.kA.value).whenPressed(new RunCommand(() -> {
-      m_hopper.setHopper(-0.6);
-      m_hopper.setKicker(0.24);
-    }, m_hopper)).whenReleased(new RunCommand(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kA.value).onTrue((new IntakeCommand(m_intake, m_hopper, false))).onFalse(new RunCommand(() -> {
       m_hopper.setHopper(0);
       m_hopper.setKicker(0);
     }, m_hopper));
 
-    new JoystickButton(m_controller, XboxController.Button.kB.value).whenPressed(new RunCommand(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kB.value).onTrue(new RunCommand(() -> {
       m_hopper.setHopper(0.6);
       m_hopper.setKicker(-0.24);
-    }, m_hopper)).whenReleased(new RunCommand(() -> {
+    }, m_hopper)).onFalse(new RunCommand(() -> {
       m_hopper.setHopper(0);
       m_hopper.setKicker(0);
     }, m_hopper));
 
-    new JoystickButton(m_controller, XboxController.Button.kY.value).whenPressed(new RunCommand(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kY.value).onTrue(new RunCommand(() -> {
       m_intake.setIntake(-0.3);
-    }, m_intake)).whenReleased(new RunCommand(() -> {
+    }, m_intake)).onFalse(new RunCommand(() -> {
       m_intake.setIntake(0);
     }, m_intake));
 
-    new JoystickButton(m_controller, XboxController.Button.kStart.value).whenPressed(new RunCommand(() -> {
+    new JoystickButton(m_controller, XboxController.Button.kStart.value).onTrue(new RunCommand(() -> {
       m_wheel.setWheel(0.6);
-    }, m_wheel)).whenReleased(new RunCommand(() -> {
+    }, m_wheel)).onFalse(new RunCommand(() -> {
       m_wheel.setWheel(0);
     }, m_wheel));
 
-    new JoystickButton(m_stick, 11).whenPressed(new InstantCommand(m_intake::raise, m_intake));
-    new JoystickButton(m_stick, 10).whenPressed(new InstantCommand(m_intake::lower, m_intake));
-    new JoystickButton(m_stick, 9).whenHeld(new AimCommand(m_vision, m_hood, m_drive));
+    new JoystickButton(m_stick, 11).onTrue(new InstantCommand(m_intake::raise, m_intake));
+    new JoystickButton(m_stick, 10).onTrue(new InstantCommand(m_intake::lower, m_intake));
+    new JoystickButton(m_stick, 9).whileTrue(new AimCommand(m_vision, m_hood, m_drive));
 
     new JoystickButton(m_controller, XboxController.Button.kX.value)
-        .whenPressed(new InstantCommand(m_wheel::raiseOrLower, m_wheel));
+        .onTrue(new InstantCommand(m_wheel::raiseOrLower, m_wheel));
 
-    new JoystickButton(m_stick, 6).whenPressed(new InstantCommand(m_climbing::engage, m_climbing));
-    new JoystickButton(m_stick, 7).whenPressed(new InstantCommand(m_climbing::disEngage, m_climbing));
+    new JoystickButton(m_stick, 6).onTrue(new InstantCommand(m_climbing::engage, m_climbing));
+    new JoystickButton(m_stick, 7).onTrue(new InstantCommand(m_climbing::disEngage, m_climbing));
     
-    new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value).whenHeld(
-        new ShootCommand(m_shooter, m_hopper, () -> m_controller.getTriggerAxis(XboxController.Hand.kRight) > 0.2));
+    new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value).whileTrue(
+        new ShootCommand(m_shooter, m_hopper, () -> m_controller.getRightTriggerAxis() > 0.2));
 
-    new Button(() -> m_controller.getTriggerAxis(XboxController.Hand.kLeft) > 0.2)
-        .whenHeld(new IntakeCommand(m_intake, m_hopper, false));
+    // new Button(() -> m_controller.getTriggerAxis(XboxController.Hand.kLeft) > 0.2)
+    //     .whenHeld(new IntakeCommand(m_intake, m_hopper, false));
 
   }
 

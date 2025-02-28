@@ -2,12 +2,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(1, 0, 1);
+    private final DoubleSolenoid m_intakeLift = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
     private final Spark m_intake = new Spark(7);
 
     public Intake() {

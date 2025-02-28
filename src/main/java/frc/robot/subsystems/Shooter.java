@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.util.sendable.SendableRegistry;
 
 public class Shooter extends SubsystemBase {
     private static final double kShootGarbage = 150.0; // rev per sec, for irregular values

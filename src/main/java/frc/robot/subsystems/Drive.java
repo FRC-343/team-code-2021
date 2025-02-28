@@ -3,17 +3,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.MiscMath;
 
@@ -38,8 +37,6 @@ public class Drive extends SubsystemBase {
 
     private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
-    private final SpeedControllerGroup m_leftGroup = new SpeedControllerGroup(m_leftMaster, m_leftFollower);
-    private final SpeedControllerGroup m_rightGroup = new SpeedControllerGroup(m_rightMaster, m_rightFollower);
 
     private final PIDController m_leftPIDController = new PIDController(2.0, 0, 0);
     private final PIDController m_rightPIDController = new PIDController(2.0, 0, 0);
@@ -66,10 +63,12 @@ public class Drive extends SubsystemBase {
 
         resetEncoders();
 
-        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+        m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 
-        m_leftGroup.setInverted(false);
-        m_rightGroup.setInverted(true);
+        m_leftMaster.setInverted(false);
+        m_leftFollower.setInverted(false);
+        m_rightMaster.setInverted(true);
+        m_rightFollower.setInverted(true);
         m_leftEncoder.setReverseDirection(false);
         m_rightEncoder.setReverseDirection(true);
 
@@ -90,10 +89,6 @@ public class Drive extends SubsystemBase {
         SendableRegistry.setSubsystem(m_gyro, this.getClass().getSimpleName());
         SendableRegistry.setName(m_gyro, "Gyro Drive Thingy");
 
-        SendableRegistry.setSubsystem(m_leftGroup, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_leftGroup, "Left Drive Wheel Group Thingy");
-        SendableRegistry.setSubsystem(m_rightGroup, this.getClass().getSimpleName());
-        SendableRegistry.setName(m_rightGroup, "Right Drive Wheel Group Thingy");
 
         SendableRegistry.setSubsystem(m_leftPIDController, this.getClass().getSimpleName());
         SendableRegistry.setName(m_leftPIDController, "Left Drive PID Controller Thingy");
@@ -172,7 +167,6 @@ public class Drive extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
     }
 
     /**
@@ -201,8 +195,10 @@ public class Drive extends SubsystemBase {
     }
 
     public void setVoltages(double left, double right) {
-        m_leftGroup.setVoltage(left);
-        m_rightGroup.setVoltage(right);
+        m_leftMaster.setVoltage(left);
+        m_leftFollower.setVoltage(left);
+        m_rightMaster.setVoltage(right);
+        m_rightFollower.setVoltage(right);
         m_PIDEnabled = false;
     }
 
@@ -234,8 +230,10 @@ public class Drive extends SubsystemBase {
             double leftOutput = leftPIDOutput + leftFeedforward;
             double rightOutput = rightPIDOutput + rightFeedforward;
 
-            m_leftGroup.setVoltage(leftOutput);
-            m_rightGroup.setVoltage(rightOutput);
+            m_leftMaster.setVoltage(leftOutput);
+            m_leftFollower.setVoltage(leftOutput);
+            m_rightMaster.setVoltage(rightOutput);
+            m_rightFollower.setVoltage(rightOutput);
         }
 
         // Update the odometry in the periodic block

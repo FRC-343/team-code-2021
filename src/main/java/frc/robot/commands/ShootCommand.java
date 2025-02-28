@@ -2,11 +2,11 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
-public class ShootCommand extends CommandBase {
+public class ShootCommand extends Command {
   private static final double kShootSpeed = 125.00; // rev per sec 125.0
   private static final double kShootReadySpeed = 116.0; // rev per sec
 
