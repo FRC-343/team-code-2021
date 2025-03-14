@@ -87,6 +87,14 @@ public class Robot extends TimedRobot {
       m_hopper.setKicker(0);
     }, m_hopper));
 
+    new JoystickButton(m_controller, XboxController.Button.kX.value).onTrue(new RunCommand(() -> {
+      m_hopper.setHopper(-0.6);
+      m_hopper.setKicker(0.24);
+    }, m_hopper)).onFalse(new RunCommand(() -> {
+      m_hopper.setHopper(0);
+      m_hopper.setKicker(0);
+    }, m_hopper));
+
     new JoystickButton(m_controller, XboxController.Button.kY.value).onTrue(new RunCommand(() -> {
       m_intake.setIntake(-0.3);
     }, m_intake)).onFalse(new RunCommand(() -> {
@@ -108,6 +116,8 @@ public class Robot extends TimedRobot {
 
     new JoystickButton(m_stick, 6).onTrue(new InstantCommand(m_climbing::engage, m_climbing));
     new JoystickButton(m_stick, 7).onTrue(new InstantCommand(m_climbing::disEngage, m_climbing));
+
+    new JoystickButton(m_stick, 1).whileTrue(new IntakeCommand(m_intake, m_hopper, false));
     
     new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value).whileTrue(
         new ShootCommand(m_shooter, m_hopper, () -> m_controller.getRightTriggerAxis() > 0.2));

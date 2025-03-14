@@ -7,8 +7,8 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 
 public class ShootCommand extends Command {
-  private static final double kShootSpeed = 125.00; // rev per sec 125.0
-  private static final double kShootReadySpeed = 116.0; // rev per sec
+  private static final double kShootSpeed = 100.00; // rev per sec 125.0
+  private static final double kShootReadySpeed = 90.0; // rev per sec
 
   private final Shooter m_shooter;
   private final Hopper m_hopper;

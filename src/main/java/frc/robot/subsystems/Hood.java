@@ -81,9 +81,9 @@ public class Hood extends SubsystemBase {
             }
             SmartDashboard.putBoolean("hood_aimed", m_aimed);
         } else {
-            if (m_hoodBack.get() && m_speed > 0.0) {
+            if ( m_speed > 0.0) {
                 m_hoodMotor.set(0.0);
-            } else if (m_hoodFront.get() && m_speed < 0.0) {
+            } else if ( m_speed < 0.0) {
                 m_hoodEncoder.reset();
                 m_hoodMotor.set(0.0);
             } else {
